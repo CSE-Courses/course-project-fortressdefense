@@ -61,12 +61,10 @@ public class HandTests {
 		hand.Draw(game.DefenseDeck);
 		hand.Draw(game.DefenseDeck);
 		
-		ICard card = hand.Select(3);
-		assertTrue(((Card)card).Type == CardType.Attack || ((Card)card).Type == CardType.Special);
+		hand.Select(3);
 		assertEquals(8, hand.Size());
 		
-		card = hand.Select(7);
-		assertTrue(((Card)card).Type == CardType.Defense || ((Card)card).Type == CardType.Weather || ((Card)card).Type == CardType.Special);
+		hand.Select(7);
 		assertEquals(8, hand.Size());
 	}
 	
@@ -79,7 +77,7 @@ public class HandTests {
 		hand.Draw(game.AttackDeck);
 		hand.Draw(game.DefenseDeck);
 		hand.Draw(game.AttackDeck);
-		assertEquals(4, hand.Size());
+		assertEquals(5, hand.Size());
 	}
 	
 	@Test
@@ -91,7 +89,7 @@ public class HandTests {
 		hand.Draw(game.DefenseDeck);
 		hand.Draw(game.AttackDeck);
 		hand.Draw(game.DefenseDeck);
-		assertEquals(4, hand.Size());
+		assertEquals(5, hand.Size());
 	}
 	
 	@Test
@@ -103,7 +101,7 @@ public class HandTests {
 		hand.Draw(game.DefenseDeck);
 		hand.Draw(game.AttackDeck);
 		hand.Draw(game.DefenseDeck);
-		assertEquals(4, hand.Size());
+		assertEquals(5, hand.Size());
 		hand.Clear();
 		hand.Draw(game.DefenseDeck);
 		assertEquals(1, hand.Size());

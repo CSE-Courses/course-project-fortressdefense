@@ -1,9 +1,17 @@
 package code;
 
-public class Game {
+import code.Deck.*;
 
+public class Game {
+	
+	public IDeck AttackDeck;
+	public IDeck DefenseDeck;
+	
 	public Game() {
-		// TODO Auto-generated constructor stub
+		AttackDeck = new AttackDeck();
+		AttackDeck.Initialize();
+		DefenseDeck = new DefenseDeck();
+		DefenseDeck.Initialize();
 	}
 
 }

@@ -1,9 +1,73 @@
 package code;
 
+import java.util.ArrayList;
+
+import code.Deck.*;
+
 public class Hand {
 
+	private ArrayList<ICard> cards;
+	private int numAttackDraw;
+	private int numDefenseDraw;
+	
 	public Hand() {
-		// TODO Auto-generated constructor stub
+		cards = new ArrayList<ICard>();
+		numAttackDraw = 0;
+		numDefenseDraw = 0;
+	}
+	
+	public int Size() {
+		return cards.size();
+	}
+	
+	public void Draw(IDeck deck) {
+		if (deck instanceof AttackDeck) {
+			if (numAttackDraw < 4) {
+				cards.add(deck.Draw());
+				numAttackDraw+=1;
+			}
+		}
+		else if (deck instanceof DefenseDeck) {
+			if (numDefenseDraw < 4) {
+				cards.add(deck.Draw());
+				numDefenseDraw+=1;
+			}
+		}
+		
+	}
+	
+	public ICard Play(int index) {
+		if (Size() == 0 || index < 0 || index > Size()) {
+			return null;
+		}
+		
+		return cards.remove(index);
+	}
+	
+	public ICard Select(int index) {
+		if (Size() == 0 || index < 0 || index > Size()) {
+			return null;
+		}
+		
+		return cards.get(index);
+	}
+	
+	public void Clear() {
+		cards = new ArrayList<ICard>();
+		EndDrawPhase();
+	}
+	
+	public void BeginAttackPhase() {
+		for(int i = 0; i < Size(); i++) {
+			if (((Card)Select(i)).PlayAtStart) {
+				Play(i);
+			}
+		}
+	}
+	
+	public void EndDrawPhase() {
+		numDefenseDraw = 0;
+		numAttackDraw = 0;
 	}
 
 }

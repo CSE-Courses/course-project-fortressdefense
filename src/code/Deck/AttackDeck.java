@@ -55,6 +55,7 @@ public class AttackDeck implements IDeck {
 		stack.addAll(AddScout(numScout));
 		stack.addAll(AddTrade(numTrade));
 		
+		Shuffle();
 	}
 
 	@Override

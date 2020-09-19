@@ -62,6 +62,8 @@ public class DefenseDeck implements IDeck {
 		stack.addAll(AddTornado(numTornado));
 		stack.addAll(AddFlood(numFlood));
 		stack.addAll(AddQuake(numQuake));
+		
+		Shuffle();
 	}
 
 	@Override
