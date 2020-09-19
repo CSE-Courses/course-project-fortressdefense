@@ -1,8 +1,8 @@
 package code;
 
-public class Deck {
+public class Game {
 
-	public Deck() {
+	public Game() {
 		// TODO Auto-generated constructor stub
 	}
 
