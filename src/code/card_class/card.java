@@ -1,5 +1,4 @@
-package card_class;
-import javafx.scene.control.Alert;
+package code.card_class;
 
 import java.util.Map;
 
