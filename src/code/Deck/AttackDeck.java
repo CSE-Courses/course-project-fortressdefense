@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
-import code.Card;
-import code.CardType;
-import code.ICard;
+import card_class.*;
 
 /**
  * Attack Deck for Fortress Defense
@@ -19,28 +17,28 @@ public class AttackDeck implements IDeck {
 	 * Data Structure for Attack Deck
 	 * @author Andrew Jank
 	 */
-	private Stack<ICard> stack;
+	private Stack<Card> stack;
 	
 	/*
 	 * Constants representing number of cards in attack deck
 	 */
 	
-	private final int numBattleAxe = 1;
-	private final int numAxe = 1;
-	private final int numSword = 1;
-	private final int numStick = 1;
-	private final int numMace = 1;
-	private final int numCrossBow = 1;
-	private final int numArchers = 1;
-	private final int numScout = 1;
-	private final int numTrade = 1;
+	private final int numBattleAxe = 5;
+	private final int numAxe = 5;
+	private final int numSword = 5;
+	private final int numStick = 5;
+	private final int numMace = 5;
+	private final int numCrossBow = 5;
+	private final int numArchers = 5;
+	private final int numScout = 5;
+	private final int numTrade = 5;
 	
 	/**
 	 * Creates new empty Attack Deck
 	 * @author Andrew Jank
 	 */
 	public AttackDeck() {
-		stack = new Stack<ICard>();
+		stack = new Stack<Card>();
 	}
 
 	@Override
@@ -64,19 +62,19 @@ public class AttackDeck implements IDeck {
 	}
 
 	@Override
-	public void Add(ICard card) {
-		if (((Card)card).Type == CardType.Attack || ((Card)card).Type == CardType.Special) {
+	public void Add(Card card) {
+		if (card.getType().equals("ATTACK") || card.getType().equals("SPECIAL")) {
 			stack.push(card);
 		}
 	}
 
 	@Override
 	public void Clear() {
-		stack = new Stack<ICard>();
+		stack = new Stack<Card>();
 	}
 
 	@Override
-	public ICard Draw() {
+	public Card Draw() {
 		if (Size() == 0) {
 			return null;
 		}
@@ -88,74 +86,74 @@ public class AttackDeck implements IDeck {
 		Collections.shuffle(stack);
 	}
 	
-	private Collection<? extends ICard> AddTrade(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddTrade(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("TRADE"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddScout(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddScout(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("SCOUT"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddArchers(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddArchers(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("ARCHER TOWER"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddCrossbow(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddCrossbow(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("CROSSBOW"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddMace(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddMace(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("MACE"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddStick(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddStick(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("STICK"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddSword(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddSword(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("SWORD"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddAxe(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddAxe(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("AXE"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddBattleAxe(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddBattleAxe(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("BATTLE AXE"));
 		}
 		return cards;
 	}

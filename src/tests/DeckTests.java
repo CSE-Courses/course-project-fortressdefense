@@ -3,13 +3,14 @@ package tests;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import code.*;
+import card_class.*;
 import code.Deck.*;
 
 public class DeckTests {
 	
-	private final int attackInitSize = 9;
-	private final int defenseInitSize = 13;
+	private final int attackInitSize = 45;
+	private final int defenseInitSize = 65;
+	
 	@Test
 	public void TestAttackDeckEmpty(){
 		IDeck deck = new AttackDeck();
@@ -25,8 +26,7 @@ public class DeckTests {
 	@Test
 	public void TestDefenseAddCard(){
 		IDeck deck = new DefenseDeck();
-		Card card = new Card();
-		card.Type = CardType.Defense;
+		Card card = new Card("STONE WALL");
 		deck.Add(card);
 		assertEquals(1, deck.Size());
 		deck.Add(card);
@@ -38,8 +38,7 @@ public class DeckTests {
 	@Test
 	public void TestAttackAddCard(){
 		IDeck deck = new AttackDeck();
-		Card card = new Card();
-		card.Type = CardType.Attack;
+		Card card = new Card("STICK");
 		deck.Add(card);
 		assertEquals(1, deck.Size());
 		deck.Add(card);
@@ -51,8 +50,7 @@ public class DeckTests {
 	@Test
 	public void TestDefenseDeckClear(){
 		IDeck deck = new DefenseDeck();
-		Card card = new Card();
-		card.Type = CardType.Defense;
+		Card card = new Card("STONE WALL");
 		deck.Add(card);
 		deck.Add(card);
 		deck.Add(card);
@@ -63,8 +61,7 @@ public class DeckTests {
 	@Test
 	public void TestAttackDeckClear(){
 		IDeck deck = new AttackDeck();
-		Card card = new Card();
-		card.Type = CardType.Attack;
+		Card card = new Card("STICK");
 		deck.Add(card);
 		deck.Add(card);
 		deck.Add(card);
@@ -75,12 +72,9 @@ public class DeckTests {
 	@Test
 	public void TestDefenseDeckDraw(){
 		IDeck deck = new DefenseDeck();
-		Card card1 = new Card();
-		card1.Type = CardType.Defense;
-		Card card2 = new Card();
-		card2.Type = CardType.Defense;
-		Card card3 = new Card();
-		card3.Type = CardType.Defense;
+		Card card1 = new Card("STONE WALL");
+		Card card2 = new Card("IRON DOOR");
+		Card card3 = new Card("STEEL CHAINS");
 		deck.Add(card1);
 		deck.Add(card2);
 		deck.Add(card3);
@@ -98,12 +92,9 @@ public class DeckTests {
 	@Test
 	public void TestAttackDeckDraw(){
 		IDeck deck = new AttackDeck();
-		Card card1 = new Card();
-		card1.Type = CardType.Attack;
-		Card card2 = new Card();
-		card2.Type = CardType.Attack;
-		Card card3 = new Card();
-		card3.Type = CardType.Attack;
+		Card card1 = new Card("MACE");
+		Card card2 = new Card("STICK");
+		Card card3 = new Card("AXE");
 		deck.Add(card1);
 		deck.Add(card2);
 		deck.Add(card3);
@@ -139,15 +130,15 @@ public class DeckTests {
 		IDeck deck = new AttackDeck();
 		for (int i = 0; i < 100; i++) {
 			Card card = new Card();
-			card.Name = Integer.toString(i);
-			card.Type = CardType.Attack;
+			card.SetName(Integer.toString(i));
+			card.SetType("ATTACK");
 			deck.Add(card);
 		}
 		
 		deck.Shuffle();
 		double avg = 0;
 		for (int i = 0; i < 5; i++) {
-			avg += Double.parseDouble(((Card)deck.Draw()).Name);
+			avg += Double.parseDouble(deck.Draw().getCard_name());
 		}
 		
 		avg /= 5;
@@ -159,15 +150,15 @@ public class DeckTests {
 		IDeck deck = new DefenseDeck();
 		for (int i = 0; i < 100; i++) {
 			Card card = new Card();
-			card.Name = Integer.toString(i);
-			card.Type = CardType.Defense;
+			card.SetName(Integer.toString(i));
+			card.SetType("DEFENSE");
 			deck.Add(card);
 		}
 		
 		deck.Shuffle();
 		double avg = 0;
 		for (int i = 0; i < 5; i++) {
-			avg += Double.parseDouble(((Card)deck.Draw()).Name);
+			avg += Double.parseDouble(deck.Draw().getCard_name());
 		}
 		
 		avg /= 5;
@@ -191,8 +182,7 @@ public class DeckTests {
 	@Test
 	public void TestDefenseDeckAddSpecial() {
 		IDeck deck = new DefenseDeck();
-		Card card = new Card();
-		card.Type = CardType.Special;
+		Card card = new Card("TRADE");
 		deck.Add(card);
 		assertEquals(1, deck.Size());
 	}
@@ -200,8 +190,7 @@ public class DeckTests {
 	@Test
 	public void TestDefenseDeckAddAttack() {
 		IDeck deck = new DefenseDeck();
-		Card card = new Card();
-		card.Type = CardType.Attack;
+		Card card = new Card("STICK");
 		deck.Add(card);
 		assertEquals(0, deck.Size());
 	}
@@ -209,8 +198,7 @@ public class DeckTests {
 	@Test
 	public void TestDefenseDeckAddWeather() {
 		IDeck deck = new DefenseDeck();
-		Card card = new Card();
-		card.Type = CardType.Weather;
+		Card card = new Card("FLOOD");
 		deck.Add(card);
 		assertEquals(1, deck.Size());
 	}
@@ -218,8 +206,7 @@ public class DeckTests {
 	@Test
 	public void TestDefenseDeckAddDefense() {
 		IDeck deck = new DefenseDeck();
-		Card card = new Card();
-		card.Type = CardType.Defense;
+		Card card = new Card("STEEL CHAINS");
 		deck.Add(card);
 		assertEquals(1, deck.Size());
 	}
@@ -227,8 +214,7 @@ public class DeckTests {
 	@Test
 	public void TestAttackDeckAddSpecial() {
 		IDeck deck = new AttackDeck();
-		Card card = new Card();
-		card.Type = CardType.Special;
+		Card card = new Card("TRADE");
 		deck.Add(card);
 		assertEquals(1, deck.Size());
 	}
@@ -236,8 +222,7 @@ public class DeckTests {
 	@Test
 	public void TestAttackDeckAddAttack() {
 		IDeck deck = new AttackDeck();
-		Card card = new Card();
-		card.Type = CardType.Attack;
+		Card card = new Card("MACE");
 		deck.Add(card);
 		assertEquals(1, deck.Size());
 	}
@@ -245,8 +230,7 @@ public class DeckTests {
 	@Test
 	public void TestAttackDeckAddWeather() {
 		IDeck deck = new AttackDeck();
-		Card card = new Card();
-		card.Type = CardType.Weather;
+		Card card = new Card("FLOOD");
 		deck.Add(card);
 		assertEquals(0, deck.Size());
 	}
@@ -254,8 +238,7 @@ public class DeckTests {
 	@Test
 	public void TestAttackDeckAddDefense() {
 		IDeck deck = new AttackDeck();
-		Card card = new Card();
-		card.Type = CardType.Defense;
+		Card card = new Card("STONE WALL");
 		deck.Add(card);
 		assertEquals(0, deck.Size());
 	}

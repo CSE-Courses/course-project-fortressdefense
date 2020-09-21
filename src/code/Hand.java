@@ -2,16 +2,17 @@ package code;
 
 import java.util.ArrayList;
 
+import card_class.Card;
 import code.Deck.*;
 
 public class Hand {
 
-	private ArrayList<ICard> cards;
+	private ArrayList<Card> cards;
 	private int numAttackDraw;
 	private int numDefenseDraw;
 	
 	public Hand() {
-		cards = new ArrayList<ICard>();
+		cards = new ArrayList<Card>();
 		numAttackDraw = 0;
 		numDefenseDraw = 0;
 	}
@@ -36,7 +37,7 @@ public class Hand {
 		
 	}
 	
-	public ICard Play(int index) {
+	public Card Play(int index) {
 		if (Size() == 0 || index < 0 || index > Size()) {
 			return null;
 		}
@@ -44,7 +45,7 @@ public class Hand {
 		return cards.remove(index);
 	}
 	
-	public ICard Select(int index) {
+	public Card Select(int index) {
 		if (Size() == 0 || index < 0 || index > Size()) {
 			return null;
 		}
@@ -53,13 +54,13 @@ public class Hand {
 	}
 	
 	public void Clear() {
-		cards = new ArrayList<ICard>();
+		cards = new ArrayList<Card>();
 		EndDrawPhase();
 	}
 	
 	public void BeginAttackPhase() {
 		for(int i = 0; i < Size(); i++) {
-			if (((Card)Select(i)).PlayAtStart) {
+			if (Select(i).PlayAtStart) {
 				Play(i);
 			}
 		}

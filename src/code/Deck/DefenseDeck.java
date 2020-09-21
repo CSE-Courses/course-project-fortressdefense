@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
-import code.Card;
-import code.CardType;
-import code.ICard;
+import card_class.*;
 
 /**
  * Defense Deck for Fortress Defense
@@ -20,31 +18,31 @@ public class DefenseDeck implements IDeck {
 	 * Data Structure for Defense Deck
 	 * @author Andrew Jank
 	 */
-	private Stack<ICard> stack;
+	private Stack<Card> stack;
 	
 	/*
 	 * Constants representing number of cards in attack deck
 	 */
-	private final int numStoneWall = 1;
-	private final int numWoodenWall = 1;
-	private final int numBarbedWire = 1;
-	private final int numGate = 1;
-	private final int numDoor = 1;
-	private final int numChains = 1;
-	private final int numArchers = 1;
-	private final int numScout = 1;
-	private final int numTrade = 1;
-	private final int numStorm = 1;
-	private final int numTornado = 1;
-	private final int numFlood = 1;
-	private final int numQuake = 1;
+	private final int numStoneWall = 5;
+	private final int numWoodenWall = 5;
+	private final int numBarbedWire = 5;
+	private final int numGate = 5;
+	private final int numDoor = 5;
+	private final int numChains = 5;
+	private final int numArchers = 5;
+	private final int numScout = 5;
+	private final int numTrade = 5;
+	private final int numStorm = 5;
+	private final int numTornado = 5;
+	private final int numFlood = 5;
+	private final int numQuake = 5;
 	
 	/**
 	 * Creates empty Defense Deck
 	 * @author Andrew Jank
 	 */
 	public DefenseDeck() {
-		stack = new Stack<ICard>();
+		stack = new Stack<Card>();
 	}
 
 	@Override
@@ -72,20 +70,20 @@ public class DefenseDeck implements IDeck {
 	}
 
 	@Override
-	public void Add(ICard card) {
-		if (((Card)card).Type != CardType.Attack) {
+	public void Add(Card card) {
+		if (card.getType() == "DEFENSE" || card.getType() == "SPECIAL") {
 			stack.push(card);
 		}
 	}
 
 	@Override
 	public void Clear() {
-		stack = new Stack<ICard>();
+		stack = new Stack<Card>();
 		
 	}
 
 	@Override
-	public ICard Draw() {
+	public Card Draw() {
 		if (Size() == 0) {
 			return null;
 		}
@@ -97,106 +95,106 @@ public class DefenseDeck implements IDeck {
 		Collections.shuffle(stack);
 	}
 	
-	private Collection<? extends ICard> AddTrade(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddTrade(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("TRADE"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddScout(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddScout(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("SCOUT"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddArchers(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddArchers(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("ARCHER TOWER"));
 		}
 		return cards;
 	}
 	
-	private Collection<? extends ICard> AddQuake(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddQuake(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("EARTHQUAKE"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddFlood(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddFlood(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("FLOOD"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddTornado(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddTornado(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("TORNADO"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddStorm(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddStorm(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("THUNDERSTORM"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddChains(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddChains(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("STEEL CHAINS"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddDoor(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddDoor(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("IRON DOOR"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddGate(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddGate(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("REINFORCED GATE"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddBarbedWire(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddBarbedWire(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("BARBED WIRE"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddWoodenWall(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddWoodenWall(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("WOODEN WALL"));
 		}
 		return cards;
 	}
 
-	private Collection<? extends ICard> AddStoneWall(int num) {
-		ArrayList<ICard> cards = new ArrayList<ICard>();
+	private Collection<Card> AddStoneWall(int num) {
+		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card());
+			cards.add(new Card("STONE WALL"));
 		}
 		return cards;
 	}

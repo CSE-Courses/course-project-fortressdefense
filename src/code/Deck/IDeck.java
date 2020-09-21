@@ -1,6 +1,6 @@
 package code.Deck;
 
-import code.ICard;
+import card_class.Card;
 
 /**
  * Interface representing deck of cards for Fortress Defense.
@@ -26,7 +26,7 @@ public interface IDeck {
 	 * @param card Card to be added
 	 * @author Andrew Jank
 	 */
-	public void Add(ICard card);
+	public void Add(Card card);
 	
 	/**
 	 * Removes all cards from deck.
@@ -38,7 +38,7 @@ public interface IDeck {
 	 * @return Top card from deck.
 	 * @author Andrew Jank
 	 */
-	public ICard Draw();
+	public Card Draw();
 	
 	/**
 	 * Shuffles deck
