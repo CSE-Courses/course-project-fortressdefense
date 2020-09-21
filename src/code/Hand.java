@@ -2,7 +2,7 @@ package code;
 
 import java.util.ArrayList;
 
-import card_class.Card;
+import code.card_class.*;
 import code.Deck.*;
 
 public class Hand {

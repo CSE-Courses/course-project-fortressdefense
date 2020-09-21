@@ -3,7 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import card_class.*;
+import code.card_class.*;
 import code.Deck.*;
 
 public class DeckTests {

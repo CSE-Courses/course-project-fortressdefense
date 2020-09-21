@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import card_class.Card;
+import code.card_class.Card;
 import code.*;
 import code.Deck.*;
 

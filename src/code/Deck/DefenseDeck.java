@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
-import card_class.*;
+import code.card_class.*;
 
 /**
  * Defense Deck for Fortress Defense
