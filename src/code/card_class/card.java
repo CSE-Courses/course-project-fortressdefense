@@ -1,4 +1,5 @@
-package code.card_class;
+package card_class;
+import javafx.scene.control.Alert;
 
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import java.util.Map;
  * card.getDescription() return description (not enough details)
  * error handling: not done yet
  */
-public class card {
+public class Card {
     String card_name = "";
 
     String type = "";
@@ -18,8 +19,13 @@ public class card {
     int damage = 0;
 
     String description = "";
-
-    public card(String name) {
+    
+    
+    public Boolean PlayAtStart = false;
+    public Card() {   	
+    }
+    
+    public Card(String name) {
         this.card_name = name;
         Map<String, String> type1 = Map.ofEntries(
                 Map.entry("BATTLE AXE", "ATTACK"),
@@ -31,12 +37,16 @@ public class card {
                 Map.entry("STONE WALL", "DEFENSE"),
                 Map.entry("BARBED WIRE", "DEFENSE"),
                 Map.entry("REINFORCED GATE", "DEFENSE"),
+                Map.entry("WOODEN WALL", "DEFENSE"),
                 Map.entry("IRON DOOR", "DEFENSE"),
                 Map.entry("STEEL CHAINS", "DEFENSE"),
                 Map.entry("THUNDERSTORM", "DEFENSE"),
+                Map.entry("EARTHQUAKE", "DEFENSE"),
                 Map.entry("TORNADO", "DEFENSE"),
                 Map.entry("FLOOD", "DEFENSE"),
-                Map.entry("EARTHQUAKE", "DEFENSE")
+                Map.entry("ARCHER TOWER", "SPECIAL"),
+                Map.entry("TRADE", "SPECIAL"),
+                Map.entry("SCOUT", "SPECIAL")
         );
         this.type = type1.get(name);
         Map<String, Integer> damage1 = Map.ofEntries(
@@ -47,6 +57,7 @@ public class card {
                 Map.entry("MACE", 5),
                 Map.entry("CROSSBOW", 10),
                 Map.entry("STONE WALL", 5),
+                Map.entry("WOODEN WALL", 2),
                 Map.entry("BARBED WIRE", 8),
                 Map.entry("REINFORCED GATE", 14),
                 Map.entry("IRON DOOR", 10),
@@ -54,7 +65,10 @@ public class card {
                 Map.entry("THUNDERSTORM", -4),
                 Map.entry("TORNADO", -6),
                 Map.entry("FLOOD", -3),
-                Map.entry("EARTHQUAKE", -8)
+                Map.entry("EARTHQUAKE", -8),
+                Map.entry("ARCHER TOWER", 0),
+                Map.entry("TRADE", 0),
+                Map.entry("SCOUT", 0)
         );
         this.damage = damage1.get(name);
         if (!this.card_name.equals("") && !this.type.equals("")){
@@ -89,5 +103,13 @@ public class card {
 
     public String getType(){
         return this.type;
+    }
+    
+    public void SetName(String name) {
+    	card_name = name;
+    }
+    
+    public void SetType(String type) {
+    	this.type = type;
     }
 }
