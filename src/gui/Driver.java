@@ -1,10 +1,18 @@
 package gui;
 
+import javax.swing.SwingUtilities;
+
+import gui.MainMenu;
+
 public class Driver {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.print("Hello World");
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new MainMenu();
+			}
+		});
 	}
 
 }
