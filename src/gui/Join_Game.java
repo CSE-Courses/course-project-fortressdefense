@@ -40,7 +40,7 @@ public class Join_Game implements ActionListener {
     JTextArea chat;
     JTextField unsend;
     JButton send;
-    String chat_log = "Welcome";
+    String chat_log = "";
     /**Exist*/
     JButton back;
 
@@ -135,6 +135,10 @@ public class Join_Game implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(refresh_button)){
             //Get from server
+            chat_log = "";
+            chat.setText("");
+            My_Status = "waiting";
+            player_Status = new String[][]{{"me", My_Status}};
             System.out.println("Refresh Button Clicked, reload game list");
         }
         else if (e.getSource().equals(search_Button)) {
