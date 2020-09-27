@@ -1,9 +1,22 @@
+/**
+ *Join Game Screen / GUI
+ *
+ * Some variables are only used for testing.
+ * They should be empty in this file.
+ * For example:
+ * lobby_data : get games info form server
+ * player_status : According to which game you joined, get player status in that room.(ready / waiting)
+ *
+ * Haohua Feng(Eddie)
+ * */
+
 package gui;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Time;
+import java.util.Map;
 
 
 public class Join_Game implements ActionListener {
@@ -12,6 +25,7 @@ public class Join_Game implements ActionListener {
     /**--------------------*/
     JLabel lobby;
     JLabel lobby_status;
+    Map lobby_data = Map.of();
     JScrollPane game_list;
     JButton refresh_button;
     /**--------------------*/
@@ -154,7 +168,7 @@ public class Join_Game implements ActionListener {
                 chat.setText(chat_log);
                 unsend.setText("");
                 System.out.println("Send Message");
-            };
+            }
         }
         else if (e.getSource().equals(back)){
             System.out.println("You clicked on Go Back button, back to main menu");
