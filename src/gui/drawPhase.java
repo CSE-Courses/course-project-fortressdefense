@@ -73,7 +73,7 @@ public class drawPhase {
 		btnExit.setBackground(Color.DARK_GRAY);
 		btnExit.addActionListener(new ActionListener() {
 			
-			//exit button
+			//cardImg/exit button
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
@@ -87,8 +87,8 @@ public class drawPhase {
 		lblDrawPhase.setBounds(354, 0, 296, 90);
 		frmFortressDefense.getContentPane().add(lblDrawPhase);
 		
-		//timer
-		//Timer tm = new Timer(50, new ActionListener();)
+		//cardImg/timer
+		//cardImg/Timer tm = new Timer(50, new ActionListener();)
 		JLabel lblTimer = new JLabel("30");
 		lblTimer.setFont(new Font("Sitka Subheading", Font.PLAIN, 36));
 		lblTimer.setBounds(407, 71, 67, 46);
@@ -113,14 +113,14 @@ public class drawPhase {
 		lblBar.setBounds(380, 114, 254, 46);
 		frmFortressDefense.getContentPane().add(lblBar);
 		
-		JLabel lblRoundNum = new JLabel("ROUND 5/8");
+		JLabel lblRoundNum = new JLabel("ROUND 5/cardImg/8");
 		lblRoundNum.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 30));
 		lblRoundNum.setBounds(10, 216, 195, 90);
 		frmFortressDefense.getContentPane().add(lblRoundNum);
 		
 		JButton btnAttack = new JButton("");
 		btnAttack.setBorder(UIManager.getBorder("CheckBox.border"));
-		Image attackImg = new ImageIcon(this.getClass().getResource("/attackCard.png")).getImage();
+		Image attackImg = new ImageIcon(this.getClass().getResource("Images/attackCard.PNG")).getImage();
 		btnAttack.setIcon(new ImageIcon(attackImg));
 		btnAttack.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnAttack.setBounds(250, 209, 234, 280);
@@ -128,7 +128,7 @@ public class drawPhase {
 		
 		JButton btnDefense = new JButton("");
 		btnDefense.setBorder(UIManager.getBorder("CheckBox.border"));
-		Image defenseImg = new ImageIcon(this.getClass().getResource("/defenseCard.png")).getImage();
+		Image defenseImg = new ImageIcon(this.getClass().getResource("Images/defenseCard.png")).getImage();
 		btnDefense.setIcon(new ImageIcon(defenseImg));
 		btnDefense.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnDefense.setBounds(524, 210, 234, 279);
@@ -170,25 +170,25 @@ public class drawPhase {
 		cardPanel.setLayout(null);
 		
 		JButton btnCard1 = new JButton("");
-		Image axeImg = new ImageIcon(this.getClass().getResource("/axe.png")).getImage();
+		Image axeImg = new ImageIcon(this.getClass().getResource("Images/axe.png")).getImage();
 		btnCard1.setIcon(new ImageIcon(axeImg));
 		btnCard1.setBounds(91, 29, 159, 179);
 		cardPanel.add(btnCard1);
 		
 		JButton btnCard2 = new JButton("");
-		Image battleAxeImg = new ImageIcon(this.getClass().getResource("/battleAxe.png")).getImage();
+		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/battleAxe.png")).getImage();
 		btnCard2.setIcon(new ImageIcon(battleAxeImg));
 		btnCard2.setBounds(326, 29, 159, 179);
 		cardPanel.add(btnCard2);
 		
 		JButton btnCard3 = new JButton("");
-		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("/reinforcedGate.png")).getImage();
+		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/reinforcedGate.png")).getImage();
 		btnCard3.setIcon(new ImageIcon(reinforcedGateImg));
 		btnCard3.setBounds(565, 29, 159, 179);
 		cardPanel.add(btnCard3);
 		
 		JButton btnCard4 = new JButton("");
-		Image scoutImg = new ImageIcon(this.getClass().getResource("/scout.png")).getImage();
+		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/scout.png")).getImage();
 		btnCard4.setIcon(new ImageIcon(scoutImg));
 		btnCard4.setBounds(802, 29, 159, 179);
 		cardPanel.add(btnCard4);
