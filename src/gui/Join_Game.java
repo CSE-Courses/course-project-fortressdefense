@@ -13,10 +13,13 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.*;
+import java.util.List;
 
 
 public class Join_Game implements ActionListener {
@@ -45,12 +48,13 @@ public class Join_Game implements ActionListener {
     /**Exist*/
     JButton back;
 
-    public Join_Game(){
+    public Join_Game() throws IOException {
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("Fortress Defense → Join Game");
         frame.setSize(720,720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panel.setBackground(new Color(209  ,116,0));
         panel.setLayout(null);
 
         /**Game Lobby*/
@@ -64,6 +68,7 @@ public class Join_Game implements ActionListener {
         panel.add(refresh_button);
 
         lobby_status = new JLabel("Room         |        Players           |          Status");
+        lobby_status.setForeground(new Color(255,255,255));
         lobby_status.setBounds(80, 83,300,20);
         frame.add(lobby_status);
 
@@ -79,6 +84,8 @@ public class Join_Game implements ActionListener {
         /**Search field for searching game*/
         JLabel search1 = new JLabel("Cannot Find the game you want to join?");
         JLabel search2 = new JLabel("Type the name of the room in the text field and click.");
+        search1.setForeground(new Color(255,255,255));
+        search2.setForeground(new Color(255,255,255));
         search1.setBounds(90,525,300,20);
         search2.setBounds(50,545,300,20);
         panel.add(search1);panel.add(search2);
@@ -101,6 +108,7 @@ public class Join_Game implements ActionListener {
 
         Ready_or_Cancel = new JButton("Ready");
         Ready_or_Cancel.setBounds(485, 210, 80, 30);
+        Ready_or_Cancel.setBackground(new Color(0,204,0));
         Ready_or_Cancel.addActionListener(this);
         panel.add(Ready_or_Cancel);
 
@@ -108,6 +116,7 @@ public class Join_Game implements ActionListener {
         chat = new JTextArea();
         chat.setText(chat_log);
         chat.setEditable(false);
+        chat.setLineWrap(true);
         JScrollPane Text_scroll = new JScrollPane(chat);
         Text_scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         Text_scroll.setBounds(400,270,250,330);
@@ -124,6 +133,7 @@ public class Join_Game implements ActionListener {
 
         /**back to main menu*/
         back = new JButton("← Back");
+        back.setBackground(new Color(204,0,0));
         back.setBounds(50,10,80,30);
         back.addActionListener(this);
         panel.add(back);
@@ -132,7 +142,8 @@ public class Join_Game implements ActionListener {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args){
+
+    public static void main(String[] args) throws IOException {
         new Join_Game();
     }
 
@@ -164,10 +175,12 @@ public class Join_Game implements ActionListener {
             if (My_Status.equals("waiting")){
                 Ready_or_Cancel.setText("Cancel");
                 My_Status = "ready";
+                Ready_or_Cancel.setBackground(new Color(204,0,0));
             }
             else{
                 Ready_or_Cancel.setText("Ready");
                 My_Status = "waiting";
+                Ready_or_Cancel.setBackground(new Color(0,204,0));
             }
             if (My_Status.equals("ready")){
                 room_detail.getModel().setValueAt("ready",0,1);
@@ -181,7 +194,7 @@ public class Join_Game implements ActionListener {
             String input = unsend.getText();
             if (!input.equals("")) {
                 Time time = new Time(System.currentTimeMillis());
-                chat_log = chat_log + "\n\n" + time + "\nMe : " + input;
+                chat_log = chat_log + "" + time + "\nMe : " + input + "\n\n";
                 chat.setText(chat_log);
                 unsend.setText("");
                 System.out.println("Send Message");
