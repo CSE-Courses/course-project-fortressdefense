@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Time;
-import java.util.Map;
+import java.util.*;
 
 
 public class Join_Game implements ActionListener {
@@ -25,8 +25,9 @@ public class Join_Game implements ActionListener {
     /**--------------------*/
     JLabel lobby;
     JLabel lobby_status;
-    Map lobby_data = Map.of();
-    JScrollPane game_list;
+    HashMap<String, List<String>> lobby_data = new HashMap<>();
+    DefaultListModel<String> lobby_data_T = new DefaultListModel<>();
+    JList<String> game_list;
     JButton refresh_button;
     /**--------------------*/
     JTextField search_room;
@@ -66,10 +67,14 @@ public class Join_Game implements ActionListener {
         lobby_status.setBounds(80, 83,300,20);
         frame.add(lobby_status);
 
-        game_list = new JScrollPane();
-        game_list.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        game_list = new JList<String>(lobby_data_T);
+        game_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        game_list.setVisibleRowCount(-1);
+        JScrollPane gls = new JScrollPane(game_list);
+        gls.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         game_list.setBounds(50, 100, 300, 400);
-        panel.add(game_list);
+        gls.setBounds(50, 100, 300, 400);
+        panel.add(gls);
 
         /**Search field for searching game*/
         JLabel search1 = new JLabel("Cannot Find the game you want to join?");
@@ -134,6 +139,14 @@ public class Join_Game implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(refresh_button)){
+            for (int i = 0; i<100; i++){
+                lobby_data.put("Room "+i, Arrays.asList("3/6", "waiting"));
+            }
+            for (int i = 0; i < 100; i++){
+                String Name = "" +lobby_data.keySet().toArray()[i];
+                String value = "  " + lobby_data.values().toArray()[i];
+                lobby_data_T.addElement(Name);
+            }
             //Get from server
             chat_log = "";
             chat.setText("");
