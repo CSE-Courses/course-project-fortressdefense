@@ -12,17 +12,20 @@ import java.util.Map;
  * error handling: not done yet
  */
 public class Card {
-    String card_name = "";
+    public String card_name = "";
 
-    String type = "";
+    public String type = "";
 
-    int damage = 0;
+    public int damage = 0;
 
-    String description = "";
+    public String description = "";
     
     
     public Boolean PlayAtStart = false;
-    public Card() {   	
+    public Card(String name,String type, int damage) {
+        this.card_name=name;
+        this.type=type;
+        this.damage=damage;
     }
     
     public Card(String name) {
