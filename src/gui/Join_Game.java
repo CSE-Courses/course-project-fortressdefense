@@ -67,7 +67,7 @@ public class Join_Game implements ActionListener {
         refresh_button.addActionListener(this);
         panel.add(refresh_button);
 
-        lobby_status = new JLabel("Room         |        Players           |          Status");
+        lobby_status = new JLabel("Room         |        Players           |          Status ");
         lobby_status.setForeground(new Color(255,255,255));
         lobby_status.setBounds(80, 83,300,20);
         frame.add(lobby_status);
