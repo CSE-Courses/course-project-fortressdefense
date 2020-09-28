@@ -6,26 +6,67 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class MainMenu {
-	JFrame frame = new JFrame("Fortress Defence");
 	
 	public MainMenu() {
 		runGUI();
 	}
 
-	public void runGUI() {	    
-	    JPanel panel1 = new JPanel();
+	public JLabel createDisplayImage(String file) {
+	    JLabel label = new JLabel();
+	    java.net.URL imgURL = this.getClass().getResource(file);
+	    
+	    if (imgURL == null) {
+	      throw new IllegalArgumentException("Couldn't find file: " + file);
+	    }
+	    
+	    ImageIcon cardImage = new ImageIcon(imgURL);    
+	    label.setIcon(cardImage);
+	    Dimension d = new Dimension(cardImage.getIconWidth() + 10, cardImage.getIconHeight() + 10);
+	    label.setSize(d);
+	    label.setPreferredSize(d);
+	    label.setMaximumSize(d);
+	    label.setMinimumSize(d);
+	    return label;
+	}
+	
+	public void runGUI() {
+		JFrame frame = new JFrame("FORTRESS DEFENSE");
+		
+		Color c1 = new Color(153, 102, 0);
+		//Color c2 = new Color(0, 0, 153);
+		
+	    JPanel panel = new JPanel();
+	    
+	    JLabel logo = createDisplayImage("/fd/FD.png");
+	    logo.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    panel.add(logo);
+	    panel.add(Box.createVerticalStrut(100));
+	    
 	    JButton cgb = new JButton("Create Game");
-	    panel1.add(cgb);
+	    cgb.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    cgb.setSize(new Dimension(150, 75));
+	    cgb.setBackground(c1);
+	    panel.add(cgb);
+	    panel.add(Box.createVerticalStrut(25));
+	    
 	    JButton jgb = new JButton("Join Game");
-	    panel1.add(jgb);
-	    JPanel panel3 = new JPanel();
+	    jgb.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    jgb.setBackground(c1);
+	    panel.add(jgb);
+	    panel.add(Box.createVerticalStrut(25));
+	    
+	    jgb.addActionListener(new ActionListener(){       
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+	    });
+	    
 	    JButton rules = new JButton("Rules");
-	    panel3.add(rules);
-	    frame.getContentPane().add(panel1, BorderLayout.NORTH);
-	    frame.getContentPane().add(panel3, BorderLayout.SOUTH);
-
-//	    ImageIcon image = new ImageIcon("/fd/FD.gif");
-//	    frame.getContentPane().add(new JLabel(image));
+	    rules.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    rules.setBackground(c1);
+	    panel.add(rules);
+	    panel.add(Box.createVerticalStrut(25));
 	    
 	    rules.addActionListener(new ActionListener(){       
 			@Override
@@ -34,15 +75,47 @@ public class MainMenu {
 				rulesScreen();
 			}
 	    });
-		
-		frame.setSize(1000, 1000);
+	    
+	    JButton draw = new JButton("Draw Phase");
+	    draw.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    draw.setBackground(c1);
+	    panel.add(draw);
+	    panel.add(Box.createVerticalStrut(25));
+	    
+	    draw.addActionListener(new ActionListener(){       
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				//drawPhase dp = new drawPhase();
+			}
+	    });
+	    
+	    JButton attack = new JButton("Attack Phase");
+	    attack.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    attack.setBackground(c1);
+	    panel.add(attack);
+	    panel.add(Box.createVerticalStrut(25));
+	    
+	    attack.addActionListener(new ActionListener(){       
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				attackPhase ap = new attackPhase();
+			}
+	    });
+	    
+	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	    
+	    frame.getContentPane().add(panel);
+	    
+		frame.setSize(1920, 1020);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	
 	public void rulesScreen() {
-		frame.getContentPane().removeAll();
-		frame.repaint();
+		JFrame frame = new JFrame("Rules");
+		
 		JPanel panel = new JPanel();
 		JTextArea textArea = new JTextArea(100,100);
 		
@@ -71,5 +144,8 @@ public class MainMenu {
 		
 	    panel.add(textArea);
 		frame.getContentPane().add(panel);
+		
+		frame.setSize(1920, 1020);
+		frame.setVisible(true);
 	}
 }
