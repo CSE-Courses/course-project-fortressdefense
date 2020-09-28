@@ -1,6 +1,6 @@
 package code.Deck;
 
-import code.card_class.Card;
+import code.card_class.*;
 
 /**
  * Interface representing deck of cards for Fortress Defense.

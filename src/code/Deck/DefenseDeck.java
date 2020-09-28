@@ -18,7 +18,7 @@ public class DefenseDeck implements IDeck {
 	 * Data Structure for Defense Deck
 	 * @author Andrew Jank
 	 */
-	private Stack<Card> stack;
+	public Stack<Card> stack;
 	
 	/*
 	 * Constants representing number of cards in attack deck
@@ -94,7 +94,22 @@ public class DefenseDeck implements IDeck {
 	public void Shuffle() {
 		Collections.shuffle(stack);
 	}
-	
+	public Stack<Card> AddCard(Card card, int num){
+
+		if((card.type=="DEFENSE")){
+			throw new IllegalArgumentException("No cards other than defense cards can be added to defense deck");
+		}
+		for (int i = 0; i < num; i++) {
+			stack.add(card);
+		}
+		return stack;
+	}
+	public void remove(Card card){
+		stack.remove(card);
+	}
+	public boolean contains(Card card){
+		return stack.contains(card);
+	}
 	private Collection<Card> AddTrade(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {

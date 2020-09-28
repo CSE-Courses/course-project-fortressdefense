@@ -17,7 +17,7 @@ public class AttackDeck implements IDeck {
 	 * Data Structure for Attack Deck
 	 * @author Andrew Jank
 	 */
-	private Stack<Card> stack;
+	public Stack<Card> stack;
 	
 	/*
 	 * Constants representing number of cards in attack deck
@@ -38,7 +38,7 @@ public class AttackDeck implements IDeck {
 	 * @author Andrew Jank
 	 */
 	public AttackDeck() {
-		stack = new Stack<Card>();
+		this.stack = new Stack<Card>();
 	}
 
 	@Override
@@ -85,7 +85,18 @@ public class AttackDeck implements IDeck {
 	public void Shuffle() {
 		Collections.shuffle(stack);
 	}
-	
+	public Stack<Card> AddCard(Card card, int num){
+//		System.out.println("hi");
+
+		if(!(card.type=="ATTACK"||card.type=="SPECIAL")){
+			System.out.println(card.type!="ATTACK");
+			throw new IllegalArgumentException("Defense card cannot be added to attack deck");
+		}
+		for (int i = 0; i < num; i++) {
+			stack.push(card);
+		}
+		return stack;
+	}
 	private Collection<Card> AddTrade(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
@@ -93,7 +104,16 @@ public class AttackDeck implements IDeck {
 		}
 		return cards;
 	}
+    public int DeckSize(){
+		return stack.size();
+	}
+	public void remove(Card card){
+		stack.remove(card);
+	}
+	public boolean contains(Card card){
+		return stack.contains(card);
 
+	}
 	private Collection<Card> AddScout(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {

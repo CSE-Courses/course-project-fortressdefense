@@ -141,7 +141,7 @@ public class attackPhase {
 		tpanel.add(go);
 		
 		JButton card1 = new JButton("");
-		Image axeImg = new ImageIcon(this.getClass().getResource("/axe.png")).getImage();
+		Image axeImg = new ImageIcon(this.getClass().getResource("Images/axe.png")).getImage();
 		card1.setIcon(new ImageIcon(axeImg));
 		card1.setBackground(c1);
 		spanel.add(card1);
@@ -152,7 +152,7 @@ public class attackPhase {
 		spanel.add(card2);
 		
 		JButton card3 = new JButton("");
-		Image baxeImg = new ImageIcon(this.getClass().getResource("/battleAxe.png")).getImage();
+		Image baxeImg = new ImageIcon(this.getClass().getResource("Images/battleAxe.png")).getImage();
 		card3.setIcon(new ImageIcon(baxeImg));
 		card3.setBackground(c1);
 		spanel.add(card3);
@@ -163,7 +163,7 @@ public class attackPhase {
 		spanel.add(card4);
 		
 		JButton card5 = new JButton("");
-		Image gate = new ImageIcon(this.getClass().getResource("/reinforcedGate.png")).getImage();
+		Image gate = new ImageIcon(this.getClass().getResource("Images/reinforcedGate.png")).getImage();
 		card5.setIcon(new ImageIcon(gate));
 		card5.setBackground(c1);
 		spanel.add(card5);
@@ -174,7 +174,7 @@ public class attackPhase {
 		spanel.add(card6);
 		
 		JButton card7 = new JButton("");
-		Image scout = new ImageIcon(this.getClass().getResource("/scout.png")).getImage();
+		Image scout = new ImageIcon(this.getClass().getResource("Images/scout.png")).getImage();
 		card7.setIcon(new ImageIcon(scout));
 		card7.setBackground(c1);
 		spanel.add(card7);
