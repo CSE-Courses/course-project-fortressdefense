@@ -193,4 +193,8 @@ public class drawPhase {
 		btnCard4.setBounds(802, 29, 159, 179);
 		cardPanel.add(btnCard4);
 	}
+	
+	public JPanel GetPanel() {
+		return (JPanel) frmFortressDefense.getContentPane();
+	}
 }

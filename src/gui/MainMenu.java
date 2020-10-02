@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import gui.CreateGame.*;
+
 public class MainMenu {
 	
 	public MainMenu() {
@@ -48,6 +50,7 @@ public class MainMenu {
 	    cgb.setBackground(c1);
 	    panel.add(cgb);
 	    panel.add(Box.createVerticalStrut(25));
+	    cgb.addActionListener(new CreateGameButtonHandler(frame, panel));
 	    
 	    JButton jgb = new JButton("Join Game");
 	    jgb.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -108,7 +111,7 @@ public class MainMenu {
 	    
 	    frame.getContentPane().add(panel);
 	    
-		frame.setSize(1920, 1020);
+		frame.setSize(1152, 912);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
