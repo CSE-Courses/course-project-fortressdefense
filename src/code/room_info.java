@@ -89,6 +89,10 @@ public class room_info {
         return player_status;
     }
 
+    public room_info send_update(){
+        return this;
+    }
+
     private Boolean check(String name){
         for (String player : players){
             if (player.equals(name)){

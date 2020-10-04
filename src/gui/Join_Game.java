@@ -131,16 +131,20 @@ public class Join_Game implements ActionListener {
         game_list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    String detail = (String) game_list.getSelectedValue();
-                    String rn = "";
-                    for(int i = 0; i < 20; i++){
-                        if(detail.charAt(i) == ' '){
-                            break;
-                        }
-                        else{
-                            rn += detail.charAt(i);}
+                String detail = (String) game_list.getSelectedValue();
+                String rn = "";
+                for(int i = 0; i < 20; i++){
+                    if(detail.charAt(i) == ' '){
+                        break;
                     }
+                    else{
+                        rn += detail.charAt(i);}
+                }
+                if (e.getClickCount() == 1) {
+                    get_room_detail(rn);
+                }
+                else if (e.getClickCount() == 2) {
+
                     if(!RoomName.equals(" ")) {
                         gl.get(RoomName).left(My_Name);
                     }
@@ -148,6 +152,7 @@ public class Join_Game implements ActionListener {
                         RoomName = rn;
                         gl.get(rn).join(My_Name);
                         feedback.setText("You Entered " + RoomName);
+                        gl.get(rn).send_update();
                     }
                     else if(!gl.get(rn).room_status.equals("Waiting")){
                         feedback.setText("Cannot join ongoing game");
@@ -316,9 +321,14 @@ public class Join_Game implements ActionListener {
 
         else if (e.getSource().equals(back)){
             System.out.println("You clicked on Go Back button, back to main menu");
+            if (!RoomName.equals(" ")) {
+                gl.get(RoomName).left(My_Name);
+            }
+            gl.get(RoomName).send_update();
+            RoomName = " ";
             frame.dispose();
         }
-
+        gl.get(RoomName).send_update();
         frame.repaint();
     }
 }
