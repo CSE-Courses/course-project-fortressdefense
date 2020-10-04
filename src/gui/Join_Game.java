@@ -316,7 +316,7 @@ public class Join_Game implements ActionListener {
 
         else if (e.getSource().equals(back)){
             System.out.println("You clicked on Go Back button, back to main menu");
-            System.exit((0));
+            frame.dispose();
         }
 
         frame.repaint();
