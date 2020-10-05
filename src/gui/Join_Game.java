@@ -1,7 +1,5 @@
 package gui;
 import code.room_info;
-import org.junit.Assert;
-import org.junit.Test;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -105,7 +103,7 @@ public class Join_Game implements ActionListener {
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
         frame.setSize(720,720);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setBackground(new Color(209  ,116,0));
         panel.setLayout(null);
 
@@ -165,6 +163,11 @@ public class Join_Game implements ActionListener {
                 refresh();
             }
         });
+
+        JLabel hint = new JLabel("Single click to view room detail, double click to join");
+        hint.setForeground(new Color(255,255,255));
+        hint.setBounds(50,500,300,20);
+        panel.add(hint);
 
         JScrollPane gls = new JScrollPane(game_list);
         gls.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -245,11 +248,18 @@ public class Join_Game implements ActionListener {
     }
 
     private void refresh(){
+        //obtain() returns the list of room_info that obtain from server
         lobby_data_T.removeAllElements();
         for (Map.Entry<String, room_info> room : gl.entrySet()){
             lobby_data_T.addElement(room.getValue().room_detail());
         }
     }
+    /**
+    private List<room_info> obtain(){
+        List<room_info> result = new ArrayList<>();
+        return result;
+    }
+     */
 
 
     @Override
@@ -277,6 +287,7 @@ public class Join_Game implements ActionListener {
                         found = true;
                         get_room_detail(RoomName);
                         refresh();
+                        gl.get(RoomName).send_update();
                         break;
                     }
                     else if(!gl.get(room_name).room_status.equals("Waiting")){
@@ -306,6 +317,7 @@ public class Join_Game implements ActionListener {
             }
             get_room_detail(RoomName);
             System.out.println("Set to " + gl.get(RoomName).getPlayer_status().get(My_Name));
+            gl.get(RoomName).send_update();
         }
 
         else if (e.getSource().equals(send)) {
@@ -318,17 +330,15 @@ public class Join_Game implements ActionListener {
                 System.out.println("Send Message");
             }
         }
-
         else if (e.getSource().equals(back)){
             System.out.println("You clicked on Go Back button, back to main menu");
             if (!RoomName.equals(" ")) {
                 gl.get(RoomName).left(My_Name);
+                gl.get(RoomName).send_update();
+                RoomName = " ";
             }
-            gl.get(RoomName).send_update();
-            RoomName = " ";
             frame.dispose();
         }
-        gl.get(RoomName).send_update();
         frame.repaint();
     }
 }
