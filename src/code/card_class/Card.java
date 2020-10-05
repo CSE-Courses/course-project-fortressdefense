@@ -26,6 +26,11 @@ public class Card {
         this.damage=damage;
     }
     
+    // used for DeckTests DO NOT REMOVE
+    public Card() {
+    	
+    }
+    
     public Card(String name) {
         this.card_name = name;
         Map<String, String> type1 = Map.ofEntries(

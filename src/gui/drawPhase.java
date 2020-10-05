@@ -378,4 +378,8 @@ public class drawPhase {
 		
 		
 	}
+	
+	public JPanel GetPanel() {
+		return (JPanel) frmFortressDefense.getContentPane();
+	}
 }

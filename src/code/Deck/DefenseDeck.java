@@ -94,6 +94,8 @@ public class DefenseDeck implements IDeck {
 	public void Shuffle() {
 		Collections.shuffle(stack);
 	}
+	
+	// Why is this here, cards added in initialize
 	public Stack<Card> AddCard(Card card, int num){
 
 		if((card.type=="DEFENSE")){
@@ -104,12 +106,17 @@ public class DefenseDeck implements IDeck {
 		}
 		return stack;
 	}
+	
+	// why is this here, you dont remove cards from anywhere in the deck, only top
 	public void remove(Card card){
 		stack.remove(card);
 	}
+	
+	// see above comment, players should not be able to look through decks
 	public boolean contains(Card card){
 		return stack.contains(card);
 	}
+	
 	private Collection<Card> AddTrade(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
