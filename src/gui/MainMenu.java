@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.*;
 
 public class MainMenu {
@@ -75,6 +76,17 @@ public class MainMenu {
 				rulesScreen();
 			}
 	    });
+		jgb.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				try {
+					Join_Game jg = new Join_Game();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	    
 	    JButton draw = new JButton("Draw Phase");
 	    draw.setAlignmentX(Component.CENTER_ALIGNMENT);
