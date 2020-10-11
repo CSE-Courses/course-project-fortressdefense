@@ -10,6 +10,8 @@ import javafx.util.Pair;
 
 public class Player {
 
+	public String PlayerName;
+	
     Map<String, Pair> cardType=Map.ofEntries(
             Map.entry("BATTLE AXE",new Pair("ATTACK", 8)),
             Map.entry("AXE", new Pair("ATTACK", 3)),
@@ -32,10 +34,37 @@ public class Player {
             Map.entry("SCOUT", new Pair("SPECIAL", 0))
     );
 
+    // why is Deck used, see Hand class. Deck contains all cards, Hand contains cards for each player
     public AttackDeck attack=new AttackDeck();
     public DefenseDeck defense=new DefenseDeck();
     public int points=10;
-    public void Player(){
+    public Player(String playerName){
+        cardType=Map.ofEntries(
+                Map.entry("BATTLE AXE",new Pair("ATTACK", 8)),
+                Map.entry("AXE", new Pair("ATTACK", 3)),
+                Map.entry("SWORD", new Pair("ATTACK", 4)),
+                Map.entry("STICK", new Pair("ATTACK", 1)),
+                Map.entry("MACE", new Pair("ATTACK", 5)),
+                Map.entry("CROSSBOW", new Pair("ATTACK", 10)),
+                Map.entry("STONE WALL", new Pair("DEFENSE", 5)),
+                Map.entry("BARBED WIRE", new Pair("DEFENSE", 8)),
+                Map.entry("REINFORCED GATE", new Pair("DEFENSE", 14)),
+                Map.entry("WOODEN WALL", new Pair("DEFENSE", 2)),
+                Map.entry("IRON DOOR", new Pair("DEFENSE", 10)),
+                Map.entry("STEEL CHAINS", new Pair("DEFENSE", 7)),
+                Map.entry("THUNDERSTORM", new Pair("DEFENSE", -4)),
+                Map.entry("EARTHQUAKE", new Pair("DEFENSE", -8)),
+                Map.entry("TORNADO", new Pair("DEFENSE", -6)),
+                Map.entry("FLOOD",new Pair("DEFENSE", -3)),
+                Map.entry("ARCHER TOWER", new Pair("SPECIAL", 0)),
+                Map.entry("TRADE",new Pair("SPECIAL", 0)),
+                Map.entry("SCOUT", new Pair("SPECIAL", 0))
+        );
+        
+        this.PlayerName = playerName;
+    }
+    
+    public Player() {
         cardType=Map.ofEntries(
                 Map.entry("BATTLE AXE",new Pair("ATTACK", 8)),
                 Map.entry("AXE", new Pair("ATTACK", 3)),
@@ -69,7 +98,7 @@ public class Player {
     }
 
     public int AttackDeckSize(){
-        return attack.DeckSize();
+        return attack.Size();
     }
 
     public int DefenseDeckSize(){

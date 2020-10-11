@@ -1,6 +1,4 @@
 package code.card_class;
-import javafx.scene.control.Alert;
-
 import java.util.Map;
 
 /**
@@ -26,6 +24,11 @@ public class Card {
         this.card_name=name;
         this.type=type;
         this.damage=damage;
+    }
+    
+    // used for DeckTests DO NOT REMOVE
+    public Card() {
+    	
     }
     
     public Card(String name) {
