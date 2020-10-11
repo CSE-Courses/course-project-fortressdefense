@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import gui.CreateGame.*;
-
 public class MainMenu {
 	
 	public MainMenu() {
@@ -39,7 +37,7 @@ public class MainMenu {
 		
 	    JPanel panel = new JPanel();
 	    
-	    JLabel logo = createDisplayImage("/fd/FD.png");
+	    JLabel logo = createDisplayImage("Images/FD.png");
 	    logo.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    panel.add(logo);
 	    panel.add(Box.createVerticalStrut(100));
