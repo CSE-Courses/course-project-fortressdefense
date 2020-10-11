@@ -1,24 +1,29 @@
 package code.Socket;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import code.Deck.Player;
+import code.Socket.*;
+import code.*;
+
 public class client {
-    public static void main(String args[]) throws IOException {
-        int number, temp;
-        Scanner sc = new Scanner(System.in);
-        Socket s = new Socket("172.20.6.109", 1342);
-        Scanner sc1 = new Scanner(s.getInputStream());
-        System.out.println("Enter any number");
-        number = sc.nextInt();
-        PrintStream p = new PrintStream(s.getOutputStream());
-        p.println(number);
-        temp = sc1.nextInt();
-        System.out.println(temp);
+    public static void main(String[] args) throws Exception {
+        Socket socket = new Socket("localhost", 16225);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        while (true) {
+            String msg = reader.readLine();
+            out.println(msg);
+            out.flush();
+            if (msg.equals("bye")) {
+                break;
+            }
+            System.out.println(in.readLine());
+        }
+        socket.close();
     }
 }
