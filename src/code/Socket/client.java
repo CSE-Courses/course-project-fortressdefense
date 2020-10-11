@@ -12,10 +12,7 @@ public class client {
     public static void main(String args[]) throws IOException {
         int number, temp;
         Scanner sc = new Scanner(System.in);
-        Socket socket = new Socket();
-        socket.connect(new InetSocketAddress("google.com", 80));
-        System.out.println(socket.getLocalAddress());
-        Socket s = new Socket(socket.getInetAddress(), 1342);
+        Socket s = new Socket("172.20.6.109", 1342);
         Scanner sc1 = new Scanner(s.getInputStream());
         System.out.println("Enter any number");
         number = sc.nextInt();
