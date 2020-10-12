@@ -48,6 +48,10 @@ public class drawPhase {
 	Timer tm;
 	int i = 30;
 	boolean discard = false;
+	JButton curBtn;//tracks the current card button
+	int curBound = 10;//sets the card btn position
+	int numA = 0;//number of attack cards
+	int numD = 0;//number of defense cards
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -195,11 +199,38 @@ public class drawPhase {
 		lblRoundNum.setBounds(10, 216, 195, 90);
 		frmFortressDefense.getContentPane().add(lblRoundNum);
 		
+		//Initialize Attack card images
+		Image axeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/axe.png")).getImage();
+		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/battleAxe.png")).getImage();
+		Image crossbowImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/crossbow.png")).getImage();
+		Image maceImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/mace.png")).getImage();
+		Image stickImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/stick.png")).getImage();
+		Image swordImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/sword.png")).getImage();
+				
+		//Initialize Defense card images
+		Image barbedWireImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/barbedWire.png")).getImage();
+		Image ironDoorImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/ironDoor.png")).getImage();
+		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/reinforcedGate.png")).getImage();
+		Image steelChainsImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/steelChains.png")).getImage();
+		Image stoneWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/stoneWall.png")).getImage();
+		Image woodenWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/woodenWall.png")).getImage();
+				
+		//Initialize Damage card images
+		Image earthquakeImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/earthquake.png")).getImage();
+		Image floodImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/flood.png")).getImage();
+		Image thunderstormImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/thunderstorm.png")).getImage();
+		Image tornadoImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/tornado.png")).getImage();
+				
+		//Initialize Special card images
+		Image archerTowerImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/archerTower.png")).getImage();
+		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.png")).getImage();
+		Image tradeImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/trade.png")).getImage();
+		
 		JButton btnCard1 = new JButton("");
 		btnCard1.setVisible(false);
 		btnCard1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("AXE card selected");
+				lblMsgBox.setText("<html> " + hand.Select(0).card_name + " card selected </html>");
 				lblCard1.setVisible(true);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
@@ -207,10 +238,8 @@ public class drawPhase {
 				lblSelected.setText("");
 			}
 		});
-		Image axeImg = new ImageIcon(this.getClass().getResource("Images/axe.png")).getImage();
-		btnCard1.setIcon(new ImageIcon(axeImg));
-		btnCard1.setBounds(10, 24, 119, 176);
-		cardPanel.add(btnCard1);
+		
+		curBtn = btnCard1;//initialize to first btn
 		
 		JButton btnCard2 = new JButton("");
 		btnCard2.setVisible(false);
@@ -224,10 +253,6 @@ public class drawPhase {
 				lblSelected.setText("");
 			}
 		});
-		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/battleAxe.png")).getImage();
-		btnCard2.setIcon(new ImageIcon(battleAxeImg));
-		btnCard2.setBounds(140, 24, 119, 176);
-		cardPanel.add(btnCard2);
 		
 		JButton btnCard3 = new JButton("");
 		btnCard3.setVisible(false);
@@ -241,10 +266,6 @@ public class drawPhase {
 				lblSelected.setText("");
 			}
 		});
-		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/reinforcedGate.png")).getImage();
-		btnCard3.setIcon(new ImageIcon(reinforcedGateImg));
-		btnCard3.setBounds(272, 24, 119, 176);
-		cardPanel.add(btnCard3);
 		
 		JButton btnCard4 = new JButton("");
 		btnCard4.setVisible(false);
@@ -259,40 +280,43 @@ public class drawPhase {
 			}
 		});
 		
-		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/scout.png")).getImage();
-		btnCard4.setIcon(new ImageIcon(scoutImg));
-		btnCard4.setBounds(403, 24, 119, 176);
-		cardPanel.add(btnCard4);
-		
 		JButton btnCard5 = new JButton("");
 		btnCard5.setVisible(false);
-		btnCard5.setBounds(534, 22, 119, 176);
-		cardPanel.add(btnCard5);
+		//btnCard5.setBounds(534, 22, 119, 176);
+		//cardPanel.add(btnCard5);
 		
 		JButton btnCard6 = new JButton("");
 		btnCard6.setVisible(false);
-		btnCard6.setBounds(666, 22, 119, 176);
-		cardPanel.add(btnCard6);
+		//btnCard6.setBounds(666, 22, 119, 176);
+		//cardPanel.add(btnCard6);
 		
 		JButton btnCard7 = new JButton("");
 		btnCard7.setVisible(false);
-		btnCard7.setBounds(796, 22, 119, 176);
-		cardPanel.add(btnCard7);
+		//btnCard7.setBounds(796, 22, 119, 176);
+		//cardPanel.add(btnCard7);
 		
 		JButton btnCard8 = new JButton("");
 		btnCard8.setVisible(false);
-		btnCard8.setBounds(925, 22, 119, 176);
-		cardPanel.add(btnCard8);
+		//btnCard8.setBounds(925, 22, 119, 176);
+		//cardPanel.add(btnCard8);
 		
 		JButton btnAttack = new JButton("");
 		btnAttack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblSelected.setText("<html> Attack Deck selected </html>");
-				lblMsgBox.setText("<html> Click GO! to draw a card from the Attack Deck </html>");
+				if(numA == 4)
+				{
+					lblMsgBox.setText("<html> You can only draw a maximum of 4 Attack cards </html>");
+					lblSelected.setText("");
+				}
+				else
+				{
+					lblSelected.setText("<html> Attack Deck selected </html>");
+					lblMsgBox.setText("<html> Click GO! to draw a card from the Attack Deck </html>");
+				}
 			}
 		});
 		btnAttack.setBorder(UIManager.getBorder("CheckBox.border"));
-		Image attackImg = new ImageIcon(this.getClass().getResource("Images/attackCard.png")).getImage();
+		Image attackImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/attackCard.png")).getImage();
 		btnAttack.setIcon(new ImageIcon(attackImg));
 		btnAttack.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnAttack.setBounds(250, 209, 234, 280);
@@ -301,12 +325,20 @@ public class drawPhase {
 		JButton btnDefense = new JButton("");
 		btnDefense.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblSelected.setText("<html> Defense Deck selected </html>");
-				lblMsgBox.setText("<html> Click GO! to draw a card from the Defense Deck </html>");
+				if(numD == 4)
+				{
+					lblMsgBox.setText("<html> You can only draw a maximum of 4 Defense cards </html>");
+					lblSelected.setText("");
+				}
+				else
+				{
+					lblSelected.setText("<html> Defense Deck selected </html>");
+					lblMsgBox.setText("<html> Click GO! to draw a card from the Defense Deck </html>");
+				}
 			}
 		});
 		btnDefense.setBorder(UIManager.getBorder("CheckBox.border"));
-		Image defenseImg = new ImageIcon(this.getClass().getResource("Images/defenseCard.png")).getImage();
+		Image defenseImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/defenseCard.png")).getImage();
 		btnDefense.setIcon(new ImageIcon(defenseImg));
 		btnDefense.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnDefense.setBounds(524, 210, 234, 279);
@@ -363,8 +395,6 @@ public class drawPhase {
 			}
 		});
 		
-		
-		
 		btnDiscard.setFont(new Font("SimSun", Font.BOLD, 30));
 		btnDiscard.setBackground(new Color(30, 144, 255));
 		btnDiscard.setBounds(20, 399, 187, 68);
@@ -380,10 +410,110 @@ public class drawPhase {
 				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")
 				{
 					hand.Draw(turn.AttackDeck);//draws card and adds it to hand
+					numA++;
 					
-					if(hand.Size() == 1)	//enables the btn for new card
+					if(hand.Select(hand.Size()-1).card_name == "AXE")
 					{
-						btnCard1.setVisible(true);
+						curBtn.setIcon(new ImageIcon(axeImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "BATTLE AXE")
+					{
+						curBtn.setIcon(new ImageIcon(battleAxeImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "CROSSBOW")
+					{
+						curBtn.setIcon(new ImageIcon(crossbowImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "MACE")
+					{
+						curBtn.setIcon(new ImageIcon(maceImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "STICK")
+					{
+						curBtn.setIcon(new ImageIcon(stickImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "SWORD")
+					{
+						curBtn.setIcon(new ImageIcon(swordImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "ARCHER TOWER")
+					{
+						curBtn.setIcon(new ImageIcon(archerTowerImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "SCOUT")
+					{
+						curBtn.setIcon(new ImageIcon(scoutImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "TRADE")
+					{
+						curBtn.setIcon(new ImageIcon(tradeImg));
+					}
+					curBtn.setBounds(curBound, 22, 119, 176);
+					cardPanel.add(curBtn);
+					curBtn.setVisible(true);
+					
+					curBound = curBound + 130;
+					
+					if(hand.Size() == 1)
+					{
+						curBtn = btnCard2;
+					}
+					else if(hand.Size() == 2)
+					{
+						curBtn = btnCard3;
+					}
+					else if(hand.Size() == 3)
+					{
+						curBtn = btnCard4;
+					}
+					else if(hand.Size() == 4)
+					{
+						curBtn = btnCard5;
+					}
+					else if(hand.Size() == 5)
+					{
+						curBtn = btnCard6;
+					}
+					else if(hand.Size() == 6)
+					{
+						curBtn = btnCard7;
+					}
+					else if(hand.Size() == 7)
+					{
+						curBtn = btnCard8;
+					}
+					
+					/*if(hand.Size() == 1)	//enables the btn for new card
+					{
+						if(hand.Select(hand.Size()-1).card_name == "AXE")
+						{
+							btnCard1.setIcon(new ImageIcon(axeImg));
+							btnCard1.setBounds(10, 24, 119, 176);
+							cardPanel.add(btnCard1);
+							btnCard1.setVisible(true);
+						}
+						else if(hand.Select(hand.Size()-1).card_name == "BATTLE AXE")
+						{
+							btnCard1.setIcon(new ImageIcon(battleAxeImg));
+							btnCard1.setBounds(10, 24, 119, 176);
+							cardPanel.add(btnCard1);
+							btnCard1.setVisible(true);
+						}
+						else if(hand.Select(hand.Size()-1).card_name == "CROSSBOW")
+						{
+							btnCard1.setIcon(new ImageIcon(crossbowImg));
+							btnCard1.setBounds(10, 24, 119, 176);
+							cardPanel.add(btnCard1);
+							btnCard1.setVisible(true);
+						}
+						else if(hand.Select(hand.Size()-1).card_name == "MACE")
+						{
+							btnCard1.setIcon(new ImageIcon(maceImg));
+							btnCard1.setBounds(10, 24, 119, 176);
+							cardPanel.add(btnCard1);
+							btnCard1.setVisible(true);
+						}
+						
 					}
 					else if(hand.Size() == 2)
 					{
@@ -413,6 +543,7 @@ public class drawPhase {
 					{
 						btnCard8.setVisible(true);
 					}
+					*/
 					
 					/*
 					final JOptionPane optionPane = new JOptionPane("<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
@@ -433,7 +564,96 @@ public class drawPhase {
 				else if(lblSelected.getText() == "<html> Defense Deck selected </html>")
 				{
 					hand.Draw(turn.DefenseDeck);
+					numD++;
 					
+					if(hand.Select(hand.Size()-1).card_name == "EARTHQUAKE")
+					{
+						curBtn.setIcon(new ImageIcon(earthquakeImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "FLOOD")
+					{
+						curBtn.setIcon(new ImageIcon(floodImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "THUNDERSTORM")
+					{
+						curBtn.setIcon(new ImageIcon(thunderstormImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "TORNADO")
+					{
+						curBtn.setIcon(new ImageIcon(tornadoImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "BARBED WIRE")
+					{
+						curBtn.setIcon(new ImageIcon(barbedWireImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "IRON DOOR")
+					{
+						curBtn.setIcon(new ImageIcon(ironDoorImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "REINFORCED GATE")
+					{
+						curBtn.setIcon(new ImageIcon(reinforcedGateImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "STEEL CHAINS")
+					{
+						curBtn.setIcon(new ImageIcon(steelChainsImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "STONE WALL")
+					{
+						curBtn.setIcon(new ImageIcon(stoneWallImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "WOODEN WALL")
+					{
+						curBtn.setIcon(new ImageIcon(woodenWallImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "ARCHER TOWER")
+					{
+						curBtn.setIcon(new ImageIcon(archerTowerImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "SCOUT")
+					{
+						curBtn.setIcon(new ImageIcon(scoutImg));
+					}
+					else if(hand.Select(hand.Size()-1).card_name == "TRADE")
+					{
+						curBtn.setIcon(new ImageIcon(tradeImg));
+					}
+					curBtn.setBounds(curBound, 22, 119, 176);
+					cardPanel.add(curBtn);
+					curBtn.setVisible(true);
+					
+					curBound = curBound + 130;
+					
+					if(hand.Size() == 1)
+					{
+						curBtn = btnCard2;
+					}
+					else if(hand.Size() == 2)
+					{
+						curBtn = btnCard3;
+					}
+					else if(hand.Size() == 3)
+					{
+						curBtn = btnCard4;
+					}
+					else if(hand.Size() == 4)
+					{
+						curBtn = btnCard5;
+					}
+					else if(hand.Size() == 5)
+					{
+						curBtn = btnCard6;
+					}
+					else if(hand.Size() == 6)
+					{
+						curBtn = btnCard7;
+					}
+					else if(hand.Size() == 7)
+					{
+						curBtn = btnCard8;
+					}
+					
+					/*
 					if(hand.Size() == 1)	//enables the btn for new card
 					{
 						btnCard1.setVisible(true);
@@ -466,6 +686,7 @@ public class drawPhase {
 					{
 						btnCard8.setVisible(true);
 					}
+					*/
 					/*
 					final JOptionPane optionPane = new JOptionPane("<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
 
@@ -513,6 +734,8 @@ public class drawPhase {
 						System.exit(0);
 					}
 				}
+				lblSelected.setText("");
+				lblMsgBox.setText("");
 			}
 		});
 		btnGo.setBackground(new Color(0, 128, 0));
