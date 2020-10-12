@@ -1,15 +1,17 @@
 package code.Socket;
 
 import code.Deck.Player;
-import code.card_class.*;
-
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.Serializable;
 
-public class data_pack {
+public class data_pack implements Serializable {
     private static ArrayList<Player> player_list = new ArrayList<>();
     private static String turn = new String("None");
     private static String used_card_name = new String("None");
+
+    public void add_player(Player player){
+        player_list.add(player);
+    }
 
     public ArrayList<Player> getPlayer_list(){
         return player_list;
