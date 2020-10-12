@@ -1,15 +1,15 @@
 package code.Socket;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import code.Deck.Player;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class server {
+    private static data_pack Data = new data_pack();
     public static void main(String[] args) throws IOException {
-        ServerSocket server = new ServerSocket(10000);
+        ServerSocket server = new ServerSocket(16225);
         while (true) {
             Socket socket = server.accept();
             invoke(socket);
@@ -19,33 +19,54 @@ public class server {
     private static void invoke(final Socket client) throws IOException {
         new Thread(new Runnable() {
             public void run() {
-                BufferedReader in = null;
-                PrintWriter out = null;
+                InputStreamReader isr = null;
+                BufferedReader br = null;
+                OutputStreamWriter osw = null;
+                BufferedWriter bw = null;
+                ObjectInputStream input = null;
+                ObjectOutputStream output = null;
+                InputStreamReader reader;
+                String command = null;
                 try {
-                    in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                    out = new PrintWriter(client.getOutputStream());
-
                     while (true) {
-                        String msg = in.readLine();
-                        System.out.println(msg);
-                        out.println("Server received " + msg);
-                        out.flush();
-                        if (msg.equals("bye")) {
-                            break;
+                        isr = new InputStreamReader(client.getInputStream());
+                        br = new BufferedReader(isr);
+                        command = br.readLine();
+                        System.out.println(command);
+
+                        assert command != null;
+
+                        if (command.equals("client pull")) {
+                            output = new ObjectOutputStream(client.getOutputStream());
+                            output.writeObject(Data);
+                            output.flush();
+                            System.out.println("Sent to client...");
+                        }
+                        if (command.equals("client push")) {
+                            input = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
+                            Object in = input.readObject();
+                            if (in != null) {
+                                Data = (data_pack) in;
+                            }
+                            System.out.println("Receive data from client...");
                         }
                     }
-                } catch(IOException ex) {
+                } catch (IOException | ClassNotFoundException ex) {
                     ex.printStackTrace();
                 } finally {
                     try {
-                        in.close();
-                    } catch (Exception e) {}
+                        assert input != null;
+                        input.close();
+                    } catch (Exception ignored) {
+                    }
                     try {
-                        out.close();
-                    } catch (Exception e) {}
+                        output.close();
+                    } catch (Exception ignored) {
+                    }
                     try {
                         client.close();
-                    } catch (Exception e) {}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         }).start();

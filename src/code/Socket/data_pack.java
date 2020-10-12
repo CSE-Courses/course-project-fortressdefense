@@ -2,15 +2,20 @@ package code.Socket;
 
 import code.Deck.Player;
 import java.util.ArrayList;
-import java.io.Serializable;
 
-public class data_pack implements Serializable {
-    private static ArrayList<Player> player_list = new ArrayList<>();
-    private static String turn = new String("None");
-    private static String used_card_name = new String("None");
+
+public class data_pack implements java.io.Serializable {
+    private ArrayList<Player> player_list = new ArrayList<>();
+    private String turn = new String("None");
+    private String used_card_name = new String("None");
+    private String message = "None";
 
     public void add_player(Player player){
         player_list.add(player);
+    }
+
+    public void del_player(Player player){
+        player_list.remove(player);
     }
 
     public ArrayList<Player> getPlayer_list(){
@@ -31,5 +36,13 @@ public class data_pack implements Serializable {
 
     public String getUsed_card_name(){
         return used_card_name;
+    }
+
+    public void write_message(String m){
+        message = m;
+    }
+
+    public String getMessage(){
+        return message;
     }
 }
