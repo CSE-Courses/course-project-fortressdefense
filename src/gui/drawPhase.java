@@ -1,10 +1,14 @@
 package gui;
+import code.*;
+import code.Deck.*;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -26,6 +30,12 @@ import javax.swing.JPanel;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.BorderLayout;
+
+/*
+ * Creates the Draw Phase GUI window
+ * @author Alec Willette
+ * 
+ * */
 
 public class drawPhase {
 
@@ -58,6 +68,9 @@ public class drawPhase {
 	public drawPhase() {
 		initialize();
 	}
+	
+	code.Game turn = new code.Game();//initializes decks
+	code.Hand hand = new code.Hand();//initializes the player's hand
 
 	/**
 	 * Initialize the contents of the frame.
@@ -115,25 +128,25 @@ public class drawPhase {
 		JLabel lblCard1 = new JLabel("***");
 		lblCard1.setVisible(false);
 		lblCard1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCard1.setBounds(145, 11, 46, 14);
+		lblCard1.setBounds(50, 11, 46, 14);
 		cardPanel.add(lblCard1);
 		
 		JLabel lblCard2 = new JLabel("***");
 		lblCard2.setVisible(false);
 		lblCard2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCard2.setBounds(382, 11, 46, 14);
+		lblCard2.setBounds(178, 11, 46, 14);
 		cardPanel.add(lblCard2);
 		
 		JLabel lblCard3 = new JLabel("***");
 		lblCard3.setVisible(false);
 		lblCard3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCard3.setBounds(622, 11, 46, 14);
+		lblCard3.setBounds(310, 11, 46, 14);
 		cardPanel.add(lblCard3);
 		
 		JLabel lblCard4 = new JLabel("***");
 		lblCard4.setVisible(false);
 		lblCard4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCard4.setBounds(860, 11, 46, 14);
+		lblCard4.setBounds(436, 11, 46, 14);
 		cardPanel.add(lblCard4);
 		
 		
@@ -182,7 +195,102 @@ public class drawPhase {
 		lblRoundNum.setBounds(10, 216, 195, 90);
 		frmFortressDefense.getContentPane().add(lblRoundNum);
 		
+		JButton btnCard1 = new JButton("");
+		btnCard1.setVisible(false);
+		btnCard1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("AXE card selected");
+				lblCard1.setVisible(true);
+				lblCard2.setVisible(false);
+				lblCard3.setVisible(false);
+				lblCard4.setVisible(false);
+				lblSelected.setText("");
+			}
+		});
+		Image axeImg = new ImageIcon(this.getClass().getResource("Images/axe.png")).getImage();
+		btnCard1.setIcon(new ImageIcon(axeImg));
+		btnCard1.setBounds(10, 24, 119, 176);
+		cardPanel.add(btnCard1);
+		
+		JButton btnCard2 = new JButton("");
+		btnCard2.setVisible(false);
+		btnCard2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("<html> BATTLE AXE card selected </html>");
+				lblCard2.setVisible(true);
+				lblCard1.setVisible(false);
+				lblCard3.setVisible(false);
+				lblCard4.setVisible(false);
+				lblSelected.setText("");
+			}
+		});
+		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/battleAxe.png")).getImage();
+		btnCard2.setIcon(new ImageIcon(battleAxeImg));
+		btnCard2.setBounds(140, 24, 119, 176);
+		cardPanel.add(btnCard2);
+		
+		JButton btnCard3 = new JButton("");
+		btnCard3.setVisible(false);
+		btnCard3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("<html> REINFORCED GATE card selected </html>");
+				lblCard3.setVisible(true);
+				lblCard2.setVisible(false);
+				lblCard1.setVisible(false);
+				lblCard4.setVisible(false);
+				lblSelected.setText("");
+			}
+		});
+		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/reinforcedGate.png")).getImage();
+		btnCard3.setIcon(new ImageIcon(reinforcedGateImg));
+		btnCard3.setBounds(272, 24, 119, 176);
+		cardPanel.add(btnCard3);
+		
+		JButton btnCard4 = new JButton("");
+		btnCard4.setVisible(false);
+		btnCard4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("<html> SCOUT card selected </html>");
+				lblCard4.setVisible(true);
+				lblCard2.setVisible(false);
+				lblCard3.setVisible(false);
+				lblCard1.setVisible(false);
+				lblSelected.setText("");
+			}
+		});
+		
+		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/scout.png")).getImage();
+		btnCard4.setIcon(new ImageIcon(scoutImg));
+		btnCard4.setBounds(403, 24, 119, 176);
+		cardPanel.add(btnCard4);
+		
+		JButton btnCard5 = new JButton("");
+		btnCard5.setVisible(false);
+		btnCard5.setBounds(534, 22, 119, 176);
+		cardPanel.add(btnCard5);
+		
+		JButton btnCard6 = new JButton("");
+		btnCard6.setVisible(false);
+		btnCard6.setBounds(666, 22, 119, 176);
+		cardPanel.add(btnCard6);
+		
+		JButton btnCard7 = new JButton("");
+		btnCard7.setVisible(false);
+		btnCard7.setBounds(796, 22, 119, 176);
+		cardPanel.add(btnCard7);
+		
+		JButton btnCard8 = new JButton("");
+		btnCard8.setVisible(false);
+		btnCard8.setBounds(925, 22, 119, 176);
+		cardPanel.add(btnCard8);
+		
 		JButton btnAttack = new JButton("");
+		btnAttack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblSelected.setText("<html> Attack Deck selected </html>");
+				lblMsgBox.setText("<html> Click GO! to draw a card from the Attack Deck </html>");
+			}
+		});
 		btnAttack.setBorder(UIManager.getBorder("CheckBox.border"));
 		Image attackImg = new ImageIcon(this.getClass().getResource("Images/attackCard.png")).getImage();
 		btnAttack.setIcon(new ImageIcon(attackImg));
@@ -191,6 +299,12 @@ public class drawPhase {
 		frmFortressDefense.getContentPane().add(btnAttack);
 		
 		JButton btnDefense = new JButton("");
+		btnDefense.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblSelected.setText("<html> Defense Deck selected </html>");
+				lblMsgBox.setText("<html> Click GO! to draw a card from the Defense Deck </html>");
+			}
+		});
 		btnDefense.setBorder(UIManager.getBorder("CheckBox.border"));
 		Image defenseImg = new ImageIcon(this.getClass().getResource("Images/defenseCard.png")).getImage();
 		btnDefense.setIcon(new ImageIcon(defenseImg));
@@ -249,65 +363,7 @@ public class drawPhase {
 			}
 		});
 		
-		JButton btnCard1 = new JButton("");
-		btnCard1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("AXE card selected");
-				lblCard1.setVisible(true);
-				lblCard2.setVisible(false);
-				lblCard3.setVisible(false);
-				lblCard4.setVisible(false);
-			}
-		});
-		Image axeImg = new ImageIcon(this.getClass().getResource("Images/axe.png")).getImage();
-		btnCard1.setIcon(new ImageIcon(axeImg));
-		btnCard1.setBounds(91, 29, 159, 179);
-		cardPanel.add(btnCard1);
 		
-		JButton btnCard2 = new JButton("");
-		btnCard2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> BATTLE AXE card selected </html>");
-				lblCard2.setVisible(true);
-				lblCard1.setVisible(false);
-				lblCard3.setVisible(false);
-				lblCard4.setVisible(false);
-			}
-		});
-		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/battleAxe.png")).getImage();
-		btnCard2.setIcon(new ImageIcon(battleAxeImg));
-		btnCard2.setBounds(326, 29, 159, 179);
-		cardPanel.add(btnCard2);
-		
-		JButton btnCard3 = new JButton("");
-		btnCard3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> REINFORCED GATE card selected </html>");
-				lblCard3.setVisible(true);
-				lblCard2.setVisible(false);
-				lblCard1.setVisible(false);
-				lblCard4.setVisible(false);
-			}
-		});
-		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/reinforcedGate.png")).getImage();
-		btnCard3.setIcon(new ImageIcon(reinforcedGateImg));
-		btnCard3.setBounds(565, 29, 159, 179);
-		cardPanel.add(btnCard3);
-		
-		JButton btnCard4 = new JButton("");
-		btnCard4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> SCOUT card selected </html>");
-				lblCard4.setVisible(true);
-				lblCard2.setVisible(false);
-				lblCard3.setVisible(false);
-				lblCard1.setVisible(false);
-			}
-		});
-		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/scout.png")).getImage();
-		btnCard4.setIcon(new ImageIcon(scoutImg));
-		btnCard4.setBounds(802, 29, 159, 179);
-		cardPanel.add(btnCard4);
 		
 		btnDiscard.setFont(new Font("SimSun", Font.BOLD, 30));
 		btnDiscard.setBackground(new Color(30, 144, 255));
@@ -320,6 +376,111 @@ public class drawPhase {
 				if(lblSelected.getText() == "PASS selected")
 				{
 					System.exit(0);
+				}
+				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")
+				{
+					hand.Draw(turn.AttackDeck);//draws card and adds it to hand
+					
+					if(hand.Size() == 1)	//enables the btn for new card
+					{
+						btnCard1.setVisible(true);
+					}
+					else if(hand.Size() == 2)
+					{
+						btnCard2.setVisible(true);
+					}
+					else if(hand.Size() == 3)
+					{
+						btnCard3.setVisible(true);
+					}
+					else if(hand.Size() == 4)
+					{
+						btnCard4.setVisible(true);
+					}
+					else if(hand.Size() == 5)
+					{
+						btnCard5.setVisible(true);
+					}
+					else if(hand.Size() == 6)
+					{
+						btnCard6.setVisible(true);
+					}
+					else if(hand.Size() == 7)
+					{
+						btnCard7.setVisible(true);
+					}
+					else if(hand.Size() == 8)
+					{
+						btnCard8.setVisible(true);
+					}
+					
+					/*
+					final JOptionPane optionPane = new JOptionPane("<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+
+					final JDialog dialog = new JDialog();
+					dialog.setTitle("Message");
+					dialog.setModal(true);
+
+					dialog.setContentPane(optionPane);
+
+					dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+					dialog.pack();
+					dialog.setVisible(true);
+					*/
+					
+					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>");
+				}
+				else if(lblSelected.getText() == "<html> Defense Deck selected </html>")
+				{
+					hand.Draw(turn.DefenseDeck);
+					
+					if(hand.Size() == 1)	//enables the btn for new card
+					{
+						btnCard1.setVisible(true);
+					}
+					else if(hand.Size() == 2)
+					{
+						btnCard2.setVisible(true);
+					}
+					else if(hand.Size() == 3)
+					{
+						btnCard3.setVisible(true);
+					}
+					else if(hand.Size() == 4)
+					{
+						btnCard4.setVisible(true);
+					}
+					else if(hand.Size() == 5)
+					{
+						btnCard5.setVisible(true);
+					}
+					else if(hand.Size() == 6)
+					{
+						btnCard6.setVisible(true);
+					}
+					else if(hand.Size() == 7)
+					{
+						btnCard7.setVisible(true);
+					}
+					else if(hand.Size() == 8)
+					{
+						btnCard8.setVisible(true);
+					}
+					/*
+					final JOptionPane optionPane = new JOptionPane("<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+
+					final JDialog dialog = new JDialog();
+					dialog.setTitle("Message");
+					dialog.setModal(true);
+
+					dialog.setContentPane(optionPane);
+
+					dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+					dialog.pack();
+					dialog.setVisible(true);
+					*/
+					
+					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>");
 				}
 				else if(discard)
 				{
@@ -377,9 +538,5 @@ public class drawPhase {
 		
 		
 		
-	}
-	
-	public JPanel GetPanel() {
-		return (JPanel) frmFortressDefense.getContentPane();
 	}
 }
