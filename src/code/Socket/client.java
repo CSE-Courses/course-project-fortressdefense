@@ -73,6 +73,17 @@ public class client {
                     }
                     command = "push";
                 }
+
+                if(command.equals("Quit")){
+                    Data.del_player(player);
+                    Data.write_message(player_name + " has quit...");
+                    command = "push";
+                }
+
+                if (command.equals("End")){
+                    break;
+                }
+
                 if(command.equals("push")){
                     osw = new OutputStreamWriter(socket.getOutputStream());
                     bw = new BufferedWriter(osw);
@@ -83,14 +94,6 @@ public class client {
                     output.writeObject(Data);
                     output.flush();
                     System.out.println("Update and Push to Server...");
-                }
-
-                if(command.equals("Quit")){
-                    Data.del_player(player);
-                    command = "push";
-                }
-                if (command.equals("End")){
-                    break;
                 }
                 command = null;
             }
