@@ -8,7 +8,7 @@ import javafx.util.Pair;
  * @author Mohan Vellayan
  */
 
-public class Player {
+public class Player implements java.io.Serializable{
 
 	public String PlayerName;
 	

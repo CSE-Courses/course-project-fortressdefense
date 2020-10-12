@@ -11,7 +11,7 @@ import code.card_class.*;
  * Attack Deck for Fortress Defense
  * @author Andrew Jank
  */
-public class AttackDeck implements IDeck {
+public class AttackDeck implements IDeck, java.io.Serializable {
 
 	/**
 	 * Data Structure for Attack Deck
