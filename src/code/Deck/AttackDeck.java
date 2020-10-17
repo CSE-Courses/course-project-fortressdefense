@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
+import code.GameConstants;
 import code.card_class.*;
 
 /**
@@ -19,20 +20,6 @@ public class AttackDeck implements IDeck {
 	 */
 	public Stack<Card> stack;
 	
-	/*
-	 * Constants representing number of cards in attack deck
-	 */
-	
-	private final int numBattleAxe = 5;
-	private final int numAxe = 5;
-	private final int numSword = 5;
-	private final int numStick = 5;
-	private final int numMace = 5;
-	private final int numCrossBow = 5;
-	private final int numArchers = 5;
-	private final int numScout = 5;
-	private final int numTrade = 5;
-	
 	/**
 	 * Creates new empty Attack Deck
 	 * @author Andrew Jank
@@ -43,15 +30,15 @@ public class AttackDeck implements IDeck {
 
 	@Override
 	public void Initialize() {
-		stack.addAll(AddBattleAxe(numBattleAxe));
-		stack.addAll(AddAxe(numAxe));
-		stack.addAll(AddSword(numSword));
-		stack.addAll(AddStick(numStick));
-		stack.addAll(AddMace(numMace));
-		stack.addAll(AddCrossbow(numCrossBow));
-		stack.addAll(AddArchers(numArchers));
-		stack.addAll(AddScout(numScout));
-		stack.addAll(AddTrade(numTrade));
+		stack.addAll(AddBattleAxe(GameConstants.numBattleAxe));
+		stack.addAll(AddAxe(GameConstants.numAxe));
+		stack.addAll(AddSword(GameConstants.numSword));
+		stack.addAll(AddStick(GameConstants.numStick));
+		stack.addAll(AddMace(GameConstants.numMace));
+		stack.addAll(AddCrossbow(GameConstants.numCrossBow));
+		stack.addAll(AddArchers(GameConstants.numArchersAttack));
+		stack.addAll(AddScout(GameConstants.numScoutAttack));
+		stack.addAll(AddTrade(GameConstants.numTradeAttack));
 		
 		Shuffle();
 	}
@@ -63,7 +50,7 @@ public class AttackDeck implements IDeck {
 
 	@Override
 	public void Add(Card card) {
-		if (card.getType().equals("ATTACK") || card.getType().equals("SPECIAL")) {
+		if (card.getType().equals(CardType.Attack) || card.getType().equals(CardType.Special)) {
 			stack.push(card);
 		}
 	}
@@ -86,41 +73,18 @@ public class AttackDeck implements IDeck {
 		Collections.shuffle(stack);
 	}
 	
-	// Why is this here, cards added in initialize
-	public Stack<Card> AddCard(Card card, int num){
-		if(!(card.type=="ATTACK"||card.type=="SPECIAL")){
-			System.out.println(card.type!="ATTACK");
-			throw new IllegalArgumentException("Defense card cannot be added to attack deck");
-		}
-		for (int i = 0; i < num; i++) {
-			stack.push(card);
-		}
-		return stack;
-	}
-	
-	
-	// why is this here, you dont remove cards from anywhere in the deck, only top
-	public void remove(Card card){
-		stack.remove(card);
-	}
-	
-	// see above comment, players should not be able to look through decks
-	public boolean contains(Card card){
-		return stack.contains(card);
-	}
-	
 	private Collection<Card> AddTrade(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("TRADE"));
+			cards.add(new Card(SpecialCard.Trade, CardType.Special, GameConstants.dmgTrade));
 		}
 		return cards;
 	}
-	
+
 	private Collection<Card> AddScout(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("SCOUT"));
+			cards.add(new Card(SpecialCard.Scout, CardType.Special, GameConstants.dmgScout));
 		}
 		return cards;
 	}
@@ -128,7 +92,7 @@ public class AttackDeck implements IDeck {
 	private Collection<Card> AddArchers(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("ARCHER TOWER"));
+			cards.add(new Card(SpecialCard.Archer_Tower, CardType.Special, GameConstants.dmgArcher));
 		}
 		return cards;
 	}
@@ -136,7 +100,7 @@ public class AttackDeck implements IDeck {
 	private Collection<Card> AddCrossbow(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("CROSSBOW"));
+			cards.add(new Card(AttackCard.Crossbow, CardType.Attack, GameConstants.dmgCrossbow));
 		}
 		return cards;
 	}
@@ -144,7 +108,7 @@ public class AttackDeck implements IDeck {
 	private Collection<Card> AddMace(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("MACE"));
+			cards.add(new Card(AttackCard.Mace, CardType.Attack, GameConstants.dmgMace));
 		}
 		return cards;
 	}
@@ -152,7 +116,7 @@ public class AttackDeck implements IDeck {
 	private Collection<Card> AddStick(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("STICK"));
+			cards.add(new Card(AttackCard.Stick, CardType.Attack, GameConstants.dmgStick));
 		}
 		return cards;
 	}
@@ -160,7 +124,7 @@ public class AttackDeck implements IDeck {
 	private Collection<Card> AddSword(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("SWORD"));
+			cards.add(new Card(AttackCard.Sword, CardType.Attack, GameConstants.dmgSword));
 		}
 		return cards;
 	}
@@ -168,7 +132,7 @@ public class AttackDeck implements IDeck {
 	private Collection<Card> AddAxe(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("AXE"));
+			cards.add(new Card(AttackCard.Axe, CardType.Attack, GameConstants.dmgAxe));
 		}
 		return cards;
 	}
@@ -176,7 +140,7 @@ public class AttackDeck implements IDeck {
 	private Collection<Card> AddBattleAxe(int num) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i < num; i++) {
-			cards.add(new Card("BATTLE AXE"));
+			cards.add(new Card(AttackCard.Battle_Axe, CardType.Attack, GameConstants.dmgBattleAxe));
 		}
 		return cards;
 	}

@@ -6,8 +6,8 @@ import javax.swing.border.Border;
 
 import code.AccessType;
 import code.Game;
+import code.Player;
 import code.ServerModel;
-import code.Deck.Player;
 
 import java.awt.*;
 import javax.swing.border.LineBorder;
