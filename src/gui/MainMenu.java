@@ -40,7 +40,6 @@ public class MainMenu {
 	    JLabel logo = createDisplayImage("Images/FD.png");
 	    logo.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    panel.add(logo);
-	    panel.add(Box.createVerticalStrut(100));
 	    
 	    JButton cgb = new JButton("Create Game");
 	    cgb.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -95,7 +94,6 @@ public class MainMenu {
 	    attack.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    attack.setBackground(c1);
 	    panel.add(attack);
-	    panel.add(Box.createVerticalStrut(25));
 	    
 	    attack.addActionListener(new ActionListener(){       
 			@Override
@@ -108,19 +106,20 @@ public class MainMenu {
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	    
 	    frame.getContentPane().add(panel);
-	    
-		frame.setSize(1152, 912);
+	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	
 	public void rulesScreen() {
 		JFrame frame = new JFrame("Rules");
-		
+	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		JPanel panel = new JPanel();
-		JTextArea textArea = new JTextArea(100,100);
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(0, 0,screenSize.width - 15, screenSize.height - 50);
 		
-	    textArea.setText("\t\t\t\t\t\tFORTRESS DEFENSE\n\n"
+	    textArea.setText("FORTRESS DEFENSE\n\n"
 	    		+ "Objective: Build up health points by drawing health point cards in order to strengthen your fortress. "
 	    		+ "Build up an arsenal by drawing attack cards. "
 	    		+ "Use the attack cards to destroy all other fortresses.\n\n\n" 
@@ -140,13 +139,14 @@ public class MainMenu {
 	    
 	    Font font = new Font("Times New Roman", Font.BOLD, 20);
 		textArea.setFont(font);
-		textArea.setBackground(Color.BLACK);
-		textArea.setForeground(Color.BLUE);
-		
+		textArea.setBackground(new Color(153, 102, 0));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
 	    panel.add(textArea);
 		frame.getContentPane().add(panel);
 		
-		frame.setSize(1920, 1020);
+		panel.setBackground(new Color(153, 102, 0));
+	    frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
 		frame.setVisible(true);
 	}
 }
