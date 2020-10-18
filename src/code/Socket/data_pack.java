@@ -5,17 +5,30 @@ import java.util.ArrayList;
 
 
 public class data_pack implements java.io.Serializable {
-    private ArrayList<Player> player_list = new ArrayList<>();
+    private final ArrayList<Player> player_list = new ArrayList<>();
+    private final ArrayList<String> player_name_list = new ArrayList<>();
     private String turn = new String("None");
     private String used_card_name = new String("None");
     private String message = "None";
 
     public void add_player(Player player){
-        player_list.add(player);
+        if (!player_name_list.contains(player.PlayerName)){
+            player_name_list.add(player.PlayerName);
+            player_list.add(player);
+        }
+        else{
+            System.out.println("[Server] Player already joined");
+        }
     }
 
     public void del_player(Player player){
-        player_list.remove(player);
+        if(player_name_list.contains(player.PlayerName)){
+            player_name_list.remove(player.PlayerName);
+            player_list.remove(player);
+        }
+        else {
+            System.out.println("[Server] Player does not in this game");
+        }
     }
 
     public ArrayList<Player> getPlayer_list(){
