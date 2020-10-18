@@ -14,6 +14,7 @@ public class client {
     private static InputStreamReader isr = null;
     private static OutputStreamWriter command_to_server = null;
     private static BufferedWriter client_command = null;
+    private static String player_name = "";
 
     private static void receive_from_server(Socket server) throws IOException, InterruptedException, ClassNotFoundException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
@@ -26,6 +27,7 @@ public class client {
         System.out.println("[Server] Received data from Server...");
         if (in != null) {
             Data = (data_pack) in;
+            System.out.println("\t \t Turn: " + Data.getTurn());
             for (Player value : Data.getPlayer_list()) {
                 System.out.println("\t \t " + value.PlayerName + ": " + value.points + " HP");
             }
@@ -39,6 +41,7 @@ public class client {
         client_command.write("client_push" + "\n");
         client_command.flush();
         TimeUnit.SECONDS.sleep(1);
+        Data.next_turn();
         output = new ObjectOutputStream(server.getOutputStream());
         output.writeObject(Data);
         output.flush();
@@ -46,17 +49,22 @@ public class client {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Demo\nEnter Your Name");
-        String player_name = "";
-        player_name= reader.readLine();
+        while(player_name.equals("")) {
+            System.out.println("Demo\nEnter Your Name");
+            player_name = reader.readLine();
+            if(player_name.length() == 0){
+                System.out.println("[Client] *Error: Name cannot be Empty");
+            }
+        }
         Player player = new Player(player_name);
         System.out.println("[Client] Initiated Player: " + player_name);
 
-        String host_address = "172.20.5.78";
+        String host_address = "172.20.4.196";
         int port = 16225;
         Socket server = new Socket(host_address, port);
         System.out.println("[Client] Connected to Server" + server.getInetAddress() + ": " + port);
         receive_from_server(server);
+
         Data.add_player(player);
         Data.write_message("player "+player_name+" joined...");
         send_to_server(server);
@@ -72,14 +80,19 @@ public class client {
                     receive_from_server(server);
                 }
                 command = reader.readLine();
-
+                System.out.println("[Client] Input = " + command);
 
                 switch (command){
                     case "pull":
                         receive_from_server(server);
                         break;
                     case "push":
-                        send_to_server(server);
+                        if (!Data.getTurn().equals(player_name)){
+                            System.out.println("[Server] It is Player "+ Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
+                        }
+                        else {
+                            send_to_server(server);
+                        }
                         break;
                     case "quit":
                         Data.del_player(player);

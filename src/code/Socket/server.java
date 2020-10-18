@@ -14,7 +14,7 @@ public class server {
         System.out.println("\n[Server] Server started at port " + port);
         while (true) {
             Socket socket = server.accept();
-            System.out.println("[Server] Client connected" + socket.getInetAddress());
+            System.out.println("[Server] Client connected\t" + socket.getInetAddress());
             invoke(socket);
         }
     }

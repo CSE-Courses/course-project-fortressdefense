@@ -7,9 +7,10 @@ import java.util.ArrayList;
 public class data_pack implements java.io.Serializable {
     private final ArrayList<Player> player_list = new ArrayList<>();
     private final ArrayList<String> player_name_list = new ArrayList<>();
-    private String turn = new String("None");
-    private String used_card_name = new String("None");
-    private String message = "None";
+    private String turn = new String("");
+    private String used_card_name = new String("");
+    private String message = "";
+    private int round = 1;
 
     public void add_player(Player player){
         if (!player_name_list.contains(player.PlayerName)){
@@ -35,8 +36,20 @@ public class data_pack implements java.io.Serializable {
         return player_list;
     }
 
-    public void next_turn(String name){
-        turn = name;
+    public void next_turn(){
+        if (turn.equals("None")) {
+            turn = player_name_list.get(0);
+        }
+        else{
+            int current = player_name_list.indexOf(turn);
+            if (current + 1 == player_name_list.size()){
+                turn = player_name_list.get(0);
+                round += 1;
+            }
+            else {
+                turn = player_name_list.get(current + 1);
+            }
+        }
     }
 
     public String getTurn(){
