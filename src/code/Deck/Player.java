@@ -12,6 +12,8 @@ public class Player implements java.io.Serializable{
 
 	public String PlayerName;
 	
+	private boolean ready;
+	
     Map<String, Pair> cardType=Map.ofEntries(
             Map.entry("BATTLE AXE",new Pair("ATTACK", 8)),
             Map.entry("AXE", new Pair("ATTACK", 3)),
@@ -161,6 +163,14 @@ public class Player implements java.io.Serializable{
             defense.remove(card);
             p2.defense.AddCard(card,1);
         }
+    }
+    
+    public boolean getReady() {
+    	return ready;
+    }
+    
+    public void setReady(boolean isReady) {
+    	ready = isReady;
     }
 
 }
