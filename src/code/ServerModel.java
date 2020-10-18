@@ -1,5 +1,12 @@
 package code;
 
+import java.awt.Color;
+import java.util.ArrayList;
+
+import javax.swing.JTextField;
+
+import code.Deck.Player;
+
 /**
  * Model containing all Information for the Server from the UI, updated as needed in future
  * @author Andrew Jank and https://stackoverflow.com/questions/12337986/binding-of-jtext-fields-value-to-info-class
@@ -10,14 +17,15 @@ public class ServerModel {
 	private AccessType accessType;
 	private String password;
 	private Integer maxPlayers;
-	private Integer currPlayers;
+	private ArrayList<Player> players;
+	private ArrayList<JTextField> textFields;
 	
-	public ServerModel() {
+	public ServerModel(ArrayList<Player> _players) {
 		hostGameName = "";
 		accessType = AccessType.Public;
 		password = "";
 		maxPlayers = 6;
-		currPlayers = 1;
+		players = _players;
 	}
 	
 	public void SetHostName(String hostname) {
@@ -40,10 +48,6 @@ public class ServerModel {
 		maxPlayers = num;
 	}
 	
-	public void SetCurrentPlayers(Integer num) {
-		currPlayers = num;
-	}
-	
 	public String GetHostName() {
 		return hostGameName;
 	}
@@ -61,11 +65,32 @@ public class ServerModel {
 	}
 	
 	public Integer GetCurrentPlayers() {
-		return currPlayers;
+		return players.size();
+	}
+	
+	public void SetPlayerTextFields(ArrayList<JTextField> _fields) {
+		textFields = _fields;
+		UpdatePlayerTextFields();
 	}
 	
     @Override
     public String toString() {
         return "ModelObject [hostGameName=" + hostGameName + ", password=" + password + ", numPlayers=" + maxPlayers + ", accessType=" + accessType + "]";
+    }
+    
+    public void UpdatePlayerTextFields() {
+    	for (int i = 0; i < players.size(); i++) {
+        	if (i == 0) {
+            	textFields.get(i).setText(i+1 + ") " + players.get(i).PlayerName);
+            	textFields.get(i).setBackground(Color.YELLOW.darker());
+        	}else {
+            	textFields.get(i).setText(i+1 + ") " + players.get(i).PlayerName);
+    			if (players.get(i).getReady()) {
+    				textFields.get(i).setBackground(Color.GREEN.darker());
+    			}else {
+    				textFields.get(i).setBackground(Color.RED.darker());
+    			}
+        	}
+    	}
     }
 }
