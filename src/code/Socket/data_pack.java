@@ -37,7 +37,7 @@ public class data_pack implements java.io.Serializable {
     }
 
     public void next_turn(){
-        if (turn.equals("None")) {
+        if (turn.equals("")) {
             turn = player_name_list.get(0);
         }
         else{

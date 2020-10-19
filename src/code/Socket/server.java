@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class server {
@@ -21,16 +22,28 @@ public class server {
     private static ObjectOutputStream to_client = null;
     private static InputStreamReader reader;
     private static String command = null;
+    public static int room_size;
 
     public static void main(String[] args) throws IOException {
-        int port = 16225;
+
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter your port to start");
+        int port = s.nextInt();
+        System.out.println("Enter room size");
+        room_size = s.nextInt();
+
         ServerSocket server = new ServerSocket(port);
         System.out.println("\n[Server] Server started at port " + port);
         while (true) {
             Socket socket = server.accept();
             Thread_list.add(socket);
+            System.out.println("[Server] Current Threads: " + Thread_list.size());
             System.out.println("[Server] Client connected\t" + socket.getInetAddress());
             invoke(socket);
+            if(Thread_list.size() == room_size){
+                Data.next_turn();
+                to_every_client();
+            }
         }
     }
 
@@ -48,13 +61,7 @@ public class server {
         if (in != null) {
             Data = (data_pack) in;
         }
-        for(Socket value : Thread_list){
-            command_to_client = new OutputStreamWriter(value.getOutputStream());
-            server_command = new BufferedWriter(command_to_client);
-            server_command.write("pull" +"\n");
-            server_command.flush();
-            System.out.println("[Server] Send to client \t" + value.getInetAddress());
-        }
+        to_every_client();
     }
 
     private static void client_join(Socket client) throws IOException, ClassNotFoundException, InterruptedException {
@@ -67,12 +74,18 @@ public class server {
             Data.write_message("Player " + player.PlayerName + " joined");
             System.out.println("[Server] Player \"" + player.PlayerName + "\" joined");
         }
+        to_every_client();
+    }
+
+    private static void to_every_client() throws IOException {
         for(Socket value : Thread_list){
-            command_to_client = new OutputStreamWriter(value.getOutputStream());
-            server_command = new BufferedWriter(command_to_client);
-            server_command.write("pull" +"\n");
-            server_command.flush();
-            System.out.println("[Server] Send to client \t" + value.getInetAddress());
+            if(!value.isClosed()){
+                command_to_client = new OutputStreamWriter(value.getOutputStream());
+                server_command = new BufferedWriter(command_to_client);
+                server_command.write("pull" + "\n");
+                server_command.flush();
+                System.out.println("[Server] Send to client \t" + value.getInetAddress());
+            }
         }
     }
 
@@ -82,28 +95,32 @@ public class server {
                 try (client) {
                     boolean ongoing = true;
                     while (ongoing) {
+                        if(client.isClosed()){
+                            Thread_list.remove(client);
+                        }
                         command_from_client = new InputStreamReader(client.getInputStream());
                         client_command = new BufferedReader(command_from_client);
                         command = client_command.readLine();
                         System.out.println("[Client] "+ LocalTime.now() +
                                 "\t\t" + client.getInetAddress() +"\t\t" + command);
 
-                        assert command != null;
-                        switch (command) {
-                            case "player_join":
-                                client_join(client);
-                                break;
-                            case "client_pull":
-                                send_to_client(client);
-                                break;
-                            case "client_push":
-                                receive_from_client(client);
-                                break;
-                            case "GAME_OVER":
-                                ongoing = false;
-                                break;
-                            default:
-                                System.out.println("[Client] * Error: Command Undefined");
+                        if(command != null) {
+                            switch (command) {
+                                case "player_join":
+                                    client_join(client);
+                                    break;
+                                case "client_pull":
+                                    send_to_client(client);
+                                    break;
+                                case "client_push":
+                                    receive_from_client(client);
+                                    break;
+                                case "GAME_OVER":
+                                    ongoing = false;
+                                    break;
+                                default:
+                                    System.out.println("[Client] * Error: Command Undefined");
+                            }
                         }
                         command = null; //reset
                     }

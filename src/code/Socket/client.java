@@ -5,6 +5,7 @@ import org.junit.Assert;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class client {
@@ -45,6 +46,7 @@ public class client {
         client_command.flush();
         TimeUnit.SECONDS.sleep(1);
         output = new ObjectOutputStream(server.getOutputStream());
+        Data.next_turn();
         output.writeObject(Data);
         output.flush();
         System.out.println("[Server] Update and Push to Server...");
@@ -73,8 +75,13 @@ public class client {
         Player player = new Player(player_name);
         System.out.println("[Client] Initiated Player: " + player_name);
 
-        String host_address = "172.20.5.78";
-        int port = 16225;
+        System.out.println("Enter port");
+        Scanner s = new Scanner(System.in);
+        int port = s.nextInt();
+        System.out.println("Enter Host Address");
+        //"172.20.5.78"
+        String host_address = reader.readLine();
+
         Socket server = new Socket(host_address, port);
         System.out.println("[Client] Connected to Server" + server.getInetAddress() + ": " + port);
 
@@ -83,21 +90,54 @@ public class client {
         try(server){
             boolean ongoing = true;
             while (ongoing){
-                System.out.println("[Client] Waiting for input from server");
-                command_from_server = new InputStreamReader(server.getInputStream());
-                server_command = new BufferedReader(command_from_server);
-                command = server_command.readLine();
-                System.out.println("[Server] Auto Receive from Server");
-                System.out.println("[Client] Input = " + command);
-
-                assert(command!=null);
-                switch (command){
-
-                    case "pull": {
-                        receive_from_server(server);
-                        break;
+                if(Data.getTurn().equals(player_name)){
+                    System.out.println("[Client] It is your turn. What do you want to do?"+
+                            "\n\t \t 1.attack\t2.defense(Heal your self)\t3.pass");
+                    int selection = s.nextInt();
+                    if(selection == 1) {
+                        System.out.println("\t \t Who do you want to attack?");
+                        String attack_name = reader.readLine();
+                        System.out.println("\t \t By how much?");
+                        int damage = s.nextInt();
+                        for(Player value: Data.getPlayer_list()){
+                            if(value.PlayerName.equals(attack_name)){
+                                value.points -= damage;
+                                break;
+                            }
+                        }
+                        Data.write_message(player_name + " deals " + damage + " damage to " + attack_name);
                     }
+                    else if(selection == 2) {
+                        System.out.println("\t \t By how much?");
+                        int damage = s.nextInt();
+                        for(Player value: Data.getPlayer_list()) {
+                            if (value.PlayerName.equals(player_name)) {
+                                value.points += damage;
+                                break;
+                            }
+                        }
+                        Data.write_message(player_name + "recover " + damage + " HP");
+                    }
+                    else{
+                        System.out.println("\t \t Pass");
+                        Data.write_message(player_name + "passed passed turn");
+                    }
+                    command = "push";
+                }
+                else {
+                    System.out.println("[Client] Waiting for input from server");
+                    command_from_server = new InputStreamReader(server.getInputStream());
+                    server_command = new BufferedReader(command_from_server);
+                    command = server_command.readLine();
+                    System.out.println("[Server] Auto Receive from Server");
+                    System.out.println("[Client] Input = " + command);
+                }
 
+                switch (command) {
+                    case "pull": {
+                            receive_from_server(server);
+                            break;
+                    }
                     case "push": {
                         if (!Data.getTurn().equals(player_name)) {
                             System.out.println("[Server] It is Player " + Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
@@ -107,34 +147,12 @@ public class client {
                         }
                         break;
                     }
-
                     case "quit": {
                         Data.del_player(player);
                         Data.write_message("Player " + player_name + " quited");
                         ongoing = false;
                     }
-
                     default:
-                }
-
-                if(command.equals("attack")) {
-                    if (!Data.getTurn().equals(player_name)){
-                        System.out.println("[Server] It is Player "+ Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
-                    }
-                    else {
-                        System.out.println("who?");
-                        String att_name = reader.readLine();
-                        System.out.println("How much damage?");
-                        int damage = Integer.parseInt(reader.readLine());
-                        for (Player value : Data.getPlayer_list()) {
-                            if (value.PlayerName.equals(att_name)) {
-                                value.points -= damage;
-                                Data.next_turn();
-                                Data.write_message(player_name + " deals " + damage + " damage to " + att_name);
-                            }
-                        }
-                        send_to_server(server);
-                    }
                 }
                 command = null;
             }
