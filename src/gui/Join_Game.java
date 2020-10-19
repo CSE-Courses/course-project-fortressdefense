@@ -269,67 +269,67 @@ public class Join_Game implements ActionListener {
         JPanel panel = new JPanel();
 
         JButton playerIcon = new JButton("");
-        Image pc = new ImageIcon(this.getClass().getResource("/fd/my_character1.png")).getImage();
+        Image pc = new ImageIcon(this.getClass().getResource("characters/my_character1.png")).getImage();
         playerIcon.setIcon(new ImageIcon(pc));
         playerIcon.setBounds(50, 700, 60, 100);
         panel.add(playerIcon);
 
         JButton playerIcon1 = new JButton("");
-        Image pc1 = new ImageIcon(this.getClass().getResource("/fd/my_character2.png")).getImage();
+        Image pc1 = new ImageIcon(this.getClass().getResource("characters/my_character2.png")).getImage();
         playerIcon1.setIcon(new ImageIcon(pc1));
         playerIcon1.setBounds(120, 700, 60, 100);
         panel.add(playerIcon1);
 
         JButton playerIcon2 = new JButton("");
-        Image pc2 = new ImageIcon(this.getClass().getResource("/fd/my_character3.png")).getImage();
+        Image pc2 = new ImageIcon(this.getClass().getResource("characters/my_character3.png")).getImage();
         playerIcon2.setIcon(new ImageIcon(pc2));
         playerIcon2.setBounds(190, 700, 60, 100);
         panel.add(playerIcon2);
 
         JButton playerIcon3 = new JButton("");
-        Image pc3 = new ImageIcon(this.getClass().getResource("/fd/my_character4.png")).getImage();
+        Image pc3 = new ImageIcon(this.getClass().getResource("characters/my_character4.png")).getImage();
         playerIcon3.setIcon(new ImageIcon(pc3));
         playerIcon3.setBounds(260, 700, 60, 100);
         panel.add(playerIcon3);
 
         JButton playerIcon4 = new JButton("");
-        Image pc4 = new ImageIcon(this.getClass().getResource("/fd/my_character5.png")).getImage();
+        Image pc4 = new ImageIcon(this.getClass().getResource("characters/my_character5.png")).getImage();
         playerIcon4.setIcon(new ImageIcon(pc4));
         playerIcon4.setBounds(330, 700, 60, 100);
         panel.add(playerIcon4);
 
         JButton playerIcon5 = new JButton("");
-        Image pc5 = new ImageIcon(this.getClass().getResource("/fd/my_character6.png")).getImage();
+        Image pc5 = new ImageIcon(this.getClass().getResource("characters/my_character6.png")).getImage();
         playerIcon5.setIcon(new ImageIcon(pc5));
         playerIcon5.setBounds(400, 700, 60, 100);
         panel.add(playerIcon5);
 
         JButton playerIcon6 = new JButton("");
-        Image pc6 = new ImageIcon(this.getClass().getResource("/fd/my_character7.png")).getImage();
+        Image pc6 = new ImageIcon(this.getClass().getResource("characters/my_character7.png")).getImage();
         playerIcon6.setIcon(new ImageIcon(pc6));
         playerIcon6.setBounds(50, 810, 60, 100);
         panel.add(playerIcon6);
 
         JButton playerIcon8 = new JButton("");
-        Image pc8 = new ImageIcon(this.getClass().getResource("/fd/my_character9.png")).getImage();
+        Image pc8 = new ImageIcon(this.getClass().getResource("characters/my_character9.png")).getImage();
         playerIcon8.setIcon(new ImageIcon(pc8));
         playerIcon8.setBounds(190, 810, 60, 100);
         panel.add(playerIcon8);
 
         JButton playerIcon9 = new JButton("");
-        Image pc9 = new ImageIcon(this.getClass().getResource("/fd/my_character10.png")).getImage();
+        Image pc9 = new ImageIcon(this.getClass().getResource("characters/my_character10.png")).getImage();
         playerIcon9.setIcon(new ImageIcon(pc9));
         playerIcon9.setBounds(260, 810, 60, 100);
         panel.add(playerIcon9);
 
         JButton playerIcon10 = new JButton("");
-        Image pc10 = new ImageIcon(this.getClass().getResource("/fd/my_character11.png")).getImage();
+        Image pc10 = new ImageIcon(this.getClass().getResource("characters/my_character8.png")).getImage();
         playerIcon10.setIcon(new ImageIcon(pc10));
         playerIcon10.setBounds(330, 810, 60, 100);
         panel.add(playerIcon10);
 
         JButton playerIcon11 = new JButton("");
-        Image pc11 = new ImageIcon(this.getClass().getResource("/fd/my_character12.png")).getImage();
+        Image pc11 = new ImageIcon(this.getClass().getResource("characters/my_character.png")).getImage();
         playerIcon11.setIcon(new ImageIcon(pc11));
         playerIcon11.setBounds(400, 810, 60, 100);
         panel.add(playerIcon11);

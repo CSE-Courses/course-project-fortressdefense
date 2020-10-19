@@ -834,31 +834,19 @@ public class drawPhase {
 		btnGo.setBounds(784, 253, 260, 181);
 		frmFortressDefense.getContentPane().add(btnGo);
 		
-		JProgressBar healthBar = new JProgressBar();
-		healthBar.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
-		healthBar.setForeground(new Color(50, 205, 50));
-		healthBar.setMaximum(40);
-		healthBar.setBackground(Color.DARK_GRAY);
-		healthBar.setValue(19);
-		healthBar.setBounds(250, 152, 508, 46);
-		frmFortressDefense.getContentPane().add(healthBar);
-		
-		
-		
-		
 		/*
 		Player Image
 		 */
 		JPanel playerPanel = new JPanel();
 		playerPanel.setBackground(new Color(15, 28, 81));
 		playerPanel.setBorder(UIManager.getBorder("ProgressBar.border"));
-		playerPanel.setBounds(790, 11, 120, 100);
+		playerPanel.setBounds(790, 11, 100, 100);
 		frmFortressDefense.getContentPane().add(playerPanel);
 		playerPanel.setLayout(null);
 		JButton playerIcon = new JButton("");
-		Image pc = new ImageIcon(this.getClass().getResource("/fd/my_character.png")).getImage();
+		Image pc = new ImageIcon(this.getClass().getResource("characters/my_character.png")).getImage();
 		playerIcon.setIcon(new ImageIcon(pc));
-		playerIcon.setBounds(0, 0, 120, 410);
+		playerIcon.setBounds(0, 0, 100, 100);
 		playerPanel.add(playerIcon);
 	}
 	

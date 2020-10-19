@@ -41,7 +41,6 @@ public class MainMenu {
 		JLabel logo = createDisplayImage("Images/FD.png");
 		logo.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(logo);
-		panel.add(Box.createVerticalStrut(100));
 
 	    
 	    JButton cgb = new JButton("Create Game");
