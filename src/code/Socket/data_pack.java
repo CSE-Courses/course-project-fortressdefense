@@ -56,6 +56,8 @@ public class data_pack implements java.io.Serializable {
         return turn;
     }
 
+    public int getRound(){return round;}
+
     public void card_used(String name){
         used_card_name = name;
     }

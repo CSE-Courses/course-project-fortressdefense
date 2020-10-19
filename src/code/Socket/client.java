@@ -1,6 +1,7 @@
 package code.Socket;
 
 import code.Deck.Player;
+import org.junit.Assert;
 
 import java.io.*;
 import java.net.Socket;
@@ -11,10 +12,12 @@ public class client {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static ObjectOutputStream output = null;
     private static ObjectInputStream input = null;
-    private static InputStreamReader isr = null;
+    private static InputStreamReader command_from_server = null;
+    private static BufferedReader server_command = null;
     private static OutputStreamWriter command_to_server = null;
     private static BufferedWriter client_command = null;
     private static String player_name = "";
+    private static String command = null;
 
     private static void receive_from_server(Socket server) throws IOException, InterruptedException, ClassNotFoundException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
@@ -27,7 +30,7 @@ public class client {
         System.out.println("[Server] Received data from Server...");
         if (in != null) {
             Data = (data_pack) in;
-            System.out.println("\t \t Turn: " + Data.getTurn());
+            System.out.println("\t \t Round: " + Data.getRound() + "\tTurn: " + Data.getTurn());
             for (Player value : Data.getPlayer_list()) {
                 System.out.println("\t \t " + value.PlayerName + ": " + value.points + " HP");
             }
@@ -41,11 +44,22 @@ public class client {
         client_command.write("client_push" + "\n");
         client_command.flush();
         TimeUnit.SECONDS.sleep(1);
-        Data.next_turn();
         output = new ObjectOutputStream(server.getOutputStream());
         output.writeObject(Data);
         output.flush();
         System.out.println("[Server] Update and Push to Server...");
+    }
+
+    private static void join_server (Socket server, Player player) throws IOException, InterruptedException {
+        command_to_server = new OutputStreamWriter(server.getOutputStream());
+        client_command = new BufferedWriter(command_to_server);
+        client_command.write("player_join" + "\n");
+        client_command.flush();
+        TimeUnit.SECONDS.sleep(1);
+        output = new ObjectOutputStream(server.getOutputStream());
+        output.writeObject(player);
+        output.flush();
+        System.out.println("[Client] Send Player Info to Server...");
     }
 
     public static void main(String[] args) throws Exception {
@@ -59,60 +73,68 @@ public class client {
         Player player = new Player(player_name);
         System.out.println("[Client] Initiated Player: " + player_name);
 
-        String host_address = "172.20.4.196";
+        String host_address = "172.20.5.78";
         int port = 16225;
         Socket server = new Socket(host_address, port);
         System.out.println("[Client] Connected to Server" + server.getInetAddress() + ": " + port);
-        receive_from_server(server);
 
-        Data.add_player(player);
-        Data.write_message("player "+player_name+" joined...");
-        send_to_server(server);
-        System.out.println("[Client] Player Joined");
+        join_server(server, player);
 
         try(server){
             boolean ongoing = true;
-            String command;
             while (ongoing){
-                while (!reader.ready()){
-                    Thread.sleep(4000);
-                    System.out.println("\n[Client] Auto Refresh Every 5 Sec");
-                    receive_from_server(server);
-                }
-                command = reader.readLine();
+                System.out.println("[Client] Waiting for input from server");
+                command_from_server = new InputStreamReader(server.getInputStream());
+                server_command = new BufferedReader(command_from_server);
+                command = server_command.readLine();
+                System.out.println("[Server] Auto Receive from Server");
                 System.out.println("[Client] Input = " + command);
 
+                assert(command!=null);
                 switch (command){
-                    case "pull":
+
+                    case "pull": {
                         receive_from_server(server);
                         break;
-                    case "push":
-                        if (!Data.getTurn().equals(player_name)){
-                            System.out.println("[Server] It is Player "+ Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
-                        }
-                        else {
+                    }
+
+                    case "push": {
+                        if (!Data.getTurn().equals(player_name)) {
+                            System.out.println("[Server] It is Player " + Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
+                        } else {
+                            Data.next_turn();
                             send_to_server(server);
                         }
                         break;
-                    case "quit":
+                    }
+
+                    case "quit": {
                         Data.del_player(player);
-                        Data.write_message("Player "+ player_name + " quited");
+                        Data.write_message("Player " + player_name + " quited");
                         ongoing = false;
+                    }
+
                     default:
                 }
 
                 if(command.equals("attack")) {
-                    System.out.println("who?");
-                    String att_name = reader.readLine();
-                    System.out.println("How much damage?");
-                    int damage = Integer.parseInt(reader.readLine());
-                    for (Player value : Data.getPlayer_list()) {
-                        if (value.PlayerName.equals(att_name)) {
-                            value.points -= damage;
-                            Data.write_message(player_name + " deals " + damage + " damage to " + att_name);
-                        }
+                    if (!Data.getTurn().equals(player_name)){
+                        System.out.println("[Server] It is Player "+ Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
                     }
-                    send_to_server(server);
+                    else {
+                        System.out.println("who?");
+                        String att_name = reader.readLine();
+                        System.out.println("How much damage?");
+                        int damage = Integer.parseInt(reader.readLine());
+                        for (Player value : Data.getPlayer_list()) {
+                            if (value.PlayerName.equals(att_name)) {
+                                value.points -= damage;
+                                Data.next_turn();
+                                Data.write_message(player_name + " deals " + damage + " damage to " + att_name);
+                            }
+                        }
+                        send_to_server(server);
+                    }
                 }
                 command = null;
             }
