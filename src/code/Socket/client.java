@@ -92,7 +92,7 @@ public class client {
             while (ongoing){
                 if(Data.getTurn().equals(player_name)){
                     System.out.println("[Client] It is your turn. What do you want to do?"+
-                            "\n\t \t 1.attack\t2.defense(Heal your self)\t3.pass");
+                            "\n\t \t 1.attack\t2.defense(Heal your self)\t3.pass\t4.quit");
                     int selection = s.nextInt();
                     if(selection == 1) {
                         System.out.println("\t \t Who do you want to attack?");
@@ -116,13 +116,18 @@ public class client {
                                 break;
                             }
                         }
-                        Data.write_message(player_name + "recover " + damage + " HP");
+                        Data.write_message(player_name + " recover " + damage + " HP");
                     }
-                    else{
+                    else if(selection == 3){
                         System.out.println("\t \t Pass");
                         Data.write_message(player_name + "passed passed turn");
                     }
-                    command = "push";
+                    else{
+                        Data.del_player(player);
+                        Data.write_message("Player " + player_name + " quited");
+                        ongoing = false;
+                    }
+                    send_to_server(server);
                 }
                 else {
                     System.out.println("[Client] Waiting for input from server");
@@ -132,27 +137,23 @@ public class client {
                     System.out.println("[Server] Auto Receive from Server");
                     System.out.println("[Client] Input = " + command);
                 }
-
-                switch (command) {
-                    case "pull": {
+                if(command != null) {
+                    switch (command) {
+                        case "pull": {
                             receive_from_server(server);
                             break;
-                    }
-                    case "push": {
-                        if (!Data.getTurn().equals(player_name)) {
-                            System.out.println("[Server] It is Player " + Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
-                        } else {
-                            Data.next_turn();
-                            send_to_server(server);
                         }
-                        break;
+                        case "push": {
+                            if (!Data.getTurn().equals(player_name)) {
+                                System.out.println("[Server] It is Player " + Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
+                            } else {
+                                Data.next_turn();
+                                send_to_server(server);
+                            }
+                            break;
+                        }
+                        default:
                     }
-                    case "quit": {
-                        Data.del_player(player);
-                        Data.write_message("Player " + player_name + " quited");
-                        ongoing = false;
-                    }
-                    default:
                 }
                 command = null;
             }

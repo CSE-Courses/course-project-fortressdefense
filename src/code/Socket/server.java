@@ -24,10 +24,10 @@ public class server {
     private static String command = null;
     public static int room_size;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         Scanner s = new Scanner(System.in);
-        System.out.println("Enter your port to start");
+        System.out.println("\nDEMO\nEnter your port to start (5 digit)");
         int port = s.nextInt();
         System.out.println("Enter room size");
         room_size = s.nextInt();
@@ -42,6 +42,7 @@ public class server {
             invoke(socket);
             if(Thread_list.size() == room_size){
                 Data.next_turn();
+                TimeUnit.SECONDS.sleep(2);
                 to_every_client();
             }
         }
