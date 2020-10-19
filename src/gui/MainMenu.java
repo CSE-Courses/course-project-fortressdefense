@@ -35,13 +35,14 @@ public class MainMenu {
 
 		Color c1 = new Color(153, 102, 0);
 		//Color c2 = new Color(0, 0, 153);
-
+    
 		JPanel panel = new JPanel();
 
 		JLabel logo = createDisplayImage("Images/FD.png");
 		logo.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(logo);
 		panel.add(Box.createVerticalStrut(100));
+
 	    
 	    JButton cgb = new JButton("Create Game");
 	    cgb.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -96,7 +97,6 @@ public class MainMenu {
 	    attack.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    attack.setBackground(c1);
 	    panel.add(attack);
-	    panel.add(Box.createVerticalStrut(25));
 	    
 	    attack.addActionListener(new ActionListener(){       
 			@Override
@@ -109,12 +109,10 @@ public class MainMenu {
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	    
 	    frame.getContentPane().add(panel);
-	    
-		frame.setSize(1152, 912);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
 	}
 	
 	public void rulesScreen() {
@@ -124,7 +122,7 @@ public class MainMenu {
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(0, 0,screenSize.width - 15, screenSize.height - 50);
 		
-	    textArea.setText("\t\t\t\t\t\tFORTRESS DEFENSE\n\n"
+	    textArea.setText("FORTRESS DEFENSE\n\n"
 	    		+ "Objective: Build up health points by drawing health point cards in order to strengthen your fortress. "
 	    		+ "Build up an arsenal by drawing attack cards. "
 	    		+ "Use the attack cards to destroy all other fortresses.\n\n\n" 
