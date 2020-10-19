@@ -2,7 +2,6 @@ package tests;
 
 import code.room_info;
 import org.junit.Test;
-import org.junit.Ignore;
 import static org.junit.Assert.assertEquals;
 
 public class room_info_test {
@@ -31,7 +30,5 @@ public class room_info_test {
         //left test
         room.left("Tommy");
         assertEquals(room.current_size(), 3);
-
-        //player
     }
 }

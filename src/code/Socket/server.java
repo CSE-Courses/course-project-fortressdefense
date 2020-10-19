@@ -5,7 +5,6 @@ import code.Deck.Player;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -25,7 +24,6 @@ public class server {
     public static int room_size;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-
         Scanner s = new Scanner(System.in);
         System.out.println("\nDEMO\nEnter your port to start (5 digit)");
         int port = s.nextInt();
@@ -42,14 +40,16 @@ public class server {
             invoke(socket);
             if(Thread_list.size() == room_size){
                 Data.next_turn();
-                TimeUnit.SECONDS.sleep(2);
+                Data.write_message("Game Started");
+                TimeUnit.SECONDS.sleep(5);
                 to_every_client();
             }
         }
     }
 
-    private static void send_to_client(Socket client) throws IOException {
+    private static void send_to_client(Socket client) throws IOException, InterruptedException {
         assert client != null;
+        TimeUnit.SECONDS.wait(2);
         to_client = new ObjectOutputStream(client.getOutputStream());
         to_client.writeObject(Data);
         to_client.flush();
@@ -78,11 +78,12 @@ public class server {
         to_every_client();
     }
 
-    private static void to_every_client() throws IOException {
+    private static void to_every_client() throws IOException, InterruptedException {
         for(Socket value : Thread_list){
             if(!value.isClosed()){
                 command_to_client = new OutputStreamWriter(value.getOutputStream());
                 server_command = new BufferedWriter(command_to_client);
+                TimeUnit.SECONDS.wait(1);
                 server_command.write("pull" + "\n");
                 server_command.flush();
                 System.out.println("[Server] Send to client \t" + value.getInetAddress());

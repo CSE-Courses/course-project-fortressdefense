@@ -23,9 +23,9 @@ public class client {
     private static void receive_from_server(Socket server) throws IOException, InterruptedException, ClassNotFoundException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
         client_command = new BufferedWriter(command_to_server);
+        TimeUnit.SECONDS.wait(1);
         client_command.write("client_pull" + "\n");
         client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
         input = new ObjectInputStream(new BufferedInputStream(server.getInputStream()));
         Object in = input.readObject();
         System.out.println("[Server] Received data from Server...");
@@ -42,11 +42,12 @@ public class client {
     private static void send_to_server(Socket server) throws IOException, InterruptedException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
         client_command = new BufferedWriter(command_to_server);
+        TimeUnit.SECONDS.wait(1);
         client_command.write("client_push" + "\n");
         client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
         output = new ObjectOutputStream(server.getOutputStream());
         Data.next_turn();
+        TimeUnit.SECONDS.wait(1);
         output.writeObject(Data);
         output.flush();
         System.out.println("[Server] Update and Push to Server...");
@@ -55,10 +56,11 @@ public class client {
     private static void join_server (Socket server, Player player) throws IOException, InterruptedException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
         client_command = new BufferedWriter(command_to_server);
+        TimeUnit.SECONDS.wait(1);
         client_command.write("player_join" + "\n");
         client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
         output = new ObjectOutputStream(server.getOutputStream());
+        TimeUnit.SECONDS.wait(1);
         output.writeObject(player);
         output.flush();
         System.out.println("[Client] Send Player Info to Server...");
