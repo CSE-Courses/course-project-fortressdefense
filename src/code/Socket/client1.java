@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class client {
+public class client1 {
     private static data_pack Data = new data_pack();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static ObjectOutputStream output = null;
