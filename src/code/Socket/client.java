@@ -23,7 +23,6 @@ public class client {
     private static void receive_from_server(Socket server) throws IOException, InterruptedException, ClassNotFoundException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
         client_command = new BufferedWriter(command_to_server);
-        TimeUnit.SECONDS.wait(1);
         client_command.write("client_pull" + "\n");
         client_command.flush();
         input = new ObjectInputStream(new BufferedInputStream(server.getInputStream()));
@@ -42,12 +41,11 @@ public class client {
     private static void send_to_server(Socket server) throws IOException, InterruptedException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
         client_command = new BufferedWriter(command_to_server);
-        TimeUnit.SECONDS.wait(1);
         client_command.write("client_push" + "\n");
         client_command.flush();
         output = new ObjectOutputStream(server.getOutputStream());
         Data.next_turn();
-        TimeUnit.SECONDS.wait(1);
+        TimeUnit.SECONDS.sleep(1);
         output.writeObject(Data);
         output.flush();
         System.out.println("[Server] Update and Push to Server...");
@@ -56,11 +54,9 @@ public class client {
     private static void join_server (Socket server, Player player) throws IOException, InterruptedException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
         client_command = new BufferedWriter(command_to_server);
-        TimeUnit.SECONDS.wait(1);
         client_command.write("player_join" + "\n");
         client_command.flush();
         output = new ObjectOutputStream(server.getOutputStream());
-        TimeUnit.SECONDS.wait(1);
         output.writeObject(player);
         output.flush();
         System.out.println("[Client] Send Player Info to Server...");
@@ -77,13 +73,15 @@ public class client {
         Player player = new Player(player_name);
         System.out.println("[Client] Initiated Player: " + player_name);
 
-        System.out.println("Enter port");
+//        System.out.println("Enter port");
         Scanner s = new Scanner(System.in);
-        int port = s.nextInt();
-        System.out.println("Enter Host Address");
-        //"172.20.5.78"
-        String host_address = reader.readLine();
+//        int port = s.nextInt();
+//        System.out.println("Enter Host Address");
+//        //"172.20.5.78"
+//        String host_address = reader.readLine();
 
+        int port = 16225;
+        String host_address = "172.20.5.78";
         Socket server = new Socket(host_address, port);
         System.out.println("[Client] Connected to Server" + server.getInetAddress() + ": " + port);
 
@@ -104,7 +102,6 @@ public class client {
                         for(Player value: Data.getPlayer_list()){
                             if(value.PlayerName.equals(attack_name)){
                                 value.points -= damage;
-                                break;
                             }
                         }
                         Data.write_message(player_name + " deals " + damage + " damage to " + attack_name);
@@ -115,7 +112,6 @@ public class client {
                         for(Player value: Data.getPlayer_list()) {
                             if (value.PlayerName.equals(player_name)) {
                                 value.points += damage;
-                                break;
                             }
                         }
                         Data.write_message(player_name + " recover " + damage + " HP");

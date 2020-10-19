@@ -21,15 +21,15 @@ public class server {
     private static ObjectOutputStream to_client = null;
     private static InputStreamReader reader;
     private static String command = null;
-    public static int room_size;
+    public static int room_size = 2;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Scanner s = new Scanner(System.in);
-        System.out.println("\nDEMO\nEnter your port to start (5 digit)");
-        int port = s.nextInt();
-        System.out.println("Enter room size");
-        room_size = s.nextInt();
-
+//        Scanner s = new Scanner(System.in);
+//        System.out.println("\nDEMO\nEnter your port to start (5 digit)");
+//        int port = s.nextInt();
+//        System.out.println("Enter room size");
+//        room_size = s.nextInt();
+        int port = 16225;
         ServerSocket server = new ServerSocket(port);
         System.out.println("\n[Server] Server started at port " + port);
         while (true) {
@@ -49,7 +49,6 @@ public class server {
 
     private static void send_to_client(Socket client) throws IOException, InterruptedException {
         assert client != null;
-        TimeUnit.SECONDS.wait(2);
         to_client = new ObjectOutputStream(client.getOutputStream());
         to_client.writeObject(Data);
         to_client.flush();
@@ -83,7 +82,7 @@ public class server {
             if(!value.isClosed()){
                 command_to_client = new OutputStreamWriter(value.getOutputStream());
                 server_command = new BufferedWriter(command_to_client);
-                TimeUnit.SECONDS.wait(1);
+                TimeUnit.SECONDS.sleep(1);
                 server_command.write("pull" + "\n");
                 server_command.flush();
                 System.out.println("[Server] Send to client \t" + value.getInetAddress());
