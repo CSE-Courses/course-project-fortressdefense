@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.*;
@@ -31,15 +32,17 @@ public class MainMenu {
 	
 	public void runGUI() {
 		JFrame frame = new JFrame("FORTRESS DEFENSE");
-		
+
 		Color c1 = new Color(153, 102, 0);
 		//Color c2 = new Color(0, 0, 153);
-		
-	    JPanel panel = new JPanel();
-	    
-	    JLabel logo = createDisplayImage("Images/FD.png");
-	    logo.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    panel.add(logo);
+    
+		JPanel panel = new JPanel();
+
+		JLabel logo = createDisplayImage("Images/FD.png");
+		logo.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(logo);
+		panel.add(Box.createVerticalStrut(100));
+
 	    
 	    JButton cgb = new JButton("Create Game");
 	    cgb.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -108,13 +111,13 @@ public class MainMenu {
 	    frame.getContentPane().add(panel);
 	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	    frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
 	}
 	
 	public void rulesScreen() {
 		JFrame frame = new JFrame("Rules");
-	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		JPanel panel = new JPanel();
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(0, 0,screenSize.width - 15, screenSize.height - 50);
@@ -136,17 +139,18 @@ public class MainMenu {
 	    		+ " If by the end of the third attack phase there are more than 1 player left, the player with the greatest health points wins.\n"
 	    		+ " If there is a tie between players by the end of the game, those players must fight to the death in mortal combat in real life (NOT REALLY!!!), those players must take turns drawing from the deck."
 	    		);
-	    
-	    Font font = new Font("Times New Roman", Font.BOLD, 20);
+
+		Font font = new Font("Times New Roman", Font.BOLD, 20);
 		textArea.setFont(font);
 		textArea.setBackground(new Color(153, 102, 0));
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
-	    panel.add(textArea);
+		panel.add(textArea);
 		frame.getContentPane().add(panel);
-		
+
 		panel.setBackground(new Color(153, 102, 0));
-	    frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
+		frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
 		frame.setVisible(true);
 	}
 }
+

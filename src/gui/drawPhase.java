@@ -2,7 +2,7 @@ package gui;
 import code.*;
 import code.Deck.*;
 
-import java.awt.EventQueue;
+import java.awt.*;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
@@ -11,15 +11,11 @@ import javax.swing.JDialog;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
 import java.awt.Window.Type;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-
-import java.awt.Font;
-import java.awt.Image;
 
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -27,9 +23,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JToggleButton;
 import javax.swing.JSeparator;
 import javax.swing.JPanel;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
-import java.awt.BorderLayout;
+
 
 /*
  * Creates the Draw Phase GUI window
@@ -88,7 +82,6 @@ public class drawPhase {
 		frmFortressDefense.setBounds(100, 100, 1090, 769);
 		frmFortressDefense.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmFortressDefense.getContentPane().setLayout(null);
-		
 		JButton btnExit = new JButton("EXIT GAME");
 		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnExit.setForeground(Color.WHITE);
@@ -212,13 +205,13 @@ public class drawPhase {
 		lblSeconds.setFont(new Font("Sitka Subheading", Font.PLAIN, 26));
 		lblSeconds.setBounds(454, 76, 152, 41);
 		frmFortressDefense.getContentPane().add(lblSeconds);
-		
+
 		JLabel lblName = new JLabel("Player_Name's Turn");
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblName.setBorder(UIManager.getBorder("InternalFrame.border"));
 		lblName.setForeground(Color.RED);
 		lblName.setBackground(Color.BLACK);
-		lblName.setBounds(848, 11, 216, 79);
+		lblName.setBounds(910, 11, 500, 100);
 		frmFortressDefense.getContentPane().add(lblName);
 		
 		JLabel lblBar = new JLabel("HEALTHPOINTS: 0");
@@ -840,7 +833,33 @@ public class drawPhase {
 		btnGo.setFont(new Font("Britannic Bold", Font.PLAIN, 99));
 		btnGo.setBounds(784, 253, 260, 181);
 		frmFortressDefense.getContentPane().add(btnGo);
-	
+		
+		JProgressBar healthBar = new JProgressBar();
+		healthBar.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		healthBar.setForeground(new Color(50, 205, 50));
+		healthBar.setMaximum(40);
+		healthBar.setBackground(Color.DARK_GRAY);
+		healthBar.setValue(19);
+		healthBar.setBounds(250, 152, 508, 46);
+		frmFortressDefense.getContentPane().add(healthBar);
+		
+		
+		
+		
+		/*
+		Player Image
+		 */
+		JPanel playerPanel = new JPanel();
+		playerPanel.setBackground(new Color(15, 28, 81));
+		playerPanel.setBorder(UIManager.getBorder("ProgressBar.border"));
+		playerPanel.setBounds(790, 11, 120, 100);
+		frmFortressDefense.getContentPane().add(playerPanel);
+		playerPanel.setLayout(null);
+		JButton playerIcon = new JButton("");
+		Image pc = new ImageIcon(this.getClass().getResource("/fd/my_character.png")).getImage();
+		playerIcon.setIcon(new ImageIcon(pc));
+		playerIcon.setBounds(0, 0, 120, 410);
+		playerPanel.add(playerIcon);
 	}
 	
 	public JPanel GetPanel() {
