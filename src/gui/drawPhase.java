@@ -52,12 +52,13 @@ public class drawPhase {
 	int curBound = 10;//sets the card btn position
 	int numA = 0;//number of attack cards
 	int numD = 0;//number of defense cards
+	int newHealth = 0;//updates healthpoints
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					drawPhase window = new drawPhase();
+					drawPhase window = new drawPhase(new code.Game());
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,11 +70,12 @@ public class drawPhase {
 	/**
 	 * Create the application.
 	 */
-	public drawPhase() {
+	public drawPhase(code.Game phase) {
+		turn = phase;
 		initialize();
 	}
 	
-	code.Game turn = new code.Game();//initializes decks
+	private code.Game turn;//initializes decks
 	code.Hand hand = new code.Hand();//initializes the player's hand
 
 	/**
@@ -153,6 +155,30 @@ public class drawPhase {
 		lblCard4.setBounds(436, 11, 46, 14);
 		cardPanel.add(lblCard4);
 		
+		JLabel lblCard5 = new JLabel("***");
+		lblCard5.setVisible(false);
+		lblCard5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCard5.setBounds(562, 11, 46, 14);
+		cardPanel.add(lblCard5);
+		
+		JLabel lblCard6 = new JLabel("***");
+		lblCard6.setVisible(false);
+		lblCard6.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCard6.setBounds(687, 11, 46, 14);
+		cardPanel.add(lblCard6);
+		
+		JLabel lblCard7 = new JLabel("***");
+		lblCard7.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCard7.setVisible(false);
+		lblCard7.setBounds(810, 11, 46, 14);
+		cardPanel.add(lblCard7);
+		
+		JLabel lblCard8 = new JLabel("***");
+		lblCard8.setVisible(false);
+		lblCard8.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCard8.setBounds(942, 11, 46, 14);
+		cardPanel.add(lblCard8);
+		
 		
 		JLabel lblTimer = new JLabel("30");
 		lblTimer.setFont(new Font("Sitka Subheading", Font.PLAIN, 36));
@@ -174,6 +200,13 @@ public class drawPhase {
 		});
 		tm.start();
 		
+		JProgressBar healthBar = new JProgressBar();
+		healthBar.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		healthBar.setForeground(new Color(50, 205, 50));
+		healthBar.setMaximum(50);
+		healthBar.setBackground(Color.DARK_GRAY);
+		healthBar.setBounds(250, 152, 508, 46);
+		frmFortressDefense.getContentPane().add(healthBar);
 		
 		JLabel lblSeconds = new JLabel("Seconds left");
 		lblSeconds.setFont(new Font("Sitka Subheading", Font.PLAIN, 26));
@@ -188,7 +221,7 @@ public class drawPhase {
 		lblName.setBounds(848, 11, 216, 79);
 		frmFortressDefense.getContentPane().add(lblName);
 		
-		JLabel lblBar = new JLabel("HEALTHPOINTS: 19");
+		JLabel lblBar = new JLabel("HEALTHPOINTS: 0");
 		lblBar.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		lblBar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBar.setBounds(380, 114, 254, 46);
@@ -235,6 +268,10 @@ public class drawPhase {
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
 				lblCard4.setVisible(false);
+				lblCard5.setVisible(false);
+				lblCard6.setVisible(false);
+				lblCard7.setVisible(false);
+				lblCard8.setVisible(false);
 				lblSelected.setText("");
 			}
 		});
@@ -245,11 +282,15 @@ public class drawPhase {
 		btnCard2.setVisible(false);
 		btnCard2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> BATTLE AXE card selected </html>");
-				lblCard2.setVisible(true);
+				lblMsgBox.setText("<html> " + hand.Select(1).card_name + " card selected </html>");
 				lblCard1.setVisible(false);
+				lblCard2.setVisible(true);
 				lblCard3.setVisible(false);
 				lblCard4.setVisible(false);
+				lblCard5.setVisible(false);
+				lblCard6.setVisible(false);
+				lblCard7.setVisible(false);
+				lblCard8.setVisible(false);
 				lblSelected.setText("");
 			}
 		});
@@ -258,11 +299,15 @@ public class drawPhase {
 		btnCard3.setVisible(false);
 		btnCard3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> REINFORCED GATE card selected </html>");
-				lblCard3.setVisible(true);
-				lblCard2.setVisible(false);
+				lblMsgBox.setText("<html> " + hand.Select(2).card_name + " card selected </html>");
 				lblCard1.setVisible(false);
+				lblCard2.setVisible(false);
+				lblCard3.setVisible(true);
 				lblCard4.setVisible(false);
+				lblCard5.setVisible(false);
+				lblCard6.setVisible(false);
+				lblCard7.setVisible(false);
+				lblCard8.setVisible(false);
 				lblSelected.setText("");
 			}
 		});
@@ -271,34 +316,86 @@ public class drawPhase {
 		btnCard4.setVisible(false);
 		btnCard4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> SCOUT card selected </html>");
-				lblCard4.setVisible(true);
+				lblMsgBox.setText("<html> " + hand.Select(3).card_name + " card selected </html>");
+				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
-				lblCard1.setVisible(false);
+				lblCard4.setVisible(true);
+				lblCard5.setVisible(false);
+				lblCard6.setVisible(false);
+				lblCard7.setVisible(false);
+				lblCard8.setVisible(false);
 				lblSelected.setText("");
 			}
 		});
 		
 		JButton btnCard5 = new JButton("");
 		btnCard5.setVisible(false);
-		//btnCard5.setBounds(534, 22, 119, 176);
-		//cardPanel.add(btnCard5);
+		btnCard5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("<html> " + hand.Select(4).card_name + " card selected </html>");
+				lblCard1.setVisible(false);
+				lblCard2.setVisible(false);
+				lblCard3.setVisible(false);
+				lblCard4.setVisible(false);
+				lblCard5.setVisible(true);
+				lblCard6.setVisible(false);
+				lblCard7.setVisible(false);
+				lblCard8.setVisible(false);
+				lblSelected.setText("");
+			}
+		});
 		
 		JButton btnCard6 = new JButton("");
 		btnCard6.setVisible(false);
-		//btnCard6.setBounds(666, 22, 119, 176);
-		//cardPanel.add(btnCard6);
+		btnCard6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("<html> " + hand.Select(5).card_name + " card selected </html>");
+				lblCard1.setVisible(false);
+				lblCard2.setVisible(false);
+				lblCard3.setVisible(false);
+				lblCard4.setVisible(false);
+				lblCard5.setVisible(false);
+				lblCard6.setVisible(true);
+				lblCard7.setVisible(false);
+				lblCard8.setVisible(false);
+				lblSelected.setText("");
+			}
+		});
 		
 		JButton btnCard7 = new JButton("");
 		btnCard7.setVisible(false);
-		//btnCard7.setBounds(796, 22, 119, 176);
-		//cardPanel.add(btnCard7);
+		btnCard7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("<html> " + hand.Select(6).card_name + " card selected </html>");
+				lblCard1.setVisible(false);
+				lblCard2.setVisible(false);
+				lblCard3.setVisible(false);
+				lblCard4.setVisible(false);
+				lblCard5.setVisible(false);
+				lblCard6.setVisible(false);
+				lblCard7.setVisible(true);
+				lblCard8.setVisible(false);
+				lblSelected.setText("");
+			}
+		});
 		
 		JButton btnCard8 = new JButton("");
 		btnCard8.setVisible(false);
-		//btnCard8.setBounds(925, 22, 119, 176);
-		//cardPanel.add(btnCard8);
+		btnCard8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMsgBox.setText("<html> " + hand.Select(7).card_name + " card selected </html>");
+				lblCard1.setVisible(false);
+				lblCard2.setVisible(false);
+				lblCard3.setVisible(false);
+				lblCard4.setVisible(false);
+				lblCard5.setVisible(false);
+				lblCard6.setVisible(false);
+				lblCard7.setVisible(false);
+				lblCard8.setVisible(true);
+				lblSelected.setText("");
+			}
+		});
 		
 		JButton btnAttack = new JButton("");
 		btnAttack.addActionListener(new ActionListener() {
@@ -365,26 +462,44 @@ public class drawPhase {
 			public void actionPerformed(ActionEvent e) {
 				if(lblCard1.isVisible())
 				{
-					lblSelected.setText("<html> Discard AXE selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard AXE </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(0).card_name + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(0).card_name + " </html>");
 					discard = true;
 				}
 				else if(lblCard2.isVisible())
 				{
-					lblSelected.setText("<html> Discard BATTLE AXE selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard BATTLE AXE </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(1).card_name + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(1).card_name + " </html>");
 					discard = true;
 				}
 				else if(lblCard3.isVisible())
 				{
-					lblSelected.setText("<html> Discard REINFORCED GATE selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard REINFORCED GATE </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(2).card_name + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(2).card_name + " </html>");
 					discard = true;
 				}
 				else if(lblCard4.isVisible())
 				{
-					lblSelected.setText("<html> Discard SCOUT selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard SCOUT </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(3).card_name + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(3).card_name + " </html>");
+					discard = true;
+				}
+				else if(lblCard5.isVisible())
+				{
+					lblSelected.setText("<html> Discard " + hand.Select(4).card_name + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(4).card_name + " </html>");
+					discard = true;
+				}
+				else if(lblCard6.isVisible())
+				{
+					lblSelected.setText("<html> Discard " + hand.Select(5).card_name + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(5).card_name + " </html>");
+					discard = true;
+				}
+				else if(lblCard7.isVisible())
+				{
+					lblSelected.setText("<html> Discard " + hand.Select(6).card_name + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(6).card_name + " </html>");
 					discard = true;
 				}
 				else
@@ -483,82 +598,6 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					/*if(hand.Size() == 1)	//enables the btn for new card
-					{
-						if(hand.Select(hand.Size()-1).card_name == "AXE")
-						{
-							btnCard1.setIcon(new ImageIcon(axeImg));
-							btnCard1.setBounds(10, 24, 119, 176);
-							cardPanel.add(btnCard1);
-							btnCard1.setVisible(true);
-						}
-						else if(hand.Select(hand.Size()-1).card_name == "BATTLE AXE")
-						{
-							btnCard1.setIcon(new ImageIcon(battleAxeImg));
-							btnCard1.setBounds(10, 24, 119, 176);
-							cardPanel.add(btnCard1);
-							btnCard1.setVisible(true);
-						}
-						else if(hand.Select(hand.Size()-1).card_name == "CROSSBOW")
-						{
-							btnCard1.setIcon(new ImageIcon(crossbowImg));
-							btnCard1.setBounds(10, 24, 119, 176);
-							cardPanel.add(btnCard1);
-							btnCard1.setVisible(true);
-						}
-						else if(hand.Select(hand.Size()-1).card_name == "MACE")
-						{
-							btnCard1.setIcon(new ImageIcon(maceImg));
-							btnCard1.setBounds(10, 24, 119, 176);
-							cardPanel.add(btnCard1);
-							btnCard1.setVisible(true);
-						}
-						
-					}
-					else if(hand.Size() == 2)
-					{
-						btnCard2.setVisible(true);
-					}
-					else if(hand.Size() == 3)
-					{
-						btnCard3.setVisible(true);
-					}
-					else if(hand.Size() == 4)
-					{
-						btnCard4.setVisible(true);
-					}
-					else if(hand.Size() == 5)
-					{
-						btnCard5.setVisible(true);
-					}
-					else if(hand.Size() == 6)
-					{
-						btnCard6.setVisible(true);
-					}
-					else if(hand.Size() == 7)
-					{
-						btnCard7.setVisible(true);
-					}
-					else if(hand.Size() == 8)
-					{
-						btnCard8.setVisible(true);
-					}
-					*/
-					
-					/*
-					final JOptionPane optionPane = new JOptionPane("<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-
-					final JDialog dialog = new JDialog();
-					dialog.setTitle("Message");
-					dialog.setModal(true);
-
-					dialog.setContentPane(optionPane);
-
-					dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-					dialog.pack();
-					dialog.setVisible(true);
-					*/
-					
 					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>");
 				}
 				else if(lblSelected.getText() == "<html> Defense Deck selected </html>")
@@ -622,6 +661,22 @@ public class drawPhase {
 					cardPanel.add(curBtn);
 					curBtn.setVisible(true);
 					
+					newHealth = newHealth + hand.Select(hand.Size()-1).getDamage();
+					
+					/*if(newHealth < 0)
+					{
+						healthBar.setValue(0);
+						lblBar.setText("HEALTHPOINTS: 0");
+					}
+					else
+					{*/
+						//updates the health bar based on card picked up
+						healthBar.setValue(newHealth);
+						
+						//updates the healthpoints
+						lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+					//}
+	
 					curBound = curBound + 130;
 					
 					if(hand.Size() == 1)
@@ -653,54 +708,6 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					/*
-					if(hand.Size() == 1)	//enables the btn for new card
-					{
-						btnCard1.setVisible(true);
-					}
-					else if(hand.Size() == 2)
-					{
-						btnCard2.setVisible(true);
-					}
-					else if(hand.Size() == 3)
-					{
-						btnCard3.setVisible(true);
-					}
-					else if(hand.Size() == 4)
-					{
-						btnCard4.setVisible(true);
-					}
-					else if(hand.Size() == 5)
-					{
-						btnCard5.setVisible(true);
-					}
-					else if(hand.Size() == 6)
-					{
-						btnCard6.setVisible(true);
-					}
-					else if(hand.Size() == 7)
-					{
-						btnCard7.setVisible(true);
-					}
-					else if(hand.Size() == 8)
-					{
-						btnCard8.setVisible(true);
-					}
-					*/
-					/*
-					final JOptionPane optionPane = new JOptionPane("<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-
-					final JDialog dialog = new JDialog();
-					dialog.setTitle("Message");
-					dialog.setModal(true);
-
-					dialog.setContentPane(optionPane);
-
-					dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-					dialog.pack();
-					dialog.setVisible(true);
-					*/
-					
 					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>");
 				}
 				else if(discard)
@@ -709,29 +716,120 @@ public class drawPhase {
 					{
 						lblCard1.setVisible(false);
 						btnCard1.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The AXE card has been discarded </html>");
-						System.exit(0);
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(0).card_name + " card has been discarded </html>");
+						if(hand.Select(0).type == "DEFENSE")
+						{
+							newHealth = newHealth - hand.Select(0).getDamage();
+							
+							//updates the health bar based on card discarded
+							healthBar.setValue(newHealth);
+							
+							//updates the healthpoints
+							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						}
+						//System.exit(0);
 					}
 					else if(lblCard2.isVisible())
 					{
 						lblCard2.setVisible(false);
 						btnCard2.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The BATTLE AXE card has been discarded </html>");
-						System.exit(0);
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(1).card_name + " card has been discarded </html>");
+						if(hand.Select(1).type == "DEFENSE")
+						{
+							newHealth = newHealth - hand.Select(1).getDamage();
+							
+							//updates the health bar based on card discarded
+							healthBar.setValue(newHealth);
+							
+							//updates the healthpoints
+							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						}
+						//System.exit(0);
 					}
 					else if(lblCard3.isVisible())
 					{
 						lblCard3.setVisible(false);
 						btnCard3.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The REINFORCED GATE card has been discarded </html>");
-						System.exit(0);
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(2).card_name + " card has been discarded </html>");
+						if(hand.Select(2).type == "DEFENSE")
+						{
+							newHealth = newHealth - hand.Select(2).getDamage();
+							
+							//updates the health bar based on card discarded
+							healthBar.setValue(newHealth);
+							
+							//updates the healthpoints
+							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						}
+						//System.exit(0);
 					}
 					else if(lblCard4.isVisible())
 					{
 						lblCard4.setVisible(false);
 						btnCard4.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The SCOUT card has been discarded </html>");
-						System.exit(0);
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(3).card_name + " card has been discarded </html>");
+						if(hand.Select(3).type == "DEFENSE")
+						{
+							newHealth = newHealth - hand.Select(3).getDamage();
+							
+							//updates the health bar based on card discarded
+							healthBar.setValue(newHealth);
+							
+							//updates the healthpoints
+							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						}
+						//System.exit(0);
+					}
+					else if(lblCard5.isVisible())
+					{
+						lblCard5.setVisible(false);
+						btnCard5.setVisible(false);
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(4).card_name + " card has been discarded </html>");
+						if(hand.Select(4).type == "DEFENSE")
+						{
+							newHealth = newHealth - hand.Select(4).getDamage();
+							
+							//updates the health bar based on card discarded
+							healthBar.setValue(newHealth);
+							
+							//updates the healthpoints
+							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						}
+						//System.exit(0);
+					}
+					else if(lblCard6.isVisible())
+					{
+						lblCard6.setVisible(false);
+						btnCard6.setVisible(false);
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(5).card_name + " card has been discarded </html>");
+						if(hand.Select(5).type == "DEFENSE")
+						{
+							newHealth = newHealth - hand.Select(5).getDamage();
+							
+							//updates the health bar based on card discarded
+							healthBar.setValue(newHealth);
+							
+							//updates the healthpoints
+							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						}
+						//System.exit(0);
+					}
+					else if(lblCard7.isVisible())
+					{
+						lblCard7.setVisible(false);
+						btnCard7.setVisible(false);
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(6).card_name + " card has been discarded </html>");
+						if(hand.Select(6).type == "DEFENSE")
+						{
+							newHealth = newHealth - hand.Select(6).getDamage();
+							
+							//updates the health bar based on card discarded
+							healthBar.setValue(newHealth);
+							
+							//updates the healthpoints
+							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						}
+						//System.exit(0);
 					}
 				}
 				lblSelected.setText("");
@@ -742,24 +840,11 @@ public class drawPhase {
 		btnGo.setFont(new Font("Britannic Bold", Font.PLAIN, 99));
 		btnGo.setBounds(784, 253, 260, 181);
 		frmFortressDefense.getContentPane().add(btnGo);
-		
-		JProgressBar healthBar = new JProgressBar();
-		healthBar.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
-		healthBar.setForeground(new Color(50, 205, 50));
-		healthBar.setMaximum(40);
-		healthBar.setBackground(Color.DARK_GRAY);
-		healthBar.setValue(19);
-		healthBar.setBounds(250, 152, 508, 46);
-		frmFortressDefense.getContentPane().add(healthBar);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	
 	}
+	
+	public JPanel GetPanel() {
+		return (JPanel) frmFortressDefense.getContentPane();
+	}
+
 }
