@@ -229,31 +229,31 @@ public class drawPhase {
 		frmFortressDefense.getContentPane().add(lblRoundNum);
 		
 		//Initialize Attack card images
-		Image axeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/axe.png")).getImage();
-		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/battleAxe.png")).getImage();
-		Image crossbowImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/crossbow.png")).getImage();
-		Image maceImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/mace.png")).getImage();
-		Image stickImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/stick.png")).getImage();
-		Image swordImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/sword.png")).getImage();
+		Image axeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/axe.PNG")).getImage();
+		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/battleAxe.PNG")).getImage();
+		Image crossbowImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/crossbow.PNG")).getImage();
+		Image maceImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/mace.PNG")).getImage();
+		Image stickImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/stick.PNG")).getImage();
+		Image swordImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/sword.PNG")).getImage();
 				
 		//Initialize Defense card images
-		Image barbedWireImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/barbedWire.png")).getImage();
-		Image ironDoorImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/ironDoor.png")).getImage();
-		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/reinforcedGate.png")).getImage();
-		Image steelChainsImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/steelChains.png")).getImage();
-		Image stoneWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/stoneWall.png")).getImage();
-		Image woodenWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/woodenWall.png")).getImage();
+		Image barbedWireImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/barbedWire.PNG")).getImage();
+		Image ironDoorImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/ironDoor.PNG")).getImage();
+		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/reinforcedGate.PNG")).getImage();
+		Image steelChainsImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/steelChains.PNG")).getImage();
+		Image stoneWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/stoneWall.PNG")).getImage();
+		Image woodenWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/woodenWall.PNG")).getImage();
 				
 		//Initialize Damage card images
-		Image earthquakeImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/earthquake.png")).getImage();
-		Image floodImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/flood.png")).getImage();
-		Image thunderstormImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/thunderstorm.png")).getImage();
-		Image tornadoImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/tornado.png")).getImage();
+		Image earthquakeImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/earthquake.PNG")).getImage();
+		Image floodImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/flood.PNG")).getImage();
+		Image thunderstormImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/thunderstorm.PNG")).getImage();
+		Image tornadoImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/tornado.PNG")).getImage();
 				
 		//Initialize Special card images
-		Image archerTowerImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/archerTower.png")).getImage();
-		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.png")).getImage();
-		Image tradeImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/trade.png")).getImage();
+		Image archerTowerImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/archerTower.PNG")).getImage();
+		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.PNG")).getImage();
+		Image tradeImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/trade.PNG")).getImage();
 		
 		JButton btnCard1 = new JButton("");
 		btnCard1.setVisible(false);
@@ -409,7 +409,7 @@ public class drawPhase {
 			}
 		});
 		btnAttack.setBorder(UIManager.getBorder("CheckBox.border"));
-		Image attackImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/attackCard.png")).getImage();
+		Image attackImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/attackCard.PNG")).getImage();
 		btnAttack.setIcon(new ImageIcon(attackImg));
 		btnAttack.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnAttack.setBounds(250, 209, 234, 280);
@@ -431,7 +431,7 @@ public class drawPhase {
 			}
 		});
 		btnDefense.setBorder(UIManager.getBorder("CheckBox.border"));
-		Image defenseImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/defenseCard.png")).getImage();
+		Image defenseImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/defenseCard.PNG")).getImage();
 		btnDefense.setIcon(new ImageIcon(defenseImg));
 		btnDefense.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnDefense.setBounds(524, 210, 234, 279);
