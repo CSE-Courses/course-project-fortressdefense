@@ -9,7 +9,7 @@ import java.util.Map;
  * card.getDescription() return description (not enough details)
  * error handling: not done yet
  */
-public class Card {
+public class Card implements java.io.Serializable{
     public String card_name = "";
 
     public String type = "";
