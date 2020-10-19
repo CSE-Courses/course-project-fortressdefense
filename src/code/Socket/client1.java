@@ -117,11 +117,11 @@ public class client1 {
                                 break;
                             }
                         }
-                        Data.write_message(player_name + "recover " + damage + " HP");
+                        Data.write_message(player_name + " recover " + damage + " HP");
                     }
                     else{
                         System.out.println("\t \t Pass");
-                        Data.write_message(player_name + "passed passed turn");
+                        Data.write_message(player_name + " passed turn");
                     }
                     command = "push";
                 }
