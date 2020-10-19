@@ -23,7 +23,7 @@ public class attackPhase {
 		JPanel spanel = new JPanel();
 		JPanel lpanel = new JPanel();
 		JPanel rpanel = new JPanel();
-		
+
 		tpanel.setLayout(new BoxLayout(tpanel, BoxLayout.Y_AXIS));
 		tpanel.setBounds(850, 0, 500, 1000);
 		spanel.setLayout(new FlowLayout());
@@ -36,13 +36,33 @@ public class attackPhase {
 		exit.setBackground(Color.GRAY);
 		exit.setForeground(Color.WHITE);
 		exit.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		exit.setBounds(0, 0, 200, 100);		
+		exit.setBounds(0, 0, 200, 100);
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		
+
+		JButton playerIcon = new JButton("");
+		Image pc = new ImageIcon(this.getClass().getResource("/fd/my_character1.png")).getImage();
+		playerIcon.setIcon(new ImageIcon(pc));
+
+		JButton playerIcon1 = new JButton("");
+		Image pc1 = new ImageIcon(this.getClass().getResource("/fd/my_character2.png")).getImage();
+		playerIcon1.setIcon(new ImageIcon(pc1));
+
+		JButton playerIcon2 = new JButton("");
+		Image pc2 = new ImageIcon(this.getClass().getResource("/fd/my_character3.png")).getImage();
+		playerIcon2.setIcon(new ImageIcon(pc2));
+
+		JButton playerIcon3 = new JButton("");
+		Image pc3 = new ImageIcon(this.getClass().getResource("/fd/my_character4.png")).getImage();
+		playerIcon3.setIcon(new ImageIcon(pc3));
+
+		JButton playerIcon4 = new JButton("");
+		Image pc4 = new ImageIcon(this.getClass().getResource("/fd/my_character5.png")).getImage();
+		playerIcon4.setIcon(new ImageIcon(pc4));
+
 		JLabel p2 = new JLabel("PLAYER 2");
 		p2.setForeground(c2);
 		p2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
@@ -52,6 +72,13 @@ public class attackPhase {
 		hp2.setForeground(c2);
 		hp2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp2.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JProgressBar hb2 = new JProgressBar();
+		hb2.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		hb2.setForeground(new Color(50, 205, 50));
+		hb2.setMaximum(20);
+		hb2.setBackground(Color.DARK_GRAY);
+		hb2.setValue(10);
 		
 		JLabel p1 = new JLabel("PLAYER 1");
 		p1.setForeground(c2);
@@ -62,18 +89,27 @@ public class attackPhase {
 		hp1.setForeground(c2);
 		hp1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp1.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
+		JProgressBar hb1 = new JProgressBar();
+		hb1.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		hb1.setForeground(new Color(50, 205, 50));
+		hb1.setMaximum(20);
+		hb1.setBackground(Color.DARK_GRAY);
+		hb1.setValue(12);
+
 		lpanel.add(exit);
-		lpanel.add(Box.createVerticalStrut(200));
+		lpanel.add(Box.createVerticalStrut(70));
+		lpanel.add(playerIcon1);
 		lpanel.add(p2);
-		lpanel.add(Box.createVerticalStrut(20));
 		lpanel.add(hp2);
-		lpanel.add(Box.createVerticalStrut(200));
+		lpanel.add(hb2);
+		lpanel.add(Box.createVerticalStrut(80));
+		lpanel.add(playerIcon);
 		lpanel.add(p1);
-		lpanel.add(Box.createVerticalStrut(20));
 		lpanel.add(hp1);
-		lpanel.add(Box.createVerticalStrut(20));
-		
+		lpanel.add(hb1);
+
+
 		JLabel p3 = new JLabel("PLAYER 3");
 		p3.setForeground(c2);
 		p3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
@@ -83,6 +119,13 @@ public class attackPhase {
 		hp3.setForeground(c2);
 		hp3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp3.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JProgressBar hb3 = new JProgressBar();
+		hb3.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		hb3.setForeground(new Color(50, 205, 50));
+		hb3.setMaximum(20);
+		hb3.setBackground(Color.DARK_GRAY);
+		hb3.setValue(5);
 		
 		JLabel p4 = new JLabel("PLAYER 4");
 		p4.setForeground(c2);
@@ -93,59 +136,62 @@ public class attackPhase {
 		hp4.setForeground(c2);
 		hp4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp4.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		rpanel.add(Box.createVerticalStrut(200));
+
+		JProgressBar hb4 = new JProgressBar();
+		hb4.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		hb4.setForeground(new Color(50, 205, 50));
+		hb4.setMaximum(20);
+		hb4.setBackground(Color.DARK_GRAY);
+		hb4.setValue(2);
+
+		rpanel.add(Box.createVerticalStrut(120));
+		rpanel.add(playerIcon4);
 		rpanel.add(p3);
-		rpanel.add(Box.createVerticalStrut(20));
 		rpanel.add(hp3);
-		rpanel.add(Box.createVerticalStrut(200));
+		rpanel.add(hb3);
+		rpanel.add(Box.createVerticalStrut(80));
+		rpanel.add(playerIcon3);
 		rpanel.add(p4);
-		rpanel.add(Box.createVerticalStrut(20));
 		rpanel.add(hp4);
+		rpanel.add(hb4);
 		
 		JLabel attack = new JLabel("ATTACK PHASE");
 		attack.setForeground(c2);
 		attack.setFont(new Font("Times New Roman", Font.BOLD, 50));
 		attack.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JLabel time = new JLabel("30 Seconds Left");
 		time.setForeground(c2);
 		time.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		time.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JLabel hp = new JLabel("HEALTH POINTS: 15");
 		hp.setForeground(c2);
 		hp.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
+		JProgressBar hb = new JProgressBar();
+		hb.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		hb.setForeground(new Color(50, 205, 50));
+		hb.setMaximum(20);
+		hb.setBackground(Color.DARK_GRAY);
+		hb.setValue(15);
+		hb.setBounds(250, 252, 508, 46);
+
 		tpanel.add(attack);
 		tpanel.add(Box.createVerticalStrut(20));
+		tpanel.add(Box.createHorizontalStrut(500));
+		tpanel.add(playerIcon2);
 		tpanel.add(time);
-		tpanel.add(Box.createVerticalStrut(100));
 		tpanel.add(hp);
-		tpanel.add(Box.createVerticalStrut(100));
-		
-		JButton pass = new JButton("PASS");
-		pass.setBackground(c1);
-		pass.setForeground(c2);
-		pass.setFont(new Font("Arial", Font.BOLD, 25));
-		pass.setBounds(1000, 300, 300, 100);
-		tpanel.add(pass);
-		tpanel.add(Box.createVerticalStrut(50));
-		
-		JButton go = new JButton("GO!");
-		go.setBackground(c1);
-		go.setForeground(c2);
-		go.setFont(new Font("Arial", Font.BOLD, 25));
-		go.setBounds(850, 500, 300, 100);
-		tpanel.add(go);
+		tpanel.add(hb);
 		
 		JButton card1 = new JButton("");
 		Image axeImg = new ImageIcon(this.getClass().getResource("Images/axe.png")).getImage();
 		card1.setIcon(new ImageIcon(axeImg));
 		card1.setBackground(c1);
 		spanel.add(card1);
-		
+
 		JButton card2 = new JButton("");
 		card2.setIcon(new ImageIcon(axeImg));
 		card2.setBackground(c1);
@@ -188,7 +234,8 @@ public class attackPhase {
 		frame.getContentPane().add(spanel, BorderLayout.SOUTH);
 		frame.getContentPane().add(rpanel, BorderLayout.EAST);
 		frame.getContentPane().add(lpanel, BorderLayout.WEST);
-		frame.setSize(1920, 1020);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
 		frame.setVisible(true);
 	}
 
