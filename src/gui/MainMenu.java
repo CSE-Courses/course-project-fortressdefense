@@ -1,10 +1,13 @@
-
 package gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import javax.swing.*;
+
+import code.Game;
 
 public class MainMenu {
 	
@@ -60,7 +63,12 @@ public class MainMenu {
 	    jgb.addActionListener(new ActionListener(){       
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				try {
+					Join_Game join_game = new Join_Game();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 	    });
 	    
@@ -88,7 +96,8 @@ public class MainMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				//drawPhase dp = new drawPhase();
+				drawPhase dp = new drawPhase(new Game());
+				dp.frmFortressDefense.setVisible(true);
 			}
 	    });
 	    

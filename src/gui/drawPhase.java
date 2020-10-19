@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 
 public class drawPhase {
 
-	private JFrame frmFortressDefense;
+	public JFrame frmFortressDefense;
 
 	/**
 	 * Launch the application.
@@ -66,6 +66,9 @@ public class drawPhase {
 	 */
 	public drawPhase(code.Game phase) {
 		turn = phase;
+		if (turn.PlayerList.size() == 0) {
+			turn.PlayerList.add(new Player("Test Player"));
+		}
 		initialize();
 	}
 	
@@ -206,7 +209,7 @@ public class drawPhase {
 		lblSeconds.setBounds(454, 76, 152, 41);
 		frmFortressDefense.getContentPane().add(lblSeconds);
 
-		JLabel lblName = new JLabel("Player_Name's Turn");
+		JLabel lblName = new JLabel(turn.PlayerList.get(0).PlayerName + "'s Turn");
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblName.setBorder(UIManager.getBorder("InternalFrame.border"));
 		lblName.setForeground(Color.RED);
