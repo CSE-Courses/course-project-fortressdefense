@@ -17,8 +17,8 @@ public class Card implements java.io.Serializable{
     public int damage = 0;
 
     public String description = "";
-    
-    
+
+
     public Boolean PlayAtStart = false;
     public Card(String name,String type, int damage) {
         this.card_name=name;
