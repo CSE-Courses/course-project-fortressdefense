@@ -9,27 +9,16 @@ import java.util.Map;
  * card.getDescription() return description (not enough details)
  * error handling: not done yet
  */
-<<<<<<< HEAD
 public class Card {
     private ICardEnum card_name;
-=======
-public class Card implements java.io.Serializable{
-    public String card_name = "";
->>>>>>> develop
 
     private CardType type;
 
     private int damage;
 
-<<<<<<< HEAD
     private String description;
     
     
-=======
-    public String description = "";
-
-
->>>>>>> develop
     public Boolean PlayAtStart = false;
     public Card(ICardEnum name, CardType type, int damage) {
         this.card_name=name;
