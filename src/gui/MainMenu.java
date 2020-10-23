@@ -3,7 +3,11 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import javax.swing.*;
+
+import code.Game;
 
 public class MainMenu {
 	
@@ -31,16 +35,16 @@ public class MainMenu {
 	
 	public void runGUI() {
 		JFrame frame = new JFrame("FORTRESS DEFENSE");
-		
+
 		Color c1 = new Color(153, 102, 0);
 		//Color c2 = new Color(0, 0, 153);
-		
-	    JPanel panel = new JPanel();
-	    
-	    JLabel logo = createDisplayImage("Images/FD.png");
-	    logo.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    panel.add(logo);
-	    panel.add(Box.createVerticalStrut(100));
+    
+		JPanel panel = new JPanel();
+
+		JLabel logo = createDisplayImage("Images/FD.png");
+		logo.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(logo);
+
 	    
 	    JButton cgb = new JButton("Create Game");
 	    cgb.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -59,7 +63,12 @@ public class MainMenu {
 	    jgb.addActionListener(new ActionListener(){       
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				try {
+					Join_Game join_game = new Join_Game();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 	    });
 	    
@@ -87,7 +96,8 @@ public class MainMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				//drawPhase dp = new drawPhase();
+				drawPhase dp = new drawPhase(new Game());
+				dp.frmFortressDefense.setVisible(true);
 			}
 	    });
 	    
@@ -95,7 +105,6 @@ public class MainMenu {
 	    attack.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    attack.setBackground(c1);
 	    panel.add(attack);
-	    panel.add(Box.createVerticalStrut(25));
 	    
 	    attack.addActionListener(new ActionListener(){       
 			@Override
@@ -108,19 +117,20 @@ public class MainMenu {
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	    
 	    frame.getContentPane().add(panel);
-	    
-		frame.setSize(1152, 912);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
 	}
 	
 	public void rulesScreen() {
 		JFrame frame = new JFrame("Rules");
-		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		JPanel panel = new JPanel();
-		JTextArea textArea = new JTextArea(100,100);
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(0, 0,screenSize.width - 15, screenSize.height - 50);
 		
-	    textArea.setText("\t\t\t\t\t\tFORTRESS DEFENSE\n\n"
+	    textArea.setText("FORTRESS DEFENSE\n\n"
 	    		+ "Objective: Build up health points by drawing health point cards in order to strengthen your fortress. "
 	    		+ "Build up an arsenal by drawing attack cards. "
 	    		+ "Use the attack cards to destroy all other fortresses.\n\n\n" 
@@ -137,16 +147,18 @@ public class MainMenu {
 	    		+ " If by the end of the third attack phase there are more than 1 player left, the player with the greatest health points wins.\n"
 	    		+ " If there is a tie between players by the end of the game, those players must fight to the death in mortal combat in real life (NOT REALLY!!!), those players must take turns drawing from the deck."
 	    		);
-	    
-	    Font font = new Font("Times New Roman", Font.BOLD, 20);
+
+		Font font = new Font("Times New Roman", Font.BOLD, 20);
 		textArea.setFont(font);
-		textArea.setBackground(Color.BLACK);
-		textArea.setForeground(Color.BLUE);
-		
-	    panel.add(textArea);
+		textArea.setBackground(new Color(153, 102, 0));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		panel.add(textArea);
 		frame.getContentPane().add(panel);
-		
-		frame.setSize(1920, 1020);
+
+		panel.setBackground(new Color(153, 102, 0));
+		frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
 		frame.setVisible(true);
 	}
 }
+

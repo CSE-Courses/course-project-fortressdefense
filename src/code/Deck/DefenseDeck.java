@@ -13,7 +13,7 @@ import code.card_class.*;
  * @author Andrew Jank
  *
  */
-public class DefenseDeck implements IDeck {
+public class DefenseDeck implements IDeck,java.io.Serializable {
 	
 	/**
 	 * Data Structure for Defense Deck
