@@ -4,18 +4,21 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import javafx.util.Pair;
 import code.card_class.*;
+import code.GameConstants;
+import code.Hand;
+import code.Player;
 import code.Deck.*;
 public class AttackTests {
 
-    Card stick = new Card("STICK","ATTACK",1);
-    Card battleaxe = new Card("BATTLE AXE","ATTACK",8);
-    Card axe = new Card("AXE","ATTACK",3);
-    Card sword = new Card("SWORD","ATTACK",4);
-    Card mace = new Card("MACE","ATTACK",5);
-    Card crossbow = new Card("CROSSBOW","ATTACK",10);
-    Card archertower = new Card("ARCHER TOWER","SPECIAL",0);
-    Card trade = new Card("TRADE","SPECIAL",0);
-    Card scout = new Card("SCOUT","SPECIAL",0);
+    Card stick = new Card(AttackCard.Stick, CardType.Attack, GameConstants.dmgStick);
+    Card battleaxe = new Card(AttackCard.Battle_Axe, CardType.Attack, GameConstants.dmgBattleAxe);
+    Card axe = new Card(AttackCard.Axe, CardType.Attack, GameConstants.dmgAxe);
+    Card sword = new Card(AttackCard.Sword, CardType.Attack, GameConstants.dmgSword);
+    Card mace = new Card(AttackCard.Mace, CardType.Attack, GameConstants.dmgMace);
+    Card crossbow = new Card(AttackCard.Crossbow, CardType.Attack, GameConstants.dmgCrossbow);
+    Card archertower = new Card(SpecialCard.Archer_Tower, CardType.Special, GameConstants.dmgArcher);
+    Card trade = new Card(SpecialCard.Trade, CardType.Special, GameConstants.dmgTrade);
+    Card scout = new Card(SpecialCard.Scout, CardType.Special, GameConstants.dmgScout);
 
     @Test
     public void PlayerInitialPoints() {
@@ -24,21 +27,11 @@ public class AttackTests {
     }
 
     @Test
-    public void PlayerPickingCardStick() {
-        Player p1 = new Player();
-
-        p1.PickingCard(stick);
-        assertEquals(p1.attack.stack.peek(), stick);
-        assertEquals(p1.attack.stack.peek().type, "ATTACK");
-    }
-
-
-    @Test
     public void PlayerGettingAttackedByBattleAxe() {
         Player p1 = new Player();
 
         int previousPoints = p1.points;
-        p1.GettingAttacked(battleaxe);
+        p1.useAttackCard(battleaxe, p1);
         assertEquals(p1.points, previousPoints - 8);
     }
 
@@ -46,7 +39,6 @@ public class AttackTests {
     public void PlayerUseAttackCardByBattleAxe() {
         Player p1 = new Player();
 
-        p1.PickingCard(battleaxe);
         Player p2 = new Player();
         int previousPoints = p2.points;
         p1.useAttackCard(battleaxe, p2);
@@ -57,14 +49,13 @@ public class AttackTests {
     public void PlayerGettingAttackedByAxe() {
         Player p1 = new Player();
         int previousPoints = p1.points;
-        p1.GettingAttacked(axe);
+        p1.useAttackCard(axe, p1);
         assertEquals(p1.points, previousPoints - 3);
     }
 
     @Test
     public void PlayerUseAttackCardByAxe() {
         Player p1 = new Player();
-        p1.PickingCard(axe);
         Player p2 = new Player();
         int previousPoints = p2.points;
         p1.useAttackCard(axe, p2);
@@ -75,14 +66,13 @@ public class AttackTests {
     public void PlayerGettingAttackedBySword() {
         Player p1 = new Player();
         int previousPoints = p1.points;
-        p1.GettingAttacked(sword);
+        p1.useAttackCard(sword, p1);
         assertEquals(p1.points, previousPoints - 4);
     }
 
     @Test
     public void PlayerUseAttackCardBySword() {
         Player p1 = new Player();
-        p1.PickingCard(sword);
         Player p2 = new Player();
         int previousPoints = p2.points;
         p1.useAttackCard(sword, p2);
@@ -93,14 +83,13 @@ public class AttackTests {
     public void PlayerGettingAttackedByStick() {
         Player p1 = new Player();
         int previousPoints = p1.points;
-        p1.GettingAttacked(stick);
+        p1.useAttackCard(stick, p1);
         assertEquals(p1.points, previousPoints - 1);
     }
 
     @Test
     public void PlayerUseAttackCardByStick() {
         Player p1 = new Player();
-        p1.PickingCard(stick);
         Player p2 = new Player();
         int previousPoints = p2.points;
         p1.useAttackCard(stick, p2);
@@ -111,14 +100,13 @@ public class AttackTests {
     public void PlayerGettingAttackedByMace() {
         Player p1 = new Player();
         int previousPoints = p1.points;
-        p1.GettingAttacked(mace);
+        p1.useAttackCard(mace, p1);
         assertEquals(p1.points, previousPoints - 5);
     }
 
     @Test
     public void PlayerUseAttackCardByMace() {
         Player p1 = new Player();
-        p1.PickingCard(mace);
         Player p2 = new Player();
         int previousPoints = p2.points;
         p1.useAttackCard(mace, p2);
@@ -129,14 +117,13 @@ public class AttackTests {
     public void PlayerGettingAttackedByCrossbow() {
         Player p1 = new Player();
         int previousPoints = p1.points;
-        p1.GettingAttacked(crossbow);
+        p1.useAttackCard(crossbow, p1);
         assertEquals(p1.points, previousPoints - 10);
     }
 
     @Test
     public void PlayerUseAttackCardByCrossbow() {
         Player p1 = new Player();
-        p1.PickingCard(crossbow);
         Player p2 = new Player();
         int previousPoints = p2.points;
         p1.useAttackCard(crossbow, p2);
@@ -146,48 +133,43 @@ public class AttackTests {
     @Test
     public void PlayerUseArcherTower(){
         Player p1 = new Player();
-//        Card card = new Card("ARCHER");
-        p1.PickingCard(archertower);
         Player p2= new Player();
-        int previousPoints=p2.points;
-        p1.useArcherTower(archertower,p2);//should keep track of which player is attacking you.
-        assertEquals(p2.points, previousPoints-1);
+        int p2previousPoints=p2.points;
+        int p1previousPoints = p1.points;
+        p1.useArcherTower();
+        p2.useAttackCard(crossbow, p1);
+        assertEquals(p2.points, p2previousPoints-1);
+        assertEquals(p1.points, p1previousPoints-10);
     }
 
     @Test
     public void PlayerUseScout(){
         Player p1 = new Player();
-        p1.PickingCard(scout);
         Player p2= new Player();
-        p2.PickingCard(axe);
-        p2.PickingCard(stick);
+        IDeck deck = new DefenseDeck();
+        deck.Add(stick);
+        p2.getHand().Draw(deck);
         int previousPoints=p2.points;
-        AttackDeck a= p2.attack;
-        DefenseDeck b=p2.defense;
-        Pair<AttackDeck,DefenseDeck>hi=p1.useScout(scout,p2);
-        assertEquals(hi.getKey(), p2.attack);
-        assertEquals(hi.getValue(), p2.defense);
+        Hand p2Hand = p1.useScout(p2);
+        assertEquals(previousPoints, p2.points);
+        assertEquals(p2.getHand(), p2Hand);
     }
 
 
     @Test
     public void PlayerUseTrade(){
+    	IDeck deck = new AttackDeck();
+    	deck.Add(stick);
+    	deck.Add(axe);
         Player p1 = new Player();
-        p1.PickingCard(axe);
+        p1.getHand().Draw(deck); // axe
         Player p2= new Player();
-        p2.PickingCard(stick);
-        p2.PickingCard(scout);
-        Card tradeCard=p2.attack.Draw();
-        AttackDeck a=p1.attack;
-        int p1size=a.Size();
-        AttackDeck a1=p2.attack;
-        int p2size=a1.Size();
-        p1.useTrade(axe,tradeCard,p2);
-        assertEquals(p1.attack.Size(), p1size);
-        assertEquals(p1.attack.stack.contains(axe),false);//should write contains() function in attackDeck and defenseDeck classes.
-        assertEquals(p1.attack.stack.contains(tradeCard),true);
-        assertEquals(p2.attack.stack.contains(tradeCard),false);
-        assertEquals(p2.attack.stack.contains(axe),true);
+        p2.getHand().Draw(deck); // stick
+        p1.useTrade(axe,stick,p2);
+        assertEquals(p1.getHand().Contains(axe),false);//should write contains() function in attackDeck and defenseDeck classes.
+        assertEquals(p1.getHand().Contains(stick),true);
+        assertEquals(p2.getHand().Contains(stick),false);
+        assertEquals(p2.getHand().Contains(axe),true);
     }
 
 }

@@ -5,7 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import code.card_class.AttackCard;
 import code.card_class.Card;
+import code.card_class.CardType;
+import code.card_class.SpecialCard;
 import code.*;
 import code.Deck.*;
 
@@ -138,7 +141,7 @@ public class HandTests {
 		Hand hand = new Hand();
 		
 		IDeck deck = new AttackDeck();
-		Card card = new Card("ARCHER TOWER");
+		Card card = new Card(SpecialCard.Archer_Tower, CardType.Special, GameConstants.dmgArcher);
 		card.PlayAtStart = true;
 		deck.Add(card);
 		
@@ -153,7 +156,7 @@ public class HandTests {
 		Hand hand = new Hand();
 		
 		IDeck deck = new AttackDeck();
-		Card card = new Card("STICK");
+		Card card = new Card(AttackCard.Stick, CardType.Attack, GameConstants.dmgStick);
 		deck.Add(card);
 		
 		hand.Draw(deck);

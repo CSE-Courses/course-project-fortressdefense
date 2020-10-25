@@ -70,5 +70,26 @@ public class Hand {
 		numDefenseDraw = 0;
 		numAttackDraw = 0;
 	}
-
+	
+	public boolean Contains(Card card) {
+		return cards.contains(card);
+	}
+	
+	/**
+	 * Used for trading only, adds card to hand
+	 * @param card traded from another
+	 * @author Andrew Jank
+	 */
+	public void Add(Card card) {
+		cards.add(card);
+	}
+	
+	/**
+	 * Used for trading only, removes card from hand
+	 * @param card to be traded to another
+	 * @author Andrew Jank
+	 */
+	public void Remove(Card card) {
+		cards.remove(card);
+	}
 }

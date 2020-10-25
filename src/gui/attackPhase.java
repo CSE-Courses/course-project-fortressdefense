@@ -195,7 +195,7 @@ public class attackPhase {
 		tpanel.add(hb);
 		
 		JButton card1 = new JButton("");
-		Image axeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/axe.png")).getImage();
+		Image axeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/axe.PNG")).getImage();
 		card1.setIcon(new ImageIcon(axeImg));
 		card1.setBackground(c1);
 		spanel.add(card1);
@@ -206,7 +206,7 @@ public class attackPhase {
 		spanel.add(card2);
 		
 		JButton card3 = new JButton("");
-		Image baxeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/battleAxe.png")).getImage();
+		Image baxeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/battleAxe.PNG")).getImage();
 		card3.setIcon(new ImageIcon(baxeImg));
 		card3.setBackground(c1);
 		spanel.add(card3);
