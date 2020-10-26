@@ -42,7 +42,13 @@ public class UDP_Server {
         }
         @Override
         public void run() {
-
+            System.out.println("[Server] Client Joined");
+            try {
+                receive(server, packet);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            send(server, packet);
         }
         private static void send(DatagramSocket server, DatagramPacket packet){
             try {

@@ -8,6 +8,7 @@ import code.Player;
 import code.Socket.data_pack;
 
 public class UDP_Client {
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static ByteArrayOutputStream OS = null;
     private static ObjectOutputStream os = null;
     private static ByteArrayInputStream IS = null;
@@ -24,12 +25,19 @@ public class UDP_Client {
         DatagramSocket socket = new DatagramSocket();
         InetAddress address = InetAddress.getByName("172.20.5.78");
         int port = 8899;
-        socket.connect(address, port);
+        //socket.connect(address, port);
 
         while (true){
-
+            socket.connect(address, port);
+            System.out.println("[Client] Enter anything to simulate clicking");
+            String i = reader.readLine();
+            send(socket);
+            socket.connect(address, port);
+            receive(socket);
+            if(i.equals("quit")){
+                break;
+            }
         }
-
     }
     private static void receive(DatagramSocket socket) throws IOException, ClassNotFoundException {
         System.out.println("[Server > Client] Receive from Server");
@@ -48,8 +56,7 @@ public class UDP_Client {
         System.out.println("\t \t Recent activity: " + Data.getMessage());
     }
 
-    private static void send(DatagramSocket socket, DatagramPacket packet) throws IOException {
-        Data.next_turn();
+    private static void send(DatagramSocket socket) throws IOException {
         OS = new ByteArrayOutputStream();
         os = new ObjectOutputStream(OS);
         os.writeObject(Data);
