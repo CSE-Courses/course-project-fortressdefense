@@ -26,33 +26,13 @@ public class UDP_Client {
         int port = 8899;
         socket.connect(address, port);
 
-        // Create a Player
-        OS = new ByteArrayOutputStream();
-        os = new ObjectOutputStream(OS);
-        os.writeObject(player);
-        data = OS.toByteArray();
-        DatagramPacket packet = new DatagramPacket(data, data.length);
-        socket.send(packet);
-        System.out.println("[Client > Server] Send to Server");
+        while (true){
 
-        //first time receive data_pack
-        System.out.println("[Server] Waiting for Players to Join");
-        receive(socket);
-
-        boolean client_status = true;
-        while (client_status){
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            if(Data.getTurn().equals(player.PlayerName)) {
-                System.out.println("[Client] Enter anything to simulate clicking a buttons.");
-                String click = reader.readLine();
-                send(socket);
-            }
-            System.out.println("[Client] Not your turn yet. Waiting for other player's input");
-            receive(socket);
         }
-        socket.close();
+
     }
     private static void receive(DatagramSocket socket) throws IOException, ClassNotFoundException {
+        System.out.println("[Server > Client] Receive from Server");
         data = new byte[1024];
         input = new DatagramPacket(data, data.length);
         socket.receive(input);
@@ -68,13 +48,14 @@ public class UDP_Client {
         System.out.println("\t \t Recent activity: " + Data.getMessage());
     }
 
-    private static void send(DatagramSocket socket) throws IOException {
+    private static void send(DatagramSocket socket, DatagramPacket packet) throws IOException {
+        Data.next_turn();
         OS = new ByteArrayOutputStream();
         os = new ObjectOutputStream(OS);
         os.writeObject(Data);
         data = OS.toByteArray();
-        output = new DatagramPacket(data, data.length);
-        socket.send(output);
+        DatagramPacket p = new DatagramPacket(data, data.length);
+        socket.send(p);
         System.out.println("[Client > Server] Send to Server");
     }
 }

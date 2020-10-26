@@ -39,51 +39,11 @@ public class UDP_Server {
         public UDP_Server_Thread(DatagramSocket server, DatagramPacket packet) {
             this.server = server;
             this.packet = packet;
-            thread_list.add(packet);
         }
+        @Override
+        public void run() {
 
-        public void start() {
-            System.out.println("[Thread] " + packet.getAddress() +": "+ packet.getPort() + " connected");
-            data = packet.getData();
-            try {
-                IS = new ByteArrayInputStream(data);
-                is = new ObjectInputStream(IS);
-                Player player = (Player) is.readObject();
-                Data.add_player(player);
-                Data.write_message(player.PlayerName + " Joined");
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            System.out.println("[Client > Server] " + Data.getMessage());
-
-            /**
-             * waiting for players
-             * start the game if number of players equals to room size
-            */
-            while (Data.getRoom_size() > Data.getPlayer_list().size()){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            Data.next_turn();
-            send(server, packet);
-
-            boolean thread_status = true;
-            while (thread_status){
-                try {
-                    receive(server, packet);
-                    //Data = input
-                    for(DatagramPacket value : thread_list){
-                        send(server, value);
-                    }
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-
         private static void send(DatagramSocket server, DatagramPacket packet){
             try {
                 OS = new ByteArrayOutputStream();
@@ -106,6 +66,10 @@ public class UDP_Server {
             IS = new ByteArrayInputStream(data);
             is = new ObjectInputStream(IS);
             Data = (data_pack) is.readObject();
+            System.out.println("\t \t Round: " + Data.getRound() + "\tTurn: " + Data.getTurn());
+            for (Player value : Data.getPlayer_list()) {
+                System.out.println("\t \t " + value.PlayerName + ": " + value.points + " HP");
+            }
             System.out.println("[Client > Server] Receive from " + packet.getAddress() +": " + packet.getPort());
         }
     }
