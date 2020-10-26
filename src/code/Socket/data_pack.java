@@ -1,6 +1,6 @@
 package code.Socket;
 
-import code.Deck.Player;
+import code.Player;
 import java.util.ArrayList;
 
 

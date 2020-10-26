@@ -1,7 +1,6 @@
 package code.Socket;
 
-import code.Deck.Player;
-import org.junit.Assert;
+import code.Player;
 
 import java.io.*;
 import java.net.Socket;
