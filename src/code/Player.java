@@ -1,6 +1,8 @@
 package code;
 import code.Deck.*;
 import code.card_class.*;
+
+import java.io.Serializable;
 import java.util.*;
 import javafx.util.Pair;
 
@@ -9,7 +11,7 @@ import javafx.util.Pair;
  * @author Mohan Vellayan
  */
 
-public class Player {
+public class Player implements Serializable {
 
 	public String PlayerName;
 	
