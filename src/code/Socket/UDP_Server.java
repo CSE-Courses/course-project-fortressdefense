@@ -6,46 +6,44 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import code.Player;
-import code.Socket.data_pack;
 
 public class UDP_Server {
-    private static data_pack Data = new data_pack();
     private static ArrayList<DatagramPacket> thread_list = new ArrayList();
+    private static ArrayList<InetAddress> thread_address = new ArrayList<>();
     private static ByteArrayOutputStream OS = null;
     private static ObjectOutputStream os = null;
     private static ByteArrayInputStream IS = null;
     private static ObjectInputStream is = null;
+    private static  DatagramPacket input = null;
+    private static  DatagramPacket output = null;
+    private static data_pack Data = new data_pack();
+    private static byte[] data = null;
+    private static int room_size = 2;
 
     public static void main(String[] args) throws IOException {
         DatagramSocket server = new DatagramSocket(8899);
-        byte[] data = new byte[1024];
-        DatagramPacket packet = new DatagramPacket(data, data.length);
         System.out.println("[Server] Start......");
-        data_pack Data = new data_pack();
-
+        Data.setRoom_size(room_size);
         while(true){
+            byte[] data = new byte[1024];
+            DatagramPacket packet = new DatagramPacket(data, data.length);
             server.receive(packet);
-            UDP_Server_Thread thread = new UDP_Server_Thread(data, server, packet);
-            thread_list.add(packet);
+            UDP_Server_Thread thread = new UDP_Server_Thread(server, packet);
             thread.start();
         }
-        //server.close();
     }
 
     static class UDP_Server_Thread extends Thread {
-        byte[] data = null;
         DatagramSocket server = null;
         DatagramPacket packet = null;
-
-        public UDP_Server_Thread(byte[] data, DatagramSocket server, DatagramPacket packet) {
+        public UDP_Server_Thread(DatagramSocket server, DatagramPacket packet) {
             this.server = server;
             this.packet = packet;
-            this.data = data;
+            thread_list.add(packet);
         }
 
-        public void start(){
+        public void start() {
             System.out.println("[Thread] " + packet.getAddress() +": "+ packet.getPort() + " connected");
-            //will be player join
             data = packet.getData();
             try {
                 IS = new ByteArrayInputStream(data);
@@ -57,37 +55,58 @@ public class UDP_Server {
                 e.printStackTrace();
             }
             System.out.println("[Client > Server] " + Data.getMessage());
-            //1. define client address, port, data
-            InetAddress client_address = packet.getAddress();
-            int client_port = packet.getPort();
-            //Send Data to Client
-            try {
-                byte[] greeting  = "Welcome!".getBytes();
-                DatagramPacket greet = new DatagramPacket(greeting, greeting.length, client_address, client_port);
-                server.send(greet);
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            /**
+             * waiting for players
+             * start the game if number of players equals to room size
+            */
+            while (Data.getRoom_size() > Data.getPlayer_list().size()){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            System.out.println("[Server > Client] Send to Client");
+            Data.next_turn();
+            send(server, packet);
 
             boolean thread_status = true;
             while (thread_status){
                 try {
-                    byte[] data = new byte[1024];
-                    DatagramPacket input = new DatagramPacket(data, data.length);
-                    server.receive(input);
-                    System.out.println("[Client > Server] " + new String(input.getData(),0,input.getLength()));
+                    receive(server, packet);
                     //Data = input
                     for(DatagramPacket value : thread_list){
-                        data = "Data received".getBytes();
-                        DatagramPacket output = new DatagramPacket(data, data.length, value.getAddress(), value.getPort());
-                        server.send(output);
-                        System.out.println("[Server > Each Client] Send to Everyone");
+                        send(server, value);
                     }
-                } catch (IOException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
+        }
+
+        private static void send(DatagramSocket server, DatagramPacket packet){
+            try {
+                OS = new ByteArrayOutputStream();
+                os = new ObjectOutputStream(OS);
+                os.writeObject(Data);
+                data = OS.toByteArray();
+                DatagramPacket p = new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort());
+                server.send(p);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("[Server > Client] Send to " + packet.getAddress() +": " + packet.getPort());
+        }
+
+        private static void receive(DatagramSocket server, DatagramPacket packet) throws IOException, ClassNotFoundException {
+            data = new byte[1024];
+            input = new DatagramPacket(data, data.length);
+            server.receive(input);
+            data = input.getData();
+            IS = new ByteArrayInputStream(data);
+            is = new ObjectInputStream(IS);
+            Data = (data_pack) is.readObject();
+            System.out.println("[Client > Server] Receive from " + packet.getAddress() +": " + packet.getPort());
         }
     }
 }
