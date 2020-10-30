@@ -5,7 +5,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import code.GameConstants;
+import code.Player;
 import code.ServerModel;
+import code.Socket.BroadcastGame;
 
 public class EndServerButtonHandler implements ActionListener {
 	
@@ -16,8 +19,9 @@ public class EndServerButtonHandler implements ActionListener {
 	private JSpinner numSpinner;
 	private JTextField password;
 	private JComboBox<String> choice;
+	private BroadcastGame broadcast;
 	
-	public EndServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice) {
+	public EndServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice, BroadcastGame gameBroadcast) {
 		this.model = model;
 		start = startButton;
 		end = endButton;
@@ -25,6 +29,7 @@ public class EndServerButtonHandler implements ActionListener {
 		numSpinner = spinner;
 		password = textField_1;
 		this.choice = choice;
+		this.broadcast = gameBroadcast;
 	}
 	
 	@Override
@@ -35,7 +40,13 @@ public class EndServerButtonHandler implements ActionListener {
 		numSpinner.setEnabled(true);
 		password.setEditable(true);
 		this.choice.setEnabled(true);
-		//TODO: End server broadcast for server, all players will be removed from game
+		
+		broadcast.close();
+		Player host = model.getPlayers().get(0);
+		model.getPlayers().clear();
+		model.getPlayers().add(host);
+		broadcast = new BroadcastGame(GameConstants.port, model);
+		
 	}
 
 }

@@ -8,7 +8,7 @@ import javax.swing.*;
 
 import code.Game;
 import code.ServerModel;
-import code.Deck.Player;
+import code.Player;
 import gui.drawPhase;
 
 public class SendButtonHandler implements ActionListener {

@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import code.GameConstants;
 import code.ServerModel;
+import code.Socket.BroadcastGame;
 
 public class StartServerButtonHandler implements ActionListener {
 
@@ -16,8 +18,9 @@ public class StartServerButtonHandler implements ActionListener {
 	private JSpinner numSpinner;
 	private JTextField password;
 	private JComboBox<String> choice;
+	private BroadcastGame broadcast;
 	
-	public StartServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice) {
+	public StartServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice, BroadcastGame gameBroadcast) {
 		serverModel = model;
 		start = startButton;
 		end = endButton;
@@ -25,6 +28,7 @@ public class StartServerButtonHandler implements ActionListener {
 		numSpinner = spinner;
 		password = textField_1;
 		this.choice = choice;
+		broadcast = gameBroadcast;
 	}
 	
 	@Override
@@ -35,7 +39,10 @@ public class StartServerButtonHandler implements ActionListener {
 		numSpinner.setEnabled(false);
 		password.setEditable(false);
 		this.choice.setEnabled(false);
-		//TODO: implement server broadcast
+		
+		// Server Broadcast
+		broadcast.start();
+		
 	}
 
 }

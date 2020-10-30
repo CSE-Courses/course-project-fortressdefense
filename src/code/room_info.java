@@ -101,4 +101,13 @@ public class room_info {
         }
         return false;
     }
+
+	public void parseMessage(String sendEcho) {
+		System.out.println(sendEcho);
+		String[] args = sendEcho.split("/");
+		if (args.length > 1) {
+			this.create("TEST", Integer.parseInt(args[3]), args[0]);
+		}
+		
+	}
 }

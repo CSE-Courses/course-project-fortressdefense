@@ -6,8 +6,10 @@ import javax.swing.border.Border;
 
 import code.AccessType;
 import code.Game;
+import code.GameConstants;
 import code.Player;
 import code.ServerModel;
+import code.Socket.BroadcastGame;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class CreateGame extends JPanel {
 	public CreateGame(String hostPlayerName, JPanel mainPanel, JFrame mainFrame) {
 		Game game = new Game();
 		ServerModel model = new ServerModel(game.PlayerList);
+		BroadcastGame broadcast = new BroadcastGame(GameConstants.port, model);
 		Player p1 = new Player(hostPlayerName);
 		p1.setReady(true);
 		game.PlayerList.add(p1);
@@ -183,8 +186,8 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridx = 1;
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
-		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice));
-		btnStartSever.addActionListener(new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice));
+		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, broadcast));
+		btnStartSever.addActionListener(new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, broadcast));
 		
 		// Player Panel
 		Panel panel_1 = new Panel();

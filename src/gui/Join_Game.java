@@ -1,5 +1,6 @@
 package gui;
 import code.room_info;
+import code.Socket.FindGame;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -98,7 +99,7 @@ public class Join_Game implements ActionListener {
     }
 
     public Join_Game() throws IOException {
-        room_test();
+        //room_test();
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
@@ -349,6 +350,13 @@ public class Join_Game implements ActionListener {
         for (Map.Entry<String, room_info> room : gl.entrySet()){
             lobby_data_T.addElement(room.getValue().room_detail());
         }
+        
+        
+        FindGame client = new FindGame();
+        room_info room = new room_info();
+        room.parseMessage(client.sendEcho("whoami"));
+        lobby_data_T.addElement(room.room_detail());
+        client.close();
     }
     /**
     private List<room_info> obtain(){

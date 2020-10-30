@@ -70,4 +70,7 @@ public class GameConstants {
 	public static final int numArchersAttack = 5;
 	public static final int numScoutAttack = 5;
 	public static final int numTradeAttack = 5;
+	
+	
+	public static final int port = 12356;
 }
