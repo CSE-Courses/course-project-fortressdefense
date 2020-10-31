@@ -311,7 +311,7 @@ public class CreateGame extends JPanel {
 		gbc_btnBackToMain.gridx = 0;
 		gbc_btnBackToMain.gridy = 2;
 		add(btnBackToMain, gbc_btnBackToMain);
-		btnBackToMain.addActionListener(new CreateGameBackButtonHandler(this, mainPanel));
+		btnBackToMain.addActionListener(new CreateGameBackButtonHandler(this, mainPanel, startHandler));
 		
 		// Start Game Button
 		JButton btnStartGame = new JButton("START GAME");
@@ -342,14 +342,6 @@ public class CreateGame extends JPanel {
 		gbc_btnNewButton.gridy = 2;
 		add(btnNewButton, gbc_btnNewButton);
 		btnNewButton.addActionListener(new SendButtonHandler(textField_8, textArea, hostPlayerName));
-		
-		// Temporary code, keep in for demo
-		Player p2 = new Player("Jane Doe");
-		Player p3 = new Player("Joe Shmoe");
-		game.PlayerList.add(p2);
-		game.PlayerList.add(p3);
-		p2.setReady(true);
-		model.UpdatePlayerTextFields();
 	}
 
 }
