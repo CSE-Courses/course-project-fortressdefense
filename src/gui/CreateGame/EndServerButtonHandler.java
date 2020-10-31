@@ -2,6 +2,7 @@ package gui.CreateGame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Executor;
 
 import javax.swing.*;
 
@@ -19,9 +20,10 @@ public class EndServerButtonHandler implements ActionListener {
 	private JSpinner numSpinner;
 	private JTextField password;
 	private JComboBox<String> choice;
-	private BroadcastGame broadcast;
+	private StartServerButtonHandler startHandler;
 	
-	public EndServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice, BroadcastGame gameBroadcast) {
+	public EndServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, 
+			JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice, StartServerButtonHandler handler) {
 		this.model = model;
 		start = startButton;
 		end = endButton;
@@ -29,7 +31,7 @@ public class EndServerButtonHandler implements ActionListener {
 		numSpinner = spinner;
 		password = textField_1;
 		this.choice = choice;
-		this.broadcast = gameBroadcast;
+		startHandler = handler;
 	}
 	
 	@Override
@@ -41,12 +43,8 @@ public class EndServerButtonHandler implements ActionListener {
 		password.setEditable(true);
 		this.choice.setEnabled(true);
 		
-		broadcast.close();
-		Player host = model.getPlayers().get(0);
-		model.getPlayers().clear();
-		model.getPlayers().add(host);
-		broadcast = new BroadcastGame(GameConstants.port, model);
-		
+		startHandler.getUDPServer().close();
+
 	}
 
 }

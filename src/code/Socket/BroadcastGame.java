@@ -7,7 +7,7 @@ import java.net.*;
 
 import code.ServerModel;
 
-public class BroadcastGame extends Thread {
+public class BroadcastGame implements Runnable  {
 	private ServerModel model;
     private DatagramSocket socket;
     private boolean running;

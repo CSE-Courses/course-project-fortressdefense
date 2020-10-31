@@ -13,6 +13,8 @@ import code.Socket.BroadcastGame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.swing.border.LineBorder;
 
@@ -35,7 +37,8 @@ public class CreateGame extends JPanel {
 	public CreateGame(String hostPlayerName, JPanel mainPanel, JFrame mainFrame) {
 		Game game = new Game();
 		ServerModel model = new ServerModel(game.PlayerList);
-		BroadcastGame broadcast = new BroadcastGame(GameConstants.port, model);
+		BroadcastGame broadcast = null;
+		Executor executor = Executors.newSingleThreadExecutor();
 		Player p1 = new Player(hostPlayerName);
 		p1.setReady(true);
 		game.PlayerList.add(p1);
@@ -186,8 +189,9 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridx = 1;
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
-		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, broadcast));
-		btnStartSever.addActionListener(new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, broadcast));
+		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, broadcast, executor);
+		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, startHandler));
+		btnStartSever.addActionListener(startHandler);
 		
 		// Player Panel
 		Panel panel_1 = new Panel();
