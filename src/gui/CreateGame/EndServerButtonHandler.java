@@ -44,7 +44,7 @@ public class EndServerButtonHandler implements ActionListener {
 		this.choice.setEnabled(true);
 		
 		startHandler.getUDPServer().close();
-
+		startHandler.getTCPServer().close();
 	}
 
 }

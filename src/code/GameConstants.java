@@ -72,5 +72,6 @@ public class GameConstants {
 	public static final int numTradeAttack = 5;
 	
 	
-	public static final int port = 12356;
+	public static final int udpPort = 12356;
+	public static final int tcpPort = 12357;
 }

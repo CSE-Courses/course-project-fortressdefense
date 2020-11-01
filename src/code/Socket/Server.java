@@ -1,53 +1,69 @@
 package code.Socket;
 
-import code.Player;
+import code.*;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
-public class server {
-    private static ArrayList<Socket> Thread_list= new ArrayList();
-    private static data_pack Data = new data_pack();
-    private static InputStreamReader command_from_client = null;
-    private static BufferedReader client_command = null;
-    private static OutputStreamWriter command_to_client = null;
-    private static BufferedWriter server_command = null;
-    private static ObjectInputStream from_client = null;
-    private static ObjectOutputStream to_client = null;
-    private static InputStreamReader reader;
-    private static String command = null;
-    public static int room_size;
+public class Server implements Runnable{
+    private ArrayList<Worker> clientList = new ArrayList<Worker>();
+    private data_pack Data = new data_pack();
+    private ServerModel model;
+    private Boolean ongoing;
+    private ServerSocket serverSocket;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    private final int serverPort;
 
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter your port to start");
-        int port = s.nextInt();
-        System.out.println("Enter room size");
-        room_size = s.nextInt();
-
-        ServerSocket server = new ServerSocket(port);
-        System.out.println("\n[Server] Server started at port " + port);
-        while (true) {
-            Socket socket = server.accept();
-            Thread_list.add(socket);
-            System.out.println("[Server] Current Threads: " + Thread_list.size());
-            System.out.println("[Server] Client connected\t" + socket.getInetAddress());
-            invoke(socket);
-            if(Thread_list.size() == room_size){
-                Data.next_turn();
-                TimeUnit.SECONDS.sleep(5);
-                to_every_client();
-            }
-        }
+    public Server(int serverPort, ServerModel model) {
+        this.serverPort = serverPort;
+        this.model = model;
     }
 
+    public ArrayList<Worker> getWorkerList() {
+        return clientList;
+    }
+
+    @Override
+    public void run() {
+        try {
+            serverSocket = new ServerSocket(serverPort);
+            ongoing = true;
+            while(ongoing) {
+            	if (model.GetCurrentPlayers() < model.GetMaxPlayers()) {
+                    Socket clientSocket = serverSocket.accept();
+                    Worker worker = new Worker(this, clientSocket);
+                    clientList.add(worker);
+                    worker.start();
+            	}
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void removeWorker(Worker serverWorker) {
+    	clientList.remove(serverWorker);
+    }
+    
+    public ServerModel getModel() {
+    	return model;
+    }
+    
+    public void close() {
+    	try {
+        	ongoing = false;
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    /*
+    
     private static void send_to_client(Socket client) throws IOException {
         assert client != null;
         to_client = new ObjectOutputStream(client.getOutputStream());
@@ -63,7 +79,8 @@ public class server {
             Data = (data_pack) in;
         }
         to_every_client();
-    }
+    } 
+
 
     private static void client_join(Socket client) throws IOException, ClassNotFoundException, InterruptedException {
         assert client != null;
@@ -141,4 +158,5 @@ public class server {
             }
         }).start();
     }
+    */
 }

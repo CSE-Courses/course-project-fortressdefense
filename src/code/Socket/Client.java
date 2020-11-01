@@ -1,5 +1,6 @@
 package code.Socket;
 
+import code.Command;
 import code.Player;
 
 import java.io.*;
@@ -7,7 +8,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class client {
+public class Client {
     private static data_pack Data = new data_pack();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static ObjectOutputStream output = null;
@@ -18,7 +19,65 @@ public class client {
     private static BufferedWriter client_command = null;
     private static String player_name = "";
     private static String command = null;
+    private final String serverName;
+    private final int serverPort;
+    private Socket socket;
+    private InputStream serverIn;
+    private OutputStream serverOut;
+    private BufferedReader bufferedIn;
+    
+    
+    public Client(String serverName, int serverPort) {
+        this.serverName = serverName;
+        this.serverPort = serverPort;
+    }
+    
+    public Boolean connect() {
+        try {
+            this.socket = new Socket(serverName, serverPort);
+            this.serverOut = socket.getOutputStream();
+            this.serverIn = socket.getInputStream();
+            this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public void join(String playerName) {
+        try {
+            String cmd = Command.Join.toString() + " " + playerName + "\n";
+			serverOut.write(cmd.getBytes());
+			//String response = bufferedIn.readLine();
+	        //System.out.println("Response Line:" + response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+ 
+    }
+
+    public void leave() {
+        try {
+            String cmd = Command.Leave.toString() + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public void close() {
+    	try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    }
+    
     private static void receive_from_server(Socket server) throws IOException, InterruptedException, ClassNotFoundException {
         command_to_server = new OutputStreamWriter(server.getOutputStream());
         client_command = new BufferedWriter(command_to_server);

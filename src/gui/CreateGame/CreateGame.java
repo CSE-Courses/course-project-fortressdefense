@@ -36,9 +36,9 @@ public class CreateGame extends JPanel {
 	 */
 	public CreateGame(String hostPlayerName, JPanel mainPanel, JFrame mainFrame) {
 		Game game = new Game();
-		ServerModel model = new ServerModel(game.PlayerList);
-		BroadcastGame broadcast = null;
+		ServerModel model = new ServerModel(game);
 		Executor executor = Executors.newSingleThreadExecutor();
+		Executor tcpServer = Executors.newSingleThreadExecutor();
 		Player p1 = new Player(hostPlayerName);
 		p1.setReady(true);
 		game.PlayerList.add(p1);
@@ -189,7 +189,7 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridx = 1;
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
-		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, broadcast, executor);
+		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, executor, tcpServer);
 		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, startHandler));
 		btnStartSever.addActionListener(startHandler);
 		

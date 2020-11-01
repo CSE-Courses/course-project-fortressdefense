@@ -22,12 +22,12 @@ public class UDPTests {
 	
 	@Before
     public void setup(){
+		Game game = new Game();
 		Player player = new Player("host");
-		ArrayList<Player> players = new ArrayList<Player>();
-		players.add(player);
-		ServerModel model = new ServerModel(players);
+		game.PlayerList.add(player);
+		ServerModel model = new ServerModel(game);
 		model.SetHostName("test game");
-        server = new BroadcastGame(GameConstants.port, model);
+        server = new BroadcastGame(GameConstants.udpPort, model);
         executor = Executors.newSingleThreadExecutor();
         executor.execute(server);
         client = new FindGame();
@@ -47,12 +47,13 @@ public class UDPTests {
         assertEquals(server.createMessage(), echo);
         server.close();
 
+        Game game = new Game();
 		Player player = new Player("host");
-		ArrayList<Player> players = new ArrayList<Player>();
-		players.add(player);
-		ServerModel model = new ServerModel(players);
+		game.PlayerList.add(player);
+		ServerModel model = new ServerModel(game);
 		model.SetHostName("test game");
-        server = new BroadcastGame(GameConstants.port, model);
+        server = new BroadcastGame(GameConstants.udpPort, model);
+        executor = Executors.newSingleThreadExecutor();
         executor.execute(server);
         client = new FindGame();
         echo = client.sendEcho("whoami");

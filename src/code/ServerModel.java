@@ -17,15 +17,15 @@ public class ServerModel {
 	private AccessType accessType;
 	private String password;
 	private Integer maxPlayers;
-	private ArrayList<Player> players;
+	private Game game;
 	private ArrayList<JTextField> textFields;
 
-	public ServerModel(ArrayList<Player> _players) {
+	public ServerModel(Game game) {
 		hostGameName = "";
 		accessType = AccessType.Public;
 		password = "";
 		maxPlayers = 6;
-		players = _players;
+		this.game = game;
 	}
 
 	public void SetHostName(String hostname) {
@@ -65,7 +65,7 @@ public class ServerModel {
 	}
 
 	public Integer GetCurrentPlayers() {
-		return players.size();
+		return game.PlayerList.size();
 	}
 
 	public void SetPlayerTextFields(ArrayList<JTextField> _fields) {
@@ -74,7 +74,7 @@ public class ServerModel {
 	}
 	
 	public ArrayList<Player> getPlayers() {
-		return players;
+		return game.PlayerList;
 	}
 
     @Override
@@ -83,13 +83,13 @@ public class ServerModel {
     }
 
     public void UpdatePlayerTextFields() {
-    	for (int i = 0; i < players.size(); i++) {
+    	for (int i = 0; i < game.PlayerList.size(); i++) {
         	if (i == 0) {
-            	textFields.get(i).setText(i+1 + ") " + players.get(i).PlayerName);
+            	textFields.get(i).setText(i+1 + ") " + game.PlayerList.get(i).PlayerName);
             	textFields.get(i).setBackground(Color.YELLOW.darker());
         	}else {
-            	textFields.get(i).setText(i+1 + ") " + players.get(i).PlayerName);
-    			if (players.get(i).getReady()) {
+            	textFields.get(i).setText(i+1 + ") " + game.PlayerList.get(i).PlayerName);
+    			if (game.PlayerList.get(i).getReady()) {
     				textFields.get(i).setBackground(Color.GREEN.darker());
     			}else {
     				textFields.get(i).setBackground(Color.RED.darker());

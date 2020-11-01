@@ -22,6 +22,7 @@ public class CreateGameBackButtonHandler implements ActionListener {
 		main.setVisible(true);
 		create.setVisible(false);
 		btnHandler.getUDPServer().close();
+		btnHandler.getTCPServer().close();
 	}
 
 }

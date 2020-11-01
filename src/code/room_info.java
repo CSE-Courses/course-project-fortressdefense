@@ -28,6 +28,7 @@ public class room_info {
     public String host;
     public Integer limit;
     public String room_status = "";
+    private String address;
 
     public void create(String name, Integer lim, String rn){
         host = name;
@@ -105,8 +106,13 @@ public class room_info {
 	public void parseMessage(String sendEcho) {
 		String[] args = sendEcho.split("/");
 		if (args.length > 1) {
+			this.address = args[1];
 			this.create("TEST", Integer.parseInt(args[3]), args[0]);
 		}
 		
+	}
+	
+	public String getAddress() {
+		return address;
 	}
 }

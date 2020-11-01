@@ -1,5 +1,7 @@
 package gui;
+import code.GameConstants;
 import code.room_info;
+import code.Socket.Client;
 import code.Socket.FindGame;
 
 import javax.swing.*;
@@ -52,8 +54,8 @@ public class Join_Game implements ActionListener {
     private HashMap<String, room_info> gl = new HashMap<>();
     private String RoomName = " ";
 
-    //Test
-    private String My_Name = "Haohua Feng";
+    private String My_Name;
+    private Client client;
 
     //for test
     public void room_test() {
@@ -98,8 +100,9 @@ public class Join_Game implements ActionListener {
         }
     }
 
-    public Join_Game() throws IOException {
+    public Join_Game(String playerName) throws IOException {
         //room_test();
+    	My_Name = playerName;
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
@@ -146,12 +149,19 @@ public class Join_Game implements ActionListener {
 
                     if(!RoomName.equals(" ")) {
                         gl.get(RoomName).left(My_Name);
+                        client.leave();
+                        client.close();
                     }
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
                         RoomName = rn;
-                        gl.get(rn).join(My_Name);
-                        feedback.setText("You Entered " + RoomName);
-                        gl.get(rn).send_update();
+                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort);
+                        if (client.connect()) {
+                            client.join(My_Name);
+
+                            gl.get(rn).join(My_Name);
+                            feedback.setText("You Entered " + RoomName);
+                        }
+                        //gl.get(rn).send_update();
                     }
                     else if(!gl.get(rn).room_status.equals("Waiting")){
                         feedback.setText("Cannot join ongoing game");
@@ -341,21 +351,18 @@ public class Join_Game implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        new Join_Game();
+        new Join_Game("Haohua Feng");
     }
 
     private void refresh(){
         //obtain() returns the list of room_info that obtain from server
         lobby_data_T.removeAllElements();
-        for (Map.Entry<String, room_info> room : gl.entrySet()){
-            lobby_data_T.addElement(room.getValue().room_detail());
-        }
-        
-        
+  
         FindGame client = new FindGame();
         room_info room = new room_info();
         room.parseMessage(client.sendEcho("whoami"));
         lobby_data_T.addElement(room.room_detail());
+        gl.put(room.room_name, room);
         client.close();
     }
     /**

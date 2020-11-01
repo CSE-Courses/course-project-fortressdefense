@@ -23,7 +23,7 @@ public class FindGame {
     public String sendEcho(String msg) {
     	try {
     		sendBuf = msg.getBytes();
-            DatagramPacket packet = new DatagramPacket(sendBuf, sendBuf.length, InetAddress.getByName(getBroadcastAddress()), GameConstants.port);
+            DatagramPacket packet = new DatagramPacket(sendBuf, sendBuf.length, InetAddress.getByName(getBroadcastAddress()), GameConstants.udpPort);
             socket.send(packet);
             socket.setSoTimeout(1000);
             packet = new DatagramPacket(recieveBuf, recieveBuf.length);
