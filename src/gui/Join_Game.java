@@ -56,6 +56,7 @@ public class Join_Game implements ActionListener {
 
     private String My_Name;
     private Client client;
+    private JPanel mainPanel;
 
     //for test
     public void room_test() {
@@ -100,14 +101,14 @@ public class Join_Game implements ActionListener {
         }
     }
 
-    public Join_Game(String playerName) throws IOException {
+    public Join_Game(String playerName, JPanel mainPanel) throws IOException {
         //room_test();
     	My_Name = playerName;
+    	this.mainPanel = mainPanel;
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
         frame.setSize(720,720);
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setBackground(new Color(209  ,116,0));
         panel.setLayout(null);
 
@@ -124,7 +125,7 @@ public class Join_Game implements ActionListener {
         lobby_status = new JLabel("             Room                 | Players |        Status");
         lobby_status.setForeground(new Color(255,255,255));
         lobby_status.setBounds(80, 85,300,20);
-        frame.add(lobby_status);
+        panel.add(lobby_status);
 
         game_list = new JList<String>(lobby_data_T);
         game_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -136,12 +137,16 @@ public class Join_Game implements ActionListener {
                 String detail = (String) game_list.getSelectedValue();
                 String rn = "";
                 for(int i = 0; i < 20; i++){
-                    if(detail.charAt(i) == ' '){
+                    if(detail.charAt(i) == '/'){
                         break;
                     }
                     else{
                         rn += detail.charAt(i);}
                 }
+                
+                // Kludge allows spaces in game name
+                rn = rn.substring(0, rn.length() - 2).trim();
+                
                 if (e.getClickCount() == 1) {
                     get_room_detail(rn);
                 }
@@ -171,7 +176,7 @@ public class Join_Game implements ActionListener {
                     }
                     get_room_detail(rn);
                 }
-                refresh();
+                // TODO: re-enable for pulling from server refresh();
             }
         });
 
@@ -250,8 +255,6 @@ public class Join_Game implements ActionListener {
         panel.add(back);
 
         frame.add(panel);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setVisible(true);
 
         /*
         character choosing
@@ -351,7 +354,9 @@ public class Join_Game implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        new Join_Game("Haohua Feng");
+        Join_Game joinGame = new Join_Game("Haohua Feng", null);
+        joinGame.frame.setVisible(true);
+        
     }
 
     private void refresh(){
@@ -419,12 +424,15 @@ public class Join_Game implements ActionListener {
             if (gl.get(RoomName).getPlayer_status().get(My_Name).equals("Waiting")){
                 Ready_or_Cancel.setText("Cancel");
                 Ready_or_Cancel.setBackground(new Color(255,0,0));
+                // Kludge, should probably pull from server
                 gl.get(RoomName).my_status(My_Name, 'r');
+                client.ready(My_Name);
             }
             else if(gl.get(RoomName).getPlayer_status().get(My_Name).equals("Ready")){
                 Ready_or_Cancel.setText("Ready");
                 Ready_or_Cancel.setBackground(new Color(0,255,0));
                 gl.get(RoomName).my_status(My_Name, 'c');
+                client.ready(My_Name);
             }
             get_room_detail(RoomName);
             System.out.println("Set to " + gl.get(RoomName).getPlayer_status().get(My_Name));
@@ -448,8 +456,14 @@ public class Join_Game implements ActionListener {
                 gl.get(RoomName).send_update();
                 RoomName = " ";
             }
-            frame.dispose();
+            
+    		mainPanel.setVisible(true);
+    		panel.setVisible(false);
         }
-        frame.repaint();
+        //frame.repaint();
+    }
+    
+    public JPanel getPanel() {
+    	return panel;
     }
 }

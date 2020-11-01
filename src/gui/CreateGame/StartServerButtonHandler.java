@@ -25,9 +25,10 @@ public class StartServerButtonHandler implements ActionListener {
 	private Executor executor;
 	private Executor tcpServer;
 	private Server server;
+	private JPanel panel;
 	
 	public StartServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, 
-			JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice, Executor executor, Executor tcpServer) {
+			JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice, Executor executor, Executor tcpServer, JPanel panel) {
 		serverModel = model;
 		start = startButton;
 		end = endButton;
@@ -37,27 +38,33 @@ public class StartServerButtonHandler implements ActionListener {
 		this.choice = choice;
 		this.executor = executor;
 		this.tcpServer = tcpServer;
+		this.panel = panel;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		start.setEnabled(false);
-		end.setEnabled(true);
-		name.setEditable(false);
-		numSpinner.setEnabled(false);
-		password.setEditable(false);
-		this.choice.setEnabled(false);
-		
-		
-		// Server Broadcast
-		Player host = serverModel.getPlayers().get(0);
-		serverModel.getPlayers().clear();
-		serverModel.getPlayers().add(host);
-		broadcast = new BroadcastGame(GameConstants.udpPort, serverModel);
-		executor.execute(broadcast);
-		
-		server = new Server(GameConstants.tcpPort, serverModel);
-		tcpServer.execute(server);		
+		if (name.getText().contains("\\") || password.getText().contains("\\")){
+			JOptionPane.showMessageDialog(panel, "Cannot use \\ in the game name or in password", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		}
+		else if(name.getText().length() > 20){
+			JOptionPane.showMessageDialog(panel, "Game name cannot be more than 20 character", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		}else {
+			start.setEnabled(false);
+			end.setEnabled(true);
+			name.setEditable(false);
+			numSpinner.setEnabled(false);
+			password.setEditable(false);
+			this.choice.setEnabled(false);
+			
+			
+			// Server Broadcast
+			broadcast = new BroadcastGame(GameConstants.udpPort, serverModel);
+			executor.execute(broadcast);
+			
+			server = new Server(GameConstants.tcpPort, serverModel);
+			tcpServer.execute(server);	
+		}
+			
 	}
 	
 	public BroadcastGame getUDPServer() {
@@ -66,6 +73,10 @@ public class StartServerButtonHandler implements ActionListener {
 	
 	public Server getTCPServer() {
 		return this.server;
+	}
+	
+	public ServerModel getModel() {
+		return this.serverModel;
 	}
 
 }

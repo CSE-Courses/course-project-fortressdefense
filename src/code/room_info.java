@@ -102,12 +102,22 @@ public class room_info {
         }
         return false;
     }
-
+    
+    /*
+     * arg0 = game name
+     * arg1 = server ip address
+     * arg2 = current players
+     * arg3 = max players
+     * arg4 = access
+     * arg5 = password (empty if access if public)
+     * arg6 = p1
+     * arg7 = p2 and so on
+     */
 	public void parseMessage(String sendEcho) {
 		String[] args = sendEcho.split("/");
 		if (args.length > 1) {
 			this.address = args[1];
-			this.create("TEST", Integer.parseInt(args[3]), args[0]);
+			this.create(args[6], Integer.parseInt(args[3]), args[0]);
 		}
 		
 	}

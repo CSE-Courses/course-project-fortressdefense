@@ -189,7 +189,8 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridx = 1;
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
-		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, executor, tcpServer);
+		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, 
+				textField_1, choice, executor, tcpServer, this);
 		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, startHandler));
 		btnStartSever.addActionListener(startHandler);
 		

@@ -45,6 +45,11 @@ public class EndServerButtonHandler implements ActionListener {
 		
 		startHandler.getUDPServer().close();
 		startHandler.getTCPServer().close();
+		
+		Player host = startHandler.getModel().getPlayers().get(0);
+		startHandler.getModel().getPlayers().clear();
+		startHandler.getModel().getPlayers().add(host);
+		startHandler.getModel().UpdatePlayerTextFields();
 	}
 
 }

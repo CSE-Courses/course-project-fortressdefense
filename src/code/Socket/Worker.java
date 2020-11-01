@@ -49,6 +49,8 @@ public class Worker extends Thread{
                 	case Join:
                 		handleJoin(tokens);
                 		break;
+                	case Ready:
+                		handleReady(tokens);
                 	default:
                 		break;
                 }
@@ -58,7 +60,14 @@ public class Worker extends Thread{
         clientSocket.close();
     }
 
-    private void handleLeave(String[] tokens) {
+    private void handleReady(String[] tokens) {
+    	if (tokens.length >= 2) {
+    		player.setReady(!player.getReady());
+    		server.getModel().UpdatePlayerTextFields();
+        }
+	}
+
+	private void handleLeave(String[] tokens) {
         try {
             server.removeWorker(this);
             server.getModel().getPlayers().remove(player);

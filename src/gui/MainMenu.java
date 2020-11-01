@@ -67,14 +67,14 @@ public class MainMenu {
 				try {
 					String playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 					if (playerName != null) {
-						while (playerName.equals("")) {
-							JOptionPane.showMessageDialog(frame, "Fortress Name cannot be empty.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+						while (playerName.equals("") || playerName.contains("\\")) {
+							JOptionPane.showMessageDialog(frame, "Fortress Name cannot be empty or contain \\.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 							playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 						}
 						
 
-						Join_Game join_game = new Join_Game(playerName);
-						
+						frame.add(new Join_Game(playerName, panel).getPanel());
+						panel.setVisible(false);
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

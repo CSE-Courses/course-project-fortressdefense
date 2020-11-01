@@ -49,14 +49,20 @@ public class Client {
         try {
             String cmd = Command.Join.toString() + " " + playerName + "\n";
 			serverOut.write(cmd.getBytes());
-			//String response = bufferedIn.readLine();
-	        //System.out.println("Response Line:" + response);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
- 
+    }
+    
+    public void ready(String playerName) {
+        try {
+            String cmd = Command.Ready.toString() + " " + playerName + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public void leave() {

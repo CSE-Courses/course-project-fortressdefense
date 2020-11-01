@@ -83,18 +83,24 @@ public class ServerModel {
     }
 
     public void UpdatePlayerTextFields() {
-    	for (int i = 0; i < game.PlayerList.size(); i++) {
-        	if (i == 0) {
-            	textFields.get(i).setText(i+1 + ") " + game.PlayerList.get(i).PlayerName);
-            	textFields.get(i).setBackground(Color.YELLOW.darker());
-        	}else {
-            	textFields.get(i).setText(i+1 + ") " + game.PlayerList.get(i).PlayerName);
-    			if (game.PlayerList.get(i).getReady()) {
-    				textFields.get(i).setBackground(Color.GREEN.darker());
-    			}else {
-    				textFields.get(i).setBackground(Color.RED.darker());
-    			}
-        	}
+    	for (int i = 0; i < textFields.size(); i++) {
+    		if (i < GetCurrentPlayers()) {
+            	if (i == 0) {
+                	textFields.get(i).setText(i+1 + ") " + game.PlayerList.get(i).PlayerName);
+                	textFields.get(i).setBackground(Color.YELLOW.darker());
+            	}else {
+                	textFields.get(i).setText(i+1 + ") " + game.PlayerList.get(i).PlayerName);
+        			if (game.PlayerList.get(i).getReady()) {
+        				textFields.get(i).setBackground(Color.GREEN.darker());
+        			}else {
+        				textFields.get(i).setBackground(Color.RED.darker());
+        			}
+            	}
+    		}else {
+            	textFields.get(i).setText("");
+				textFields.get(i).setBackground(Color.WHITE);
+    		}
+
     	}
     }
 }

@@ -21,8 +21,8 @@ public class CreateGameButtonHandler implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 		if (playerName != null) {
-			while (playerName.equals("")) {
-				JOptionPane.showMessageDialog(main, "Fortress Name cannot be empty.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+			while (playerName.equals("") || playerName.contains("\\")) {
+				JOptionPane.showMessageDialog(main, "Fortress Name cannot be empty or contain \\.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 				playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 			}
 			

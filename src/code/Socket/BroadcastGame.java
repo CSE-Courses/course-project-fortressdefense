@@ -59,8 +59,13 @@ public class BroadcastGame implements Runnable  {
         try {
         	Socket ip = new Socket();
 			ip.connect(new InetSocketAddress("google.com", 80));
-			return model.GetHostName() + "/" + ip.getLocalAddress().getHostAddress() + "/" + model.GetCurrentPlayers() + 
+			String message = model.GetHostName() + "/" + ip.getLocalAddress().getHostAddress() + "/" + model.GetCurrentPlayers() + 
 					"/" + model.GetMaxPlayers() + "/" + model.GetAccessType() + "/" + model.GetPassword();
+			for (int i = 0; i < model.getPlayers().size(); i++) {
+				message += "/" + model.getPlayers().get(0).PlayerName;
+			}
+			
+			return message;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
