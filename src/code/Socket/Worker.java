@@ -74,7 +74,6 @@ public class Worker extends Thread{
             server.getModel().UpdatePlayerTextFields();
             ArrayList<Worker> workerList = server.getWorkerList();
 
-           
             // send other online users current user's status
             String onlineMsg = this.getUsername() + " has left the game." + "\n";
             for(Worker worker : workerList) {
@@ -122,7 +121,7 @@ public class Worker extends Thread{
 		return username;
 	}
 	
-    private void send(String msg) {
+    public void send(String msg) {
         if (this.username != null) {
             try {
                 outputStream.write(msg.getBytes());

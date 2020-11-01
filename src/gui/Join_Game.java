@@ -1,4 +1,5 @@
 package gui;
+import code.AccessType;
 import code.GameConstants;
 import code.room_info;
 import code.Socket.Client;
@@ -57,6 +58,7 @@ public class Join_Game implements ActionListener {
     private String My_Name;
     private Client client;
     private JPanel mainPanel;
+    private Join_Game joinGame; // used for passing into button handler;
 
     //for test
     public void room_test() {
@@ -105,6 +107,7 @@ public class Join_Game implements ActionListener {
         //room_test();
     	My_Name = playerName;
     	this.mainPanel = mainPanel;
+    	this.joinGame = this;
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
@@ -158,8 +161,15 @@ public class Join_Game implements ActionListener {
                         client.close();
                     }
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
+           
+            			if (gl.get(rn).getType() == AccessType.Private) {
+            				if (!gl.get(rn).getPassword().equals((String)JOptionPane.showInputDialog(panel, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE))) {
+            					JOptionPane.showMessageDialog(panel, "Invalid password to join " + rn + ".", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+            					return;
+            				}
+            			}
                         RoomName = rn;
-                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort);
+                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame);
                         if (client.connect()) {
                             client.join(My_Name);
 
@@ -365,7 +375,7 @@ public class Join_Game implements ActionListener {
   
         FindGame client = new FindGame();
         room_info room = new room_info();
-        room.parseMessage(client.sendEcho("whoami"));
+        room.parseMessage(client.sendEcho("whoami"), panel);
         lobby_data_T.addElement(room.room_detail());
         gl.put(room.room_name, room);
         client.close();
@@ -453,7 +463,8 @@ public class Join_Game implements ActionListener {
             System.out.println("You clicked on Go Back button, back to main menu");
             if (!RoomName.equals(" ")) {
                 gl.get(RoomName).left(My_Name);
-                gl.get(RoomName).send_update();
+                client.leave();
+                client.close();
                 RoomName = " ";
             }
             
@@ -465,5 +476,9 @@ public class Join_Game implements ActionListener {
     
     public JPanel getPanel() {
     	return panel;
+    }
+    
+    public JButton getBackButton() {
+    	return back;
     }
 }

@@ -2,11 +2,16 @@ package code.Socket;
 
 import code.Command;
 import code.Player;
+import gui.Join_Game;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class Client {
     private static data_pack Data = new data_pack();
@@ -25,11 +30,13 @@ public class Client {
     private InputStream serverIn;
     private OutputStream serverOut;
     private BufferedReader bufferedIn;
+    private Join_Game joinGame;
     
     
-    public Client(String serverName, int serverPort) {
+    public Client(String serverName, int serverPort, Join_Game joinGame) {
         this.serverName = serverName;
         this.serverPort = serverPort;
+        this.joinGame = joinGame;
     }
     
     public Boolean connect() {
@@ -49,6 +56,7 @@ public class Client {
         try {
             String cmd = Command.Join.toString() + " " + playerName + "\n";
 			serverOut.write(cmd.getBytes());
+            
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

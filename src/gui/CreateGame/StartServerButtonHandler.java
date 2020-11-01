@@ -43,8 +43,8 @@ public class StartServerButtonHandler implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (name.getText().contains("\\") || password.getText().contains("\\")){
-			JOptionPane.showMessageDialog(panel, "Cannot use \\ in the game name or in password", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		if (name.getText().contains("/") || password.getText().contains("/")){
+			JOptionPane.showMessageDialog(panel, "Cannot use / in the game name or in password", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 		}
 		else if(name.getText().length() > 20){
 			JOptionPane.showMessageDialog(panel, "Game name cannot be more than 20 character", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
