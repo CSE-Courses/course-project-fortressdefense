@@ -57,6 +57,7 @@ public class Client {
             String cmd = Command.Join.toString() + " " + playerName + "\n";
 			serverOut.write(cmd.getBytes());
             
+			startMessageReader();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,51 +93,45 @@ public class Client {
 		} 
     }
     
-    private static void receive_from_server(Socket server) throws IOException, InterruptedException, ClassNotFoundException {
-        command_to_server = new OutputStreamWriter(server.getOutputStream());
-        client_command = new BufferedWriter(command_to_server);
-        client_command.write("client_pull" + "\n");
-        client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
-        input = new ObjectInputStream(new BufferedInputStream(server.getInputStream()));
-        Object in = input.readObject();
-        System.out.println("[Server] Received data from Server...");
-        if (in != null) {
-            Data = (data_pack) in;
-            System.out.println("\t \t Round: " + Data.getRound() + "\tTurn: " + Data.getTurn());
-            for (Player value : Data.getPlayer_list()) {
-                System.out.println("\t \t " + value.PlayerName + ": " + value.points + " HP");
+    private void startMessageReader() {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                readMessageLoop();
             }
-            System.out.println("\t \t Recent activity: "+Data.getMessage());
+        };
+        t.start();
+    }
+
+    private void readMessageLoop() {
+        try {
+            String line;
+            while ((line = bufferedIn.readLine()) != null) {
+                String[] tokens = line.split(" ");
+                if (tokens != null && tokens.length > 0) {
+                    switch(Command.valueOf(tokens[0])) {
+		                case Shutdown:
+		                	// Kludge, should just set it to main frame, dont know how to check with form is visible
+		                	JOptionPane.showMessageDialog(joinGame.getPanel(), "Connection to server lost!", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		                	joinGame.getBackButton().doClick();
+		                	break;
+                    	default:
+                    		break;
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
-    private static void send_to_server(Socket server) throws IOException, InterruptedException {
-        Data.next_turn();
-        command_to_server = new OutputStreamWriter(server.getOutputStream());
-        client_command = new BufferedWriter(command_to_server);
-        client_command.write("client_push" + "\n");
-        client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
-        output = new ObjectOutputStream(server.getOutputStream());
-        Data.next_turn();
-        output.writeObject(Data);
-        output.flush();
-        System.out.println("[Server] Update and Push to Server...");
-    }
-
-    private static void join_server (Socket server, Player player) throws IOException, InterruptedException {
-        command_to_server = new OutputStreamWriter(server.getOutputStream());
-        client_command = new BufferedWriter(command_to_server);
-        client_command.write("player_join" + "\n");
-        client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
-        output = new ObjectOutputStream(server.getOutputStream());
-        output.writeObject(player);
-        output.flush();
-        System.out.println("[Client] Send Player Info to Server...");
-    }
-
+    /*
     public static void main(String[] args) throws Exception {
         while(player_name.equals("")) {
             System.out.println("Demo\nEnter Your Name");
@@ -234,4 +229,5 @@ public class Client {
             e.printStackTrace();
         }
     }
+    */
 }
