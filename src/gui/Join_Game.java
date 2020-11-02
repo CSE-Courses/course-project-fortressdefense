@@ -385,6 +385,10 @@ public class Join_Game implements ActionListener {
     public void refresh_room_detail() {
         get_room_detail(RoomName);
     }
+    
+    public room_info getRoom() {
+    	return gl.get(RoomName);
+    }
     /**
     private List<room_info> obtain(){
         List<room_info> result = new ArrayList<>();

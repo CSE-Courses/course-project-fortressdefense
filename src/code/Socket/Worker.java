@@ -73,6 +73,14 @@ public class Worker extends Thread{
     	if (tokens.length >= 2) {
     		player.setReady(!player.getReady());
     		server.getModel().UpdatePlayerTextFields();
+            // send other online users current user's status
+            for(Worker worker : server.getWorkerList()) {
+                if (worker.getUsername() != null) {
+                    if (!this.username.equals(worker.getUsername())) {
+                        worker.send(Command.Ready.toString() + " " + worker.getUsername() + "\n");
+                    }
+                }
+            }
         }
 	}
 

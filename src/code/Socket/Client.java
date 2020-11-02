@@ -149,6 +149,18 @@ public class Client {
 		                case Refresh:
 		                	joinGame.refresh();
 		                	joinGame.refresh_room_detail();
+		                	break;
+		                case Ready:
+		                	if (joinGame.getRoom().getPlayer_status().get(String.join(" ", tokens).replaceAll(tokens[0], "").trim()).equals("Ready")){
+			                	joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'w');
+		                	}else {
+		                		joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'r');
+		                	}
+	
+		                	joinGame.refresh_room_detail();
+		                	break;
+		                case Leave:
+		                	break;
                     	default:
                     		break;
                     }
