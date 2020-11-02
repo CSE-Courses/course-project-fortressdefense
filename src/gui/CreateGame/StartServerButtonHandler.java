@@ -56,13 +56,14 @@ public class StartServerButtonHandler implements ActionListener {
 			password.setEditable(false);
 			this.choice.setEnabled(false);
 			
-			
-			// Server Broadcast
-			broadcast = new BroadcastGame(GameConstants.udpPort, serverModel);
-			executor.execute(broadcast);
-			
 			server = new Server(GameConstants.tcpPort, serverModel);
 			tcpServer.execute(server);	
+			
+			// Server Broadcast
+			broadcast = new BroadcastGame(GameConstants.udpPort, server.getModel());
+			executor.execute(broadcast);
+			
+
 		}
 			
 	}

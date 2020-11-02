@@ -4,5 +4,6 @@ public enum Command {
 	Join,
 	Leave,
 	Ready,
-	Shutdown
+	Shutdown,
+	Refresh
 }

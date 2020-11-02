@@ -186,7 +186,7 @@ public class Join_Game implements ActionListener {
                     }
                     get_room_detail(rn);
                 }
-                // TODO: re-enable for pulling from server refresh();
+                refresh();
             }
         });
 
@@ -369,16 +369,21 @@ public class Join_Game implements ActionListener {
         
     }
 
-    private void refresh(){
+    public void refresh(){
         //obtain() returns the list of room_info that obtain from server
         lobby_data_T.removeAllElements();
-  
+        
+        // TODO: multiple servers
         FindGame client = new FindGame();
         room_info room = new room_info();
         room.parseMessage(client.sendEcho("whoami"), panel);
         lobby_data_T.addElement(room.room_detail());
         gl.put(room.room_name, room);
         client.close();
+    }
+    
+    public void refresh_room_detail() {
+        get_room_detail(RoomName);
     }
     /**
     private List<room_info> obtain(){

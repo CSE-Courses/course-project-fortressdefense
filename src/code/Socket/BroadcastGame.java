@@ -62,7 +62,7 @@ public class BroadcastGame implements Runnable  {
 			String message = model.GetHostName() + "/" + ip.getLocalAddress().getHostAddress() + "/" + model.GetCurrentPlayers() + 
 					"/" + model.GetMaxPlayers() + "/" + model.GetAccessType() + "/" + model.GetPassword();
 			for (int i = 0; i < model.getPlayers().size(); i++) {
-				message += "/" + model.getPlayers().get(0).PlayerName;
+				message += "/" + model.getPlayers().get(i).PlayerName;
 			}
 			
 			return message;

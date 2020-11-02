@@ -75,10 +75,11 @@ public class Worker extends Thread{
             ArrayList<Worker> workerList = server.getWorkerList();
 
             // send other online users current user's status
-            String onlineMsg = this.getUsername() + " has left the game." + "\n";
             for(Worker worker : workerList) {
-                if (!this.username.equals(worker.getUsername())) {
-                    worker.send(onlineMsg);
+                if (worker.getUsername() != null) {
+                    if (!this.username.equals(worker.getUsername())) {
+                        worker.send(Command.Refresh.toString() + "\n");
+                    }
                 }
             }
 			clientSocket.close();
@@ -101,17 +102,8 @@ public class Worker extends Thread{
             for(Worker worker : workerList) {
                 if (worker.getUsername() != null) {
                     if (!this.username.equals(worker.getUsername())) {
-                        String msg2 = worker.getUsername() + " has joined the game." + "\n";
-                        send(msg2);
+                        worker.send(Command.Refresh.toString() + "\n");
                     }
-                }
-            }
-
-            // send other online users current user's status
-            String onlineMsg = this.username + " has joined the game." + "\n";
-            for(Worker worker : workerList) {
-                if (!this.username.equals(worker.getUsername())) {
-                    worker.send(onlineMsg);
                 }
             }
         }
