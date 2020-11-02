@@ -61,7 +61,7 @@ public class drawPhaseOtherPlayer {
 	
 	Timer tm;
 	int i = 30;
-	int numDots = 0;
+	int numDots = 0;//used for waiting message
 	
 	public JPanel GetPanel() {
 		return (JPanel) frame.getContentPane();
@@ -136,7 +136,7 @@ public class drawPhaseOtherPlayer {
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
-				if(numDots == 0)
+				if(numDots == 0)//subroutine for waiting dots
 				{
 					lblDots.setText(".");
 					numDots++;
