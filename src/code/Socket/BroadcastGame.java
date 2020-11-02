@@ -20,7 +20,9 @@ public class BroadcastGame implements Runnable  {
 		}
     }
 
-
+	/**
+	 * Runs UDP server
+	 */
     @Override
     public void run() {
     	running = true;
@@ -49,11 +51,18 @@ public class BroadcastGame implements Runnable  {
     	}
     }
     
+    /**
+     * Closes UDP server
+     */
     public void close() {
     	socket.close();
     	running = false;
     }
     
+    /**
+     * Creates mesage to send to client about room
+     * @return
+     */
     public String createMessage() {
 
         try {

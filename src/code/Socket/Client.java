@@ -39,6 +39,11 @@ public class Client {
         this.joinGame = joinGame;
     }
     
+    /**
+     * Connects to server
+     * @return whether server connection is valid
+     * @author Hoahua Feng, Andrew Jank
+     */
     public Boolean connect() {
         try {
             this.socket = new Socket(serverName, serverPort);
@@ -52,6 +57,11 @@ public class Client {
         return false;
     }
     
+    /**
+     * Joins game
+     * @param playerName
+     * @author Hoahua Feng, Andrew Jank
+     */
     public void join(String playerName) {
         try {
             String cmd = Command.Join.toString() + " " + playerName + "\n";
@@ -64,6 +74,11 @@ public class Client {
 		}
     }
     
+    /**
+     * Toggles player ready
+     * @param playerName
+     * @author Hoahua Feng, Andrew Jank
+     */
     public void ready(String playerName) {
         try {
             String cmd = Command.Ready.toString() + " " + playerName + "\n";
@@ -74,6 +89,10 @@ public class Client {
 		}
     }
 
+    /**
+     * Leaves game
+     * @author Hoahua Feng, Andrew Jank
+     */
     public void leave() {
         try {
             String cmd = Command.Leave.toString() + "\n";
@@ -84,6 +103,10 @@ public class Client {
 		}
     }
     
+    /**
+     * Closes client connection
+     * @author Hoahua Feng, Andrew Jank
+     */
     public void close() {
     	try {
 			socket.close();
@@ -93,6 +116,10 @@ public class Client {
 		} 
     }
     
+    /**
+     * Thread that reads all messages from server
+     * @author Hoahua Feng, Andrew Jank
+     */
     private void startMessageReader() {
         Thread t = new Thread() {
             @Override
@@ -102,7 +129,11 @@ public class Client {
         };
         t.start();
     }
-
+    
+    /**
+     * reads all messages from server
+     * @author Hoahua Feng, Andrew Jank
+     */
     private void readMessageLoop() {
         try {
             String line;

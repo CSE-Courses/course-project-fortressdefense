@@ -25,6 +25,10 @@ public class Server implements Runnable{
         return clientList;
     }
 
+    /**
+     * Runs server
+     * @author Hoahua Feng, Andrew Jank
+     */
     @Override
     public void run() {
         try {
@@ -52,6 +56,10 @@ public class Server implements Runnable{
     	return model;
     }
     
+    /**
+     * Closes server connection and sends shutdown to all users
+     * @author Hoahua Feng, Andrew Jank
+     */
     public void close() {
     	try {
         	ongoing = false;
@@ -68,28 +76,4 @@ public class Server implements Runnable{
             worker.send(Command.Shutdown.toString() + "\n");
         }
 	}
-    
-    /*
-    
-    private static void send_to_client(Socket client) throws IOException {
-        assert client != null;
-        to_client = new ObjectOutputStream(client.getOutputStream());
-        to_client.writeObject(Data);
-        to_client.flush();
-    }
-
-
-
-    private static void to_every_client() throws IOException {
-        for(Socket value : Thread_list){
-            if(!value.isClosed()){
-                command_to_client = new OutputStreamWriter(value.getOutputStream());
-                server_command = new BufferedWriter(command_to_client);
-                server_command.write("pull" + "\n");
-                server_command.flush();
-                System.out.println("[Server] Send to client \t" + value.getInetAddress());
-            }
-        }
-    }
-    */
 }

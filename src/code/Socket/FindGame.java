@@ -20,6 +20,11 @@ public class FindGame {
 		}
 	}
 	
+	/**
+	 * Sends message to UDP server
+	 * @param msg
+	 * @return
+	 */
     public String sendEcho(String msg) {
     	try {
     		sendBuf = msg.getBytes();
@@ -38,11 +43,19 @@ public class FindGame {
     	return "";
 
     }
- 
+    
+    /**
+     * Close UDP client
+     */
     public void close() {
         socket.close();
     }
     
+    
+    /**
+     * Gets Broadcast address
+     * @return
+     */
     private String getBroadcastAddress() {
 
 		try {

@@ -22,6 +22,9 @@ public class Worker extends Thread{
         this.clientSocket = clientSocket;
     }
 
+    /**
+     * Runs client session
+     */
     @Override
     public void run() {
         try {
@@ -33,6 +36,12 @@ public class Worker extends Thread{
         }
     }
 
+    /**
+     * Handles client to server commands
+     * @throws IOException
+     * @throws InterruptedException
+     * @author Hoahua Feng, Andrew Jank
+     */
     private void handleClientSocket() throws IOException, InterruptedException {
         InputStream inputStream = clientSocket.getInputStream();
         this.outputStream = clientSocket.getOutputStream();
@@ -113,6 +122,11 @@ public class Worker extends Thread{
 		return username;
 	}
 	
+	/**
+	 * Sends message to client from server
+	 * @param msg
+	 * @author Hoahua Feng, Andrew Jank
+	 */
     public void send(String msg) {
         if (this.username != null) {
             try {
