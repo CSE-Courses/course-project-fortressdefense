@@ -8,10 +8,6 @@ import javax.swing.*;
 
 public class attackPhase {
 	
-	public attackPhase() {
-		runAttackGUI();
-	}
-
 	private boolean card1Clicked = false;
 	private boolean card2Clicked = false;
 	private boolean card3Clicked = false;
@@ -21,6 +17,17 @@ public class attackPhase {
 	private boolean card7Clicked = false;
 	private boolean card8Clicked = false;
 	
+	private int axeValue = 3;
+	private int battleAxeValue = 8;
+	private int crossbowValue = 10;
+	private int maceValue = 5;
+	private int stickValue = 1;
+	private int swordValue = 4;
+	
+	public attackPhase() {
+		runAttackGUI();
+	}
+
 	private void runAttackGUI() {
 		Color c1 = new Color(153, 102, 0);
 		Color c2 = new Color(0, 0, 153);
@@ -77,7 +84,7 @@ public class attackPhase {
 		p2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		p2.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel hp2 = new JLabel("Health Points : 10");
+		JLabel hp2 = new JLabel("Health Points : 40");
 		hp2.setForeground(c2);
 		hp2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -85,16 +92,16 @@ public class attackPhase {
 		JProgressBar hb2 = new JProgressBar();
 		hb2.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
 		hb2.setForeground(new Color(50, 205, 50));
-		hb2.setMaximum(20);
+		hb2.setMaximum(50);
 		hb2.setBackground(Color.DARK_GRAY);
-		hb2.setValue(10);
+		hb2.setValue(40);
 		
 		JLabel p1 = new JLabel("PLAYER 1");
 		p1.setForeground(c2);
 		p1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		p1.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel hp1 = new JLabel("Health Points : 12");
+		JLabel hp1 = new JLabel("Health Points : 42");
 		hp1.setForeground(c2);
 		hp1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -102,9 +109,9 @@ public class attackPhase {
 		JProgressBar hb1 = new JProgressBar();
 		hb1.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
 		hb1.setForeground(new Color(50, 205, 50));
-		hb1.setMaximum(20);
+		hb1.setMaximum(50);
 		hb1.setBackground(Color.DARK_GRAY);
-		hb1.setValue(12);
+		hb1.setValue(42);
 		
 		lpanel.add(exit);
 		lpanel.add(Box.createVerticalStrut(70));
@@ -123,7 +130,7 @@ public class attackPhase {
 		p3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		p3.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel hp3 = new JLabel("Health Points : 5");
+		JLabel hp3 = new JLabel("Health Points : 35");
 		hp3.setForeground(c2);
 		hp3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp3.setHorizontalAlignment(SwingConstants.CENTER);
@@ -131,16 +138,16 @@ public class attackPhase {
 		JProgressBar hb3 = new JProgressBar();
 		hb3.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
 		hb3.setForeground(new Color(50, 205, 50));
-		hb3.setMaximum(20);
+		hb3.setMaximum(50);
 		hb3.setBackground(Color.DARK_GRAY);
-		hb3.setValue(5);
+		hb3.setValue(35);
 		
 		JLabel p4 = new JLabel("PLAYER 4");
 		p4.setForeground(c2);
 		p4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		p4.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel hp4 = new JLabel("Health Points : 2");
+		JLabel hp4 = new JLabel("Health Points : 32");
 		hp4.setForeground(c2);
 		hp4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp4.setHorizontalAlignment(SwingConstants.CENTER);
@@ -148,9 +155,9 @@ public class attackPhase {
 		JProgressBar hb4 = new JProgressBar();
 		hb4.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
 		hb4.setForeground(new Color(50, 205, 50));
-		hb4.setMaximum(20);
+		hb4.setMaximum(50);
 		hb4.setBackground(Color.DARK_GRAY);
-		hb4.setValue(2);
+		hb4.setValue(32);
 		
 		rpanel.add(Box.createVerticalStrut(120));
 		rpanel.add(playerIcon3);
@@ -201,7 +208,8 @@ public class attackPhase {
 		spanel.add(card1);
 		
 		JButton card2 = new JButton("");
-		card2.setIcon(new ImageIcon(axeImg));
+		Image crossbow = new ImageIcon(this.getClass().getResource("Images/attackIMG/crossbow.PNG")).getImage();
+		card2.setIcon(new ImageIcon(crossbow));
 		card2.setBackground(c1);
 		spanel.add(card2);
 		
@@ -212,24 +220,25 @@ public class attackPhase {
 		spanel.add(card3);
 		
 		JButton card4 = new JButton("");
-		card4.setIcon(new ImageIcon(baxeImg));
+		Image mace = new ImageIcon(this.getClass().getResource("Images/attackIMG/mace.PNG")).getImage();
+		card4.setIcon(new ImageIcon(mace));
 		card4.setBackground(c1);
 		spanel.add(card4);
 		
 		JButton card5 = new JButton("");
-		//Image gate = new ImageIcon(this.getClass().getResource("Images/defenseIMG/reinforcedGate.png")).getImage();
-		card5.setIcon(new ImageIcon(axeImg));
+		Image stick = new ImageIcon(this.getClass().getResource("Images/attackIMG/stick.PNG")).getImage();
+		card5.setIcon(new ImageIcon(stick));
 		card5.setBackground(c1);
 		spanel.add(card5);
 		
 		JButton card6 = new JButton("");
-		card6.setIcon(new ImageIcon(axeImg));
+		Image sword = new ImageIcon(this.getClass().getResource("Images/attackIMG/sword.PNG")).getImage();
+		card6.setIcon(new ImageIcon(sword));
 		card6.setBackground(c1);
 		spanel.add(card6);
 		
 		JButton card7 = new JButton("");
-		//Image scout = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.png")).getImage();
-		card7.setIcon(new ImageIcon(baxeImg));
+		card7.setIcon(new ImageIcon(axeImg));
 		card7.setBackground(c1);
 		spanel.add(card7);
 		
@@ -310,41 +319,81 @@ public class attackPhase {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - crossbowValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - maceValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - stickValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
 					card6.setVisible(false);
 					card6Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - swordValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					int textValue = Integer.parseInt(hp1.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp1.setText(text);
+					hb1.setValue(healthAfterAttack);
 				}
 			}
 		});
@@ -357,41 +406,81 @@ public class attackPhase {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - crossbowValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - maceValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - stickValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
 					card6.setVisible(false);
 					card6Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - swordValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					int textValue = Integer.parseInt(hp2.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp2.setText(text);
+					hb2.setValue(healthAfterAttack);
 				}
 			}
 		});
@@ -404,41 +493,81 @@ public class attackPhase {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - crossbowValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - maceValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - stickValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
 					card6.setVisible(false);
 					card6Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - swordValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					int textValue = Integer.parseInt(hp3.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp3.setText(text);
+					hb3.setValue(healthAfterAttack);
 				}
 			}
 		});
@@ -451,41 +580,81 @@ public class attackPhase {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - crossbowValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - maceValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - stickValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
 					card6.setVisible(false);
 					card6Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - swordValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - axeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					int textValue = Integer.parseInt(hp4.getText().substring(16));
+					int healthAfterAttack = textValue - battleAxeValue;
+					String text = "Health Points : " + Integer.toString(healthAfterAttack);
+					hp4.setText(text);
+					hb4.setValue(healthAfterAttack);
 				}
 			}
 		});
@@ -494,9 +663,10 @@ public class attackPhase {
 		frame.getContentPane().add(spanel, BorderLayout.SOUTH);
 		frame.getContentPane().add(rpanel, BorderLayout.EAST);
 		frame.getContentPane().add(lpanel, BorderLayout.WEST);
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	    frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
-		frame.setVisible(true);
+	    frame.setVisible(true);
 	}
 
 }

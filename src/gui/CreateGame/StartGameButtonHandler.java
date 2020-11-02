@@ -34,7 +34,7 @@ public class StartGameButtonHandler implements ActionListener {
 			}
 		}
 		if (serverModel.GetCurrentPlayers() >= 2) {
-			this.mainFrame.add(new drawPhase(game).GetPanel());
+			this.mainFrame.add(new drawPhase(game, mainFrame).GetPanel());
 			create.setVisible(false);
 		}else {
 			JOptionPane.showMessageDialog(mainFrame, "Two (2) Players needed to start a game.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
