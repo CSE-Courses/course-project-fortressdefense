@@ -103,7 +103,7 @@ public class Join_Game implements ActionListener {
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
         frame.setSize(720,720);
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setBackground(new Color(209  ,116,0));
         panel.setLayout(null);
 
