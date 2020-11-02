@@ -1,6 +1,6 @@
 package code.Socket;
 
-import code.Deck.Player;
+import code.Player;
 import java.util.ArrayList;
 
 
@@ -11,6 +11,15 @@ public class data_pack implements java.io.Serializable {
     private String used_card_name = new String("");
     private String message = "";
     private int round = 1;
+    private int room_size;
+
+    public void setRoom_size(int n){
+        room_size = n;
+    }
+
+    public int getRoom_size(){
+        return room_size;
+    }
 
     public void add_player(Player player){
         if (!player_name_list.contains(player.PlayerName)){
