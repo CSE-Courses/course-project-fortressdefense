@@ -97,6 +97,11 @@ public class drawPhaseOtherPlayer {
 		frame.getContentPane().setLayout(null);
 		
 		JButton btnExit = new JButton("EXIT GAME");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		btnExit.setForeground(Color.WHITE);
 		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnExit.setBackground(Color.DARK_GRAY);
