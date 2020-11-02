@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  * Author :Haohua Feng (Eddie)
  *
@@ -28,6 +31,9 @@ public class room_info {
     public String host;
     public Integer limit;
     public String room_status = "";
+    private String address;
+    private String password;
+    private AccessType access;
 
     public void create(String name, Integer lim, String rn){
         host = name;
@@ -101,4 +107,40 @@ public class room_info {
         }
         return false;
     }
+    
+    /*
+     * arg0 = game name
+     * arg1 = server ip address
+     * arg2 = current players
+     * arg3 = max players
+     * arg4 = access
+     * arg5 = password (empty if access if public)
+     * arg6 = p1
+     * arg7 = p2 and so on
+     */
+	public void parseMessage(String sendEcho, JPanel panel) {
+		String[] args = sendEcho.split("/");
+		if (args.length > 1) {
+			this.address = args[1];
+			this.access = AccessType.valueOf(args[4]);
+			this.password = args[5];
+			this.create(args[6], Integer.parseInt(args[3]), args[0]);
+			for (int i = 7; i < args.length; i++) {
+				this.join(args[i]);
+			}
+		}
+		
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public AccessType getType() {
+		return access;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
 }

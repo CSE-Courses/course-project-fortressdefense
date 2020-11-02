@@ -1,5 +1,9 @@
 package gui;
+import code.AccessType;
+import code.GameConstants;
 import code.room_info;
+import code.Socket.Client;
+import code.Socket.FindGame;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -51,8 +55,10 @@ public class Join_Game implements ActionListener {
     private HashMap<String, room_info> gl = new HashMap<>();
     private String RoomName = " ";
 
-    //Test
-    private String My_Name = "Haohua Feng";
+    private String My_Name;
+    private Client client;
+    private JPanel mainPanel;
+    private Join_Game joinGame; // used for passing into button handler;
 
     //for test
     public void room_test() {
@@ -97,13 +103,15 @@ public class Join_Game implements ActionListener {
         }
     }
 
-    public Join_Game() throws IOException {
-        room_test();
+    public Join_Game(String playerName, JPanel mainPanel) throws IOException {
+        //room_test();
+    	My_Name = playerName;
+    	this.mainPanel = mainPanel;
+    	this.joinGame = this;
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
         frame.setSize(720,720);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setBackground(new Color(209  ,116,0));
         panel.setLayout(null);
 
@@ -120,7 +128,7 @@ public class Join_Game implements ActionListener {
         lobby_status = new JLabel("             Room                 | Players |        Status");
         lobby_status.setForeground(new Color(255,255,255));
         lobby_status.setBounds(80, 85,300,20);
-        frame.add(lobby_status);
+        panel.add(lobby_status);
 
         game_list = new JList<String>(lobby_data_T);
         game_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -132,12 +140,16 @@ public class Join_Game implements ActionListener {
                 String detail = (String) game_list.getSelectedValue();
                 String rn = "";
                 for(int i = 0; i < 20; i++){
-                    if(detail.charAt(i) == ' '){
+                    if(detail.charAt(i) == '/'){
                         break;
                     }
                     else{
                         rn += detail.charAt(i);}
                 }
+                
+                // Kludge allows spaces in game name
+                rn = rn.substring(0, rn.length() - 2).trim();
+                
                 if (e.getClickCount() == 1) {
                     get_room_detail(rn);
                 }
@@ -145,12 +157,26 @@ public class Join_Game implements ActionListener {
 
                     if(!RoomName.equals(" ")) {
                         gl.get(RoomName).left(My_Name);
+                        client.leave();
+                        client.close();
                     }
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
+           
+            			if (gl.get(rn).getType() == AccessType.Private) {
+            				if (!gl.get(rn).getPassword().equals((String)JOptionPane.showInputDialog(panel, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE))) {
+            					JOptionPane.showMessageDialog(panel, "Invalid password to join " + rn + ".", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+            					return;
+            				}
+            			}
                         RoomName = rn;
-                        gl.get(rn).join(My_Name);
-                        feedback.setText("You Entered " + RoomName);
-                        gl.get(rn).send_update();
+                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame);
+                        if (client.connect()) {
+                            client.join(My_Name);
+
+                            gl.get(rn).join(My_Name);
+                            feedback.setText("You Entered " + RoomName);
+                        }
+                        //gl.get(rn).send_update();
                     }
                     else if(!gl.get(rn).room_status.equals("Waiting")){
                         feedback.setText("Cannot join ongoing game");
@@ -239,8 +265,6 @@ public class Join_Game implements ActionListener {
         panel.add(back);
 
         frame.add(panel);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setVisible(true);
 
         /*
         character choosing
@@ -340,15 +364,30 @@ public class Join_Game implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        new Join_Game();
+        Join_Game joinGame = new Join_Game("Haohua Feng", null);
+        joinGame.frame.setVisible(true);
+        
     }
 
-    private void refresh(){
+    public void refresh(){
         //obtain() returns the list of room_info that obtain from server
         lobby_data_T.removeAllElements();
-        for (Map.Entry<String, room_info> room : gl.entrySet()){
-            lobby_data_T.addElement(room.getValue().room_detail());
-        }
+        
+        // TODO: multiple servers
+        FindGame client = new FindGame();
+        room_info room = new room_info();
+        room.parseMessage(client.sendEcho("whoami"), panel);
+        lobby_data_T.addElement(room.room_detail());
+        gl.put(room.room_name, room);
+        client.close();
+    }
+    
+    public void refresh_room_detail() {
+        get_room_detail(RoomName);
+    }
+    
+    public room_info getRoom() {
+    	return gl.get(RoomName);
     }
     /**
     private List<room_info> obtain(){
@@ -404,12 +443,15 @@ public class Join_Game implements ActionListener {
             if (gl.get(RoomName).getPlayer_status().get(My_Name).equals("Waiting")){
                 Ready_or_Cancel.setText("Cancel");
                 Ready_or_Cancel.setBackground(new Color(255,0,0));
+                // Kludge, should probably pull from server
                 gl.get(RoomName).my_status(My_Name, 'r');
+                client.ready(My_Name);
             }
             else if(gl.get(RoomName).getPlayer_status().get(My_Name).equals("Ready")){
                 Ready_or_Cancel.setText("Ready");
                 Ready_or_Cancel.setBackground(new Color(0,255,0));
                 gl.get(RoomName).my_status(My_Name, 'c');
+                client.ready(My_Name);
             }
             get_room_detail(RoomName);
             System.out.println("Set to " + gl.get(RoomName).getPlayer_status().get(My_Name));
@@ -430,11 +472,22 @@ public class Join_Game implements ActionListener {
             System.out.println("You clicked on Go Back button, back to main menu");
             if (!RoomName.equals(" ")) {
                 gl.get(RoomName).left(My_Name);
-                gl.get(RoomName).send_update();
+                client.leave();
+                client.close();
                 RoomName = " ";
             }
-            frame.dispose();
+            
+    		mainPanel.setVisible(true);
+    		panel.setVisible(false);
         }
-        frame.repaint();
+        //frame.repaint();
+    }
+    
+    public JPanel getPanel() {
+    	return panel;
+    }
+    
+    public JButton getBackButton() {
+    	return back;
     }
 }
