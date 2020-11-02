@@ -21,6 +21,8 @@ public class Player implements Serializable {
     
     public int points;
     
+    private boolean isReady;
+    
     public Player(String playerName){  
         this.PlayerName = playerName;
         points = 10;
@@ -70,5 +72,13 @@ public class Player implements Serializable {
     
     public boolean getHasArcherTower() {
     	return hasArcherTower;
+    }
+    
+    public void setReady(Boolean ready) {
+    	this.isReady = ready;
+    }
+    
+    public Boolean getReady() {
+    	return isReady;
     }
 }

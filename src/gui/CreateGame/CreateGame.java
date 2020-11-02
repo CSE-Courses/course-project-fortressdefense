@@ -6,11 +6,15 @@ import javax.swing.border.Border;
 
 import code.AccessType;
 import code.Game;
+import code.GameConstants;
 import code.Player;
 import code.ServerModel;
+import code.Socket.BroadcastGame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.swing.border.LineBorder;
 
@@ -32,7 +36,9 @@ public class CreateGame extends JPanel {
 	 */
 	public CreateGame(String hostPlayerName, JPanel mainPanel, JFrame mainFrame) {
 		Game game = new Game();
-		ServerModel model = new ServerModel(game.PlayerList);
+		ServerModel model = new ServerModel(game);
+		Executor executor = Executors.newSingleThreadExecutor();
+		Executor tcpServer = Executors.newSingleThreadExecutor();
 		Player p1 = new Player(hostPlayerName);
 		p1.setReady(true);
 		game.PlayerList.add(p1);
@@ -183,8 +189,10 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridx = 1;
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
-		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice));
-		btnStartSever.addActionListener(new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice));
+		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, 
+				textField_1, choice, executor, tcpServer, this);
+		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, startHandler));
+		btnStartSever.addActionListener(startHandler);
 		
 		// Player Panel
 		Panel panel_1 = new Panel();
@@ -304,7 +312,7 @@ public class CreateGame extends JPanel {
 		gbc_btnBackToMain.gridx = 0;
 		gbc_btnBackToMain.gridy = 2;
 		add(btnBackToMain, gbc_btnBackToMain);
-		btnBackToMain.addActionListener(new CreateGameBackButtonHandler(this, mainPanel));
+		btnBackToMain.addActionListener(new CreateGameBackButtonHandler(this, mainPanel, startHandler));
 		
 		// Start Game Button
 		JButton btnStartGame = new JButton("START GAME");
@@ -335,14 +343,6 @@ public class CreateGame extends JPanel {
 		gbc_btnNewButton.gridy = 2;
 		add(btnNewButton, gbc_btnNewButton);
 		btnNewButton.addActionListener(new SendButtonHandler(textField_8, textArea, hostPlayerName));
-		
-		// Temporary code, keep in for demo
-		Player p2 = new Player("Jane Doe");
-		Player p3 = new Player("Joe Shmoe");
-		game.PlayerList.add(p2);
-		game.PlayerList.add(p3);
-		p2.setReady(true);
-		model.UpdatePlayerTextFields();
 	}
 
 }

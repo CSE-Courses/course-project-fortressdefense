@@ -1,13 +1,19 @@
 package code.Socket;
 
+import code.Command;
 import code.Player;
+import gui.Join_Game;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class client {
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+public class Client {
     private static data_pack Data = new data_pack();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static ObjectOutputStream output = null;
@@ -18,52 +24,158 @@ public class client {
     private static BufferedWriter client_command = null;
     private static String player_name = "";
     private static String command = null;
+    private final String serverName;
+    private final int serverPort;
+    private Socket socket;
+    private InputStream serverIn;
+    private OutputStream serverOut;
+    private BufferedReader bufferedIn;
+    private Join_Game joinGame;
+    
+    
+    public Client(String serverName, int serverPort, Join_Game joinGame) {
+        this.serverName = serverName;
+        this.serverPort = serverPort;
+        this.joinGame = joinGame;
+    }
+    
+    /**
+     * Connects to server
+     * @return whether server connection is valid
+     * @author Hoahua Feng, Andrew Jank
+     */
+    public Boolean connect() {
+        try {
+            this.socket = new Socket(serverName, serverPort);
+            this.serverOut = socket.getOutputStream();
+            this.serverIn = socket.getInputStream();
+            this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    /**
+     * Joins game
+     * @param playerName
+     * @author Hoahua Feng, Andrew Jank
+     */
+    public void join(String playerName) {
+        try {
+            String cmd = Command.Join.toString() + " " + playerName + "\n";
+			serverOut.write(cmd.getBytes());
+            
+			startMessageReader();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * Toggles player ready
+     * @param playerName
+     * @author Hoahua Feng, Andrew Jank
+     */
+    public void ready(String playerName) {
+        try {
+            String cmd = Command.Ready.toString() + " " + playerName + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 
-    private static void receive_from_server(Socket server) throws IOException, InterruptedException, ClassNotFoundException {
-        command_to_server = new OutputStreamWriter(server.getOutputStream());
-        client_command = new BufferedWriter(command_to_server);
-        client_command.write("client_pull" + "\n");
-        client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
-        input = new ObjectInputStream(new BufferedInputStream(server.getInputStream()));
-        Object in = input.readObject();
-        System.out.println("[Server] Received data from Server...");
-        if (in != null) {
-            Data = (data_pack) in;
-            System.out.println("\t \t Round: " + Data.getRound() + "\tTurn: " + Data.getTurn());
-            for (Player value : Data.getPlayer_list()) {
-                System.out.println("\t \t " + value.PlayerName + ": " + value.points + " HP");
+    /**
+     * Leaves game
+     * @author Hoahua Feng, Andrew Jank
+     */
+    public void leave() {
+        try {
+            String cmd = Command.Leave.toString() + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * Closes client connection
+     * @author Hoahua Feng, Andrew Jank
+     */
+    public void close() {
+    	try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    }
+    
+    /**
+     * Thread that reads all messages from server
+     * @author Hoahua Feng, Andrew Jank
+     */
+    private void startMessageReader() {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                readMessageLoop();
             }
-            System.out.println("\t \t Recent activity: "+Data.getMessage());
+        };
+        t.start();
+    }
+    
+    /**
+     * reads all messages from server
+     * @author Hoahua Feng, Andrew Jank
+     */
+    private void readMessageLoop() {
+        try {
+            String line;
+            while ((line = bufferedIn.readLine()) != null) {
+                String[] tokens = line.split(" ");
+                if (tokens != null && tokens.length > 0) {
+                    switch(Command.valueOf(tokens[0])) {
+		                case Shutdown:
+		                	// Kludge, should just set it to main frame, dont know how to check with form is visible when in draw/attack phase
+		                	JOptionPane.showMessageDialog(joinGame.getPanel(), "Connection to server lost!", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		                	joinGame.getBackButton().doClick();
+		                	break;
+		                case Refresh:
+		                	joinGame.refresh();
+		                	joinGame.refresh_room_detail();
+		                	break;
+		                case Ready:
+		                	if (joinGame.getRoom().getPlayer_status().get(String.join(" ", tokens).replaceAll(tokens[0], "").trim()).equals("Ready")){
+			                	joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'w');
+		                	}else {
+		                		joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'r');
+		                	}
+	
+		                	joinGame.refresh_room_detail();
+		                	break;
+                    	default:
+                    		break;
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
-    private static void send_to_server(Socket server) throws IOException, InterruptedException {
-        Data.next_turn();
-        command_to_server = new OutputStreamWriter(server.getOutputStream());
-        client_command = new BufferedWriter(command_to_server);
-        client_command.write("client_push" + "\n");
-        client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
-        output = new ObjectOutputStream(server.getOutputStream());
-        Data.next_turn();
-        output.writeObject(Data);
-        output.flush();
-        System.out.println("[Server] Update and Push to Server...");
-    }
-
-    private static void join_server (Socket server, Player player) throws IOException, InterruptedException {
-        command_to_server = new OutputStreamWriter(server.getOutputStream());
-        client_command = new BufferedWriter(command_to_server);
-        client_command.write("player_join" + "\n");
-        client_command.flush();
-        TimeUnit.SECONDS.sleep(1);
-        output = new ObjectOutputStream(server.getOutputStream());
-        output.writeObject(player);
-        output.flush();
-        System.out.println("[Client] Send Player Info to Server...");
-    }
-
+    /*
     public static void main(String[] args) throws Exception {
         while(player_name.equals("")) {
             System.out.println("Demo\nEnter Your Name");
@@ -161,4 +273,5 @@ public class client {
             e.printStackTrace();
         }
     }
+    */
 }

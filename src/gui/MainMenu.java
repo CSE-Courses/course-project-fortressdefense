@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.swing.*;
 
 import code.Game;
+import gui.CreateGame.CreateGame;
 
 public class MainMenu {
 	
@@ -64,7 +65,17 @@ public class MainMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					Join_Game join_game = new Join_Game();
+					String playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
+					if (playerName != null) {
+						while (playerName.equals("") || playerName.contains("/")) {
+							JOptionPane.showMessageDialog(frame, "Fortress Name cannot be empty or contain /.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+							playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
+						}
+						
+
+						frame.add(new Join_Game(playerName, panel).getPanel());
+						panel.setVisible(false);
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

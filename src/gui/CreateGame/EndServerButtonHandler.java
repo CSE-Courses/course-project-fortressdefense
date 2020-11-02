@@ -2,10 +2,14 @@ package gui.CreateGame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Executor;
 
 import javax.swing.*;
 
+import code.GameConstants;
+import code.Player;
 import code.ServerModel;
+import code.Socket.BroadcastGame;
 
 public class EndServerButtonHandler implements ActionListener {
 	
@@ -16,8 +20,10 @@ public class EndServerButtonHandler implements ActionListener {
 	private JSpinner numSpinner;
 	private JTextField password;
 	private JComboBox<String> choice;
+	private StartServerButtonHandler startHandler;
 	
-	public EndServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice) {
+	public EndServerButtonHandler(ServerModel model, JButton startButton, JButton endButton, 
+			JTextField textField, JSpinner spinner, JTextField textField_1, JComboBox<String> choice, StartServerButtonHandler handler) {
 		this.model = model;
 		start = startButton;
 		end = endButton;
@@ -25,6 +31,7 @@ public class EndServerButtonHandler implements ActionListener {
 		numSpinner = spinner;
 		password = textField_1;
 		this.choice = choice;
+		startHandler = handler;
 	}
 	
 	@Override
@@ -35,7 +42,14 @@ public class EndServerButtonHandler implements ActionListener {
 		numSpinner.setEnabled(true);
 		password.setEditable(true);
 		this.choice.setEnabled(true);
-		//TODO: End server broadcast for server, all players will be removed from game
+		
+		startHandler.getUDPServer().close();
+		startHandler.getTCPServer().close();
+		
+		Player host = startHandler.getModel().getPlayers().get(0);
+		startHandler.getModel().getPlayers().clear();
+		startHandler.getModel().getPlayers().add(host);
+		startHandler.getModel().UpdatePlayerTextFields();
 	}
 
 }
