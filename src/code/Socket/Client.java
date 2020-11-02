@@ -159,8 +159,6 @@ public class Client {
 	
 		                	joinGame.refresh_room_detail();
 		                	break;
-		                case Leave:
-		                	break;
                     	default:
                     		break;
                     }
