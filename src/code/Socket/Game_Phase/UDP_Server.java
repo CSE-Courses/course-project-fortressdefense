@@ -1,4 +1,4 @@
-package code.Socket;
+package code.Socket.Game_Phase;
 
 import java.io.*;
 import java.net.DatagramPacket;

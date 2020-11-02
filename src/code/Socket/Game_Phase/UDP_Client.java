@@ -1,11 +1,10 @@
-package code.Socket;
+package code.Socket.Game_Phase;
 
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import code.Player;
-import code.Socket.data_pack;
 
 public class UDP_Client {
     private static ByteArrayOutputStream OS = null;
