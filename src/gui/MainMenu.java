@@ -96,7 +96,7 @@ public class MainMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				drawPhase dp = new drawPhase(new Game());
+				drawPhase dp = new drawPhase(new Game(), frame);
 				dp.frmFortressDefense.setVisible(true);
 			}
 	    });

@@ -1,6 +1,10 @@
 package gui;
 import code.*;
 import code.Deck.*;
+import code.card_class.AttackCard;
+import code.card_class.CardType;
+import code.card_class.DefenseCard;
+import code.card_class.SpecialCard;
 
 import java.awt.*;
 
@@ -33,7 +37,7 @@ import javax.swing.JPanel;
 
 public class drawPhase {
 
-	public JFrame frmFortressDefense;
+	public static JFrame frmFortressDefense;
 
 	/**
 	 * Launch the application.
@@ -48,11 +52,13 @@ public class drawPhase {
 	int numD = 0;//number of defense cards
 	int newHealth = 0;//updates healthpoints
 	
+	private JFrame mainFrame;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					drawPhase window = new drawPhase(new code.Game());
+					drawPhase window = new drawPhase(new code.Game(), frmFortressDefense);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,7 +70,7 @@ public class drawPhase {
 	/**
 	 * Create the application.
 	 */
-	public drawPhase(code.Game phase) {
+	public drawPhase(code.Game phase, JFrame mainFrame) {
 		turn = phase;
 		if (turn.PlayerList.size() == 0) {
 			turn.PlayerList.add(new Player("Test Player"));
@@ -188,7 +194,10 @@ public class drawPhase {
 				if(i == -1)
 				{
 					tm.stop();
+					mainFrame.add(new drawPhaseOtherPlayer().GetPanel());
+					GetPanel().setVisible(false);
 					System.exit(0);
+					
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
@@ -259,7 +268,7 @@ public class drawPhase {
 		btnCard1.setVisible(false);
 		btnCard1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(0).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(0).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(true);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
@@ -278,7 +287,7 @@ public class drawPhase {
 		btnCard2.setVisible(false);
 		btnCard2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(1).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(1).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(true);
 				lblCard3.setVisible(false);
@@ -295,7 +304,7 @@ public class drawPhase {
 		btnCard3.setVisible(false);
 		btnCard3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(2).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(2).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(true);
@@ -312,7 +321,7 @@ public class drawPhase {
 		btnCard4.setVisible(false);
 		btnCard4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(3).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(3).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
@@ -329,7 +338,7 @@ public class drawPhase {
 		btnCard5.setVisible(false);
 		btnCard5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(4).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(4).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
@@ -346,7 +355,7 @@ public class drawPhase {
 		btnCard6.setVisible(false);
 		btnCard6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(5).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(5).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
@@ -363,7 +372,7 @@ public class drawPhase {
 		btnCard7.setVisible(false);
 		btnCard7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(6).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(6).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
@@ -380,7 +389,7 @@ public class drawPhase {
 		btnCard8.setVisible(false);
 		btnCard8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblMsgBox.setText("<html> " + hand.Select(7).card_name + " card selected </html>");
+				lblMsgBox.setText("<html> " + hand.Select(7).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
 				lblCard3.setVisible(false);
@@ -458,44 +467,44 @@ public class drawPhase {
 			public void actionPerformed(ActionEvent e) {
 				if(lblCard1.isVisible())
 				{
-					lblSelected.setText("<html> Discard " + hand.Select(0).card_name + " selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(0).card_name + " </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(0).getCard_name() + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard  " + hand.Select(0).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard2.isVisible())
 				{
-					lblSelected.setText("<html> Discard " + hand.Select(1).card_name + " selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(1).card_name + " </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(1).getCard_name() + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(1).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard3.isVisible())
 				{
-					lblSelected.setText("<html> Discard " + hand.Select(2).card_name + " selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(2).card_name + " </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(2).getCard_name() + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(2).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard4.isVisible())
 				{
-					lblSelected.setText("<html> Discard " + hand.Select(3).card_name + " selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(3).card_name + " </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(3).getCard_name() + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(3).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard5.isVisible())
 				{
-					lblSelected.setText("<html> Discard " + hand.Select(4).card_name + " selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(4).card_name + " </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(4).getCard_name() + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(4).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard6.isVisible())
 				{
-					lblSelected.setText("<html> Discard " + hand.Select(5).card_name + " selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(5).card_name + " </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(5).getCard_name() + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(5).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard7.isVisible())
 				{
-					lblSelected.setText("<html> Discard " + hand.Select(6).card_name + " selected </html>");
-					lblMsgBox.setText("<html> Click GO! to discard" + hand.Select(6).card_name + " </html>");
+					lblSelected.setText("<html> Discard " + hand.Select(6).getCard_name() + " selected </html>");
+					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(6).getCard_name() + " </html>");
 					discard = true;
 				}
 				else
@@ -523,39 +532,39 @@ public class drawPhase {
 					hand.Draw(turn.AttackDeck);//draws card and adds it to hand
 					numA++;
 					
-					if(hand.Select(hand.Size()-1).card_name == "AXE")
+					if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Axe)
 					{
 						curBtn.setIcon(new ImageIcon(axeImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "BATTLE AXE")
+					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Battle_Axe)
 					{
 						curBtn.setIcon(new ImageIcon(battleAxeImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "CROSSBOW")
+					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Crossbow)
 					{
 						curBtn.setIcon(new ImageIcon(crossbowImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "MACE")
+					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Mace)
 					{
 						curBtn.setIcon(new ImageIcon(maceImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "STICK")
+					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Stick)
 					{
 						curBtn.setIcon(new ImageIcon(stickImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "SWORD")
+					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Sword)
 					{
 						curBtn.setIcon(new ImageIcon(swordImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "ARCHER TOWER")
+					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						curBtn.setIcon(new ImageIcon(archerTowerImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "SCOUT")
+					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Scout)
 					{
 						curBtn.setIcon(new ImageIcon(scoutImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "TRADE")
+					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Trade)
 					{
 						curBtn.setIcon(new ImageIcon(tradeImg));
 					}
@@ -594,62 +603,62 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>");
+					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
 				}
 				else if(lblSelected.getText() == "<html> Defense Deck selected </html>")
 				{
 					hand.Draw(turn.DefenseDeck);
 					numD++;
 					
-					if(hand.Select(hand.Size()-1).card_name == "EARTHQUAKE")
+					if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Earthquake)
 					{
 						curBtn.setIcon(new ImageIcon(earthquakeImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "FLOOD")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Flood)
 					{
 						curBtn.setIcon(new ImageIcon(floodImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "THUNDERSTORM")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Thunderstorm)
 					{
 						curBtn.setIcon(new ImageIcon(thunderstormImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "TORNADO")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Tornado)
 					{
 						curBtn.setIcon(new ImageIcon(tornadoImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "BARBED WIRE")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Barbed_Wire)
 					{
 						curBtn.setIcon(new ImageIcon(barbedWireImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "IRON DOOR")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Iron_Door)
 					{
 						curBtn.setIcon(new ImageIcon(ironDoorImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "REINFORCED GATE")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Reinforced_Gate)
 					{
 						curBtn.setIcon(new ImageIcon(reinforcedGateImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "STEEL CHAINS")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Steel_Chains)
 					{
 						curBtn.setIcon(new ImageIcon(steelChainsImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "STONE WALL")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Stone_Wall)
 					{
 						curBtn.setIcon(new ImageIcon(stoneWallImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "WOODEN WALL")
+					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Wooden_Wall)
 					{
 						curBtn.setIcon(new ImageIcon(woodenWallImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "ARCHER TOWER")
+					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						curBtn.setIcon(new ImageIcon(archerTowerImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "SCOUT")
+					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Scout)
 					{
 						curBtn.setIcon(new ImageIcon(scoutImg));
 					}
-					else if(hand.Select(hand.Size()-1).card_name == "TRADE")
+					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Trade)
 					{
 						curBtn.setIcon(new ImageIcon(tradeImg));
 					}
@@ -704,7 +713,7 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).card_name + " card acquired! </html>");
+					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
 				}
 				else if(discard)
 				{
@@ -712,8 +721,8 @@ public class drawPhase {
 					{
 						lblCard1.setVisible(false);
 						btnCard1.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(0).card_name + " card has been discarded </html>");
-						if(hand.Select(0).type == "DEFENSE")
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(0).getCard_name() + " card has been discarded </html>");
+						if(hand.Select(0).getType() == CardType.Defense)
 						{
 							newHealth = newHealth - hand.Select(0).getDamage();
 							
@@ -729,8 +738,8 @@ public class drawPhase {
 					{
 						lblCard2.setVisible(false);
 						btnCard2.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(1).card_name + " card has been discarded </html>");
-						if(hand.Select(1).type == "DEFENSE")
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(1).getCard_name() + " card has been discarded </html>");
+						if(hand.Select(1).getType() == CardType.Defense)
 						{
 							newHealth = newHealth - hand.Select(1).getDamage();
 							
@@ -746,8 +755,8 @@ public class drawPhase {
 					{
 						lblCard3.setVisible(false);
 						btnCard3.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(2).card_name + " card has been discarded </html>");
-						if(hand.Select(2).type == "DEFENSE")
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(2).getCard_name() + " card has been discarded </html>");
+						if(hand.Select(2).getType() == CardType.Defense)
 						{
 							newHealth = newHealth - hand.Select(2).getDamage();
 							
@@ -763,8 +772,8 @@ public class drawPhase {
 					{
 						lblCard4.setVisible(false);
 						btnCard4.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(3).card_name + " card has been discarded </html>");
-						if(hand.Select(3).type == "DEFENSE")
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(3).getCard_name() + " card has been discarded </html>");
+						if(hand.Select(3).getType() == CardType.Defense)
 						{
 							newHealth = newHealth - hand.Select(3).getDamage();
 							
@@ -780,8 +789,8 @@ public class drawPhase {
 					{
 						lblCard5.setVisible(false);
 						btnCard5.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(4).card_name + " card has been discarded </html>");
-						if(hand.Select(4).type == "DEFENSE")
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(4).getCard_name() + " card has been discarded </html>");
+						if(hand.Select(4).getType() == CardType.Defense)
 						{
 							newHealth = newHealth - hand.Select(4).getDamage();
 							
@@ -797,8 +806,8 @@ public class drawPhase {
 					{
 						lblCard6.setVisible(false);
 						btnCard6.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(5).card_name + " card has been discarded </html>");
-						if(hand.Select(5).type == "DEFENSE")
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(5).getCard_name() + " card has been discarded </html>");
+						if(hand.Select(5).getType() == CardType.Defense)
 						{
 							newHealth = newHealth - hand.Select(5).getDamage();
 							
@@ -814,8 +823,8 @@ public class drawPhase {
 					{
 						lblCard7.setVisible(false);
 						btnCard7.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(6).card_name + " card has been discarded </html>");
-						if(hand.Select(6).type == "DEFENSE")
+						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(6).getCard_name() + " card has been discarded </html>");
+						if(hand.Select(6).getType() == CardType.Defense)
 						{
 							newHealth = newHealth - hand.Select(6).getDamage();
 							
