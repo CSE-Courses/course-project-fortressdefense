@@ -27,7 +27,7 @@ import java.net.Socket;
  *
  * Receive thread receive feedback from server and also the message send to all users by server.
  *      Automatically update chart box in GUI while running
- *
+ * Works separately with the chat box for join game ui
  * */
 
 public class Game_Phase_Chat_Box implements ActionListener {
