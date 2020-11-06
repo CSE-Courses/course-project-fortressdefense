@@ -73,7 +73,7 @@ public class MainMenu {
 						}
 						
 
-						frame.add(new Join_Game(playerName, panel).getPanel());
+						frame.add(new Join_Game(playerName, panel, frame).getPanel());
 						panel.setVisible(false);
 					}
 				} catch (IOException e) {

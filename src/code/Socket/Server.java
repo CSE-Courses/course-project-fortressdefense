@@ -6,7 +6,10 @@ import code.Socket.Game_Phase.data_pack;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Time;
 import java.util.ArrayList;
+
+import javax.swing.JTextArea;
 
 public class Server implements Runnable{
     private ArrayList<Worker> clientList = new ArrayList<Worker>();
@@ -14,12 +17,14 @@ public class Server implements Runnable{
     private ServerModel model;
     private Boolean ongoing;
     private ServerSocket serverSocket;
+    private JTextArea chat;
 
     private final int serverPort;
 
-    public Server(int serverPort, ServerModel model) {
+    public Server(int serverPort, ServerModel model, JTextArea chat) {
         this.serverPort = serverPort;
         this.model = model;
+        this.chat = chat;
     }
 
     public ArrayList<Worker> getWorkerList() {
@@ -65,6 +70,7 @@ public class Server implements Runnable{
     	try {
         	ongoing = false;
         	shutdown();
+        	chat.setText("");
 			serverSocket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -76,5 +82,22 @@ public class Server implements Runnable{
         for(Worker worker : clientList) {
             worker.send(Command.Shutdown.toString() + "\n");
         }
+	}
+	
+	public void message(String msg) {
+		String message = model.getPlayers().get(0).PlayerName + ": " + msg + "\n";
+        for(Worker worker : clientList) {
+            worker.send(Command.Message.toString() + " " + message);
+        }
+        
+        chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + message + "\n");
+	}
+	
+	public void setChat(JTextArea chatBox) {
+		this.chat = chatBox;
+	}
+	
+	public JTextArea getChat() {
+		return chat;
 	}
 }

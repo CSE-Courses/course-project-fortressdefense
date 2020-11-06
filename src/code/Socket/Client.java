@@ -6,12 +6,15 @@ import gui.Join_Game;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Client {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -30,12 +33,14 @@ public class Client {
     private OutputStream serverOut;
     private BufferedReader bufferedIn;
     private Join_Game joinGame;
+    private JTextArea chat;
     
     
-    public Client(String serverName, int serverPort, Join_Game joinGame) {
+    public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat) {
         this.serverName = serverName;
         this.serverPort = serverPort;
         this.joinGame = joinGame;
+        this.chat = chat;
     }
     
     /**
@@ -78,9 +83,9 @@ public class Client {
      * @param playerName
      * @author Hoahua Feng, Andrew Jank
      */
-    public void ready(String playerName) {
+    public void ready() {
         try {
-            String cmd = Command.Ready.toString() + " " + playerName + "\n";
+            String cmd = Command.Ready.toString() + "\n";
 			serverOut.write(cmd.getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -96,6 +101,7 @@ public class Client {
         try {
             String cmd = Command.Leave.toString() + "\n";
 			serverOut.write(cmd.getBytes());
+			chat.setText("");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,6 +119,16 @@ public class Client {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+    }
+    
+    public void message(String playerName, String msg) {
+		try {
+			String cmd = Command.Message.toString() + " " + playerName + ": " + msg + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -158,6 +174,21 @@ public class Client {
 	
 		                	joinGame.refresh_room_detail();
 		                	break;
+		                case Join:
+		                   	joinGame.refresh();
+		                	joinGame.refresh_room_detail();
+		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
+		                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
+		                	break;
+		                case Leave:
+		                   	joinGame.refresh();
+		                	joinGame.refresh_room_detail();
+		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
+				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
+		                	break;
+		                case Message:
+		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + 
+				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
                     	default:
                     		break;
                     }
@@ -171,6 +202,14 @@ public class Client {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public JTextArea getChat() {
+    	return chat;
+    }
+    
+    public void setChat(JTextArea chatBox) {
+    	chat = chatBox;
     }
     
 

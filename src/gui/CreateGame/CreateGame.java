@@ -43,7 +43,6 @@ public class CreateGame extends JPanel {
 		p1.setReady(true);
 		game.PlayerList.add(p1);
 		
-		
 		// main Panel grid for create game screen
 		this.setBackground(new Color(153, 102, 0));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -174,6 +173,24 @@ public class CreateGame extends JPanel {
 		gbc_spinner.gridx = 1;
 		gbc_spinner.gridy = 5;
 		
+		//Chat Window
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.gridwidth = 2;
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 2;
+		gbc_scrollPane.gridy = 1;
+		add(scrollPane, gbc_scrollPane);
+		
+		// Chat box
+		JTextArea textArea = new JTextArea();
+		textArea.setLineWrap(true);
+		textArea.setEditable(false);
+		scrollPane.setViewportView(textArea);
+		
+		
 		// Start Server Button
 		JButton btnStartSever = new JButton("Start Server");
 		GridBagConstraints gbc_btnStartSever = new GridBagConstraints();
@@ -190,9 +207,18 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
 		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, 
-				textField_1, choice, executor, tcpServer, this);
+				textField_1, choice, executor, tcpServer, this, textArea);
 		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, startHandler));
 		btnStartSever.addActionListener(startHandler);
+		
+		mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	if (startHandler.getTCPServer() != null) {
+			    	startHandler.getTCPServer().close();
+		    	}
+		    }
+		});
 		
 		// Player Panel
 		Panel panel_1 = new Panel();
@@ -288,23 +314,6 @@ public class CreateGame extends JPanel {
 		panel.add(spinner, gbc_spinner);
 		spinner.addChangeListener(new SpinnerHandler(model, panel_1));
 		
-		//Chat Window
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridwidth = 2;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.gridx = 2;
-		gbc_scrollPane.gridy = 1;
-		add(scrollPane, gbc_scrollPane);
-		
-		// Chat box
-		JTextArea textArea = new JTextArea();
-		textArea.setLineWrap(true);
-		textArea.setEditable(false);
-		scrollPane.setViewportView(textArea);
-		
 		// Back to Main Menu Button
 		JButton btnBackToMain = new JButton("BACK TO MAIN MENU");
 		GridBagConstraints gbc_btnBackToMain = new GridBagConstraints();
@@ -342,7 +351,7 @@ public class CreateGame extends JPanel {
 		gbc_btnNewButton.gridx = 3;
 		gbc_btnNewButton.gridy = 2;
 		add(btnNewButton, gbc_btnNewButton);
-		btnNewButton.addActionListener(new SendButtonHandler(textField_8, textArea, hostPlayerName));
+		btnNewButton.addActionListener(new SendButtonHandler(textField_8, startHandler));
 	}
 
 }

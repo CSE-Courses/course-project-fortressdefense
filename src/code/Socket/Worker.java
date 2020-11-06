@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import code.*;
@@ -60,6 +61,10 @@ public class Worker extends Thread{
                 		break;
                 	case Ready:
                 		handleReady(tokens);
+                		break;
+                	case Message:
+                		handleMessage(tokens);
+                		break;
                 	default:
                 		break;
                 }
@@ -69,16 +74,33 @@ public class Worker extends Thread{
         clientSocket.close();
     }
 
-    private void handleReady(String[] tokens) {
-    	if (tokens.length >= 2) {
-    		player.setReady(!player.getReady());
-    		server.getModel().UpdatePlayerTextFields();
+    private void handleMessage(String[] tokens) {
+        try {
+            ArrayList<Worker> workerList = server.getWorkerList();
+
             // send other online users current user's status
-            for(Worker worker : server.getWorkerList()) {
+            String message = String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n";
+            for(Worker worker : workerList) {
                 if (worker.getUsername() != null) {
-                    if (!this.username.equals(worker.getUsername())) {
-                        worker.send(Command.Ready.toString() + " " + worker.getUsername() + "\n");
-                    }
+                	worker.send(Command.Message.toString() + " " + message);
+                }
+            }
+            
+            server.getChat().setText(server.getChat().getText() + new Time(System.currentTimeMillis()) + "\n" + message + "\n");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void handleReady(String[] tokens) {
+		player.setReady(!player.getReady());
+		server.getModel().UpdatePlayerTextFields();
+        // send other online users current user's status
+        for(Worker worker : server.getWorkerList()) {
+            if (worker.getUsername() != null) {
+                if (!this.username.equals(worker.getUsername())) {
+                    worker.send(Command.Ready.toString() + " " + this.getUsername() + "\n");
                 }
             }
         }
@@ -92,13 +114,17 @@ public class Worker extends Thread{
             ArrayList<Worker> workerList = server.getWorkerList();
 
             // send other online users current user's status
+            String message = this.getUsername() + " has left the game.\n";
             for(Worker worker : workerList) {
                 if (worker.getUsername() != null) {
                     if (!this.username.equals(worker.getUsername())) {
-                        worker.send(Command.Refresh.toString() + "\n");
+                    	worker.send(Command.Leave.toString() + " " + message);
                     }
                 }
             }
+            
+            server.getChat().setText(server.getChat().getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + message + "\n");
+            
 			clientSocket.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -116,13 +142,16 @@ public class Worker extends Thread{
             ArrayList<Worker> workerList = server.getWorkerList();
 
             // send current user all other online logins
+            String message = this.getUsername() + " has joined the game.\n";
             for(Worker worker : workerList) {
                 if (worker.getUsername() != null) {
                     if (!this.username.equals(worker.getUsername())) {
-                        worker.send(Command.Refresh.toString() + "\n");
+                        worker.send(Command.Join.toString() + " " + message);
                     }
                 }
             }
+            
+            server.getChat().setText(server.getChat().getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + message + "\n");
         }
 }
 	

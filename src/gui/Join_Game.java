@@ -103,7 +103,7 @@ public class Join_Game implements ActionListener {
         }
     }
 
-    public Join_Game(String playerName, JPanel mainPanel) throws IOException {
+    public Join_Game(String playerName, JPanel mainPanel, JFrame mainFrame) throws IOException {
         //room_test();
     	My_Name = playerName;
     	this.mainPanel = mainPanel;
@@ -157,6 +157,8 @@ public class Join_Game implements ActionListener {
 
                     if(!RoomName.equals(" ")) {
                         gl.get(RoomName).left(My_Name);
+                        chat_log = "";
+                        chat.setText("");
                         client.leave();
                         client.close();
                     }
@@ -169,7 +171,7 @@ public class Join_Game implements ActionListener {
             				}
             			}
                         RoomName = rn;
-                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame);
+                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat);
                         if (client.connect()) {
                             client.join(My_Name);
 
@@ -283,6 +285,16 @@ public class Join_Game implements ActionListener {
                 chooseCharacter();
             }
         });
+        
+		mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	if (client != null) {
+			    	client.leave();
+			    	client.close();
+		    	}
+		    }
+		});
 
     }
 
@@ -364,7 +376,7 @@ public class Join_Game implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        Join_Game joinGame = new Join_Game("Haohua Feng", null);
+        Join_Game joinGame = new Join_Game("Haohua Feng", null, null);
         joinGame.frame.setVisible(true);
         
     }
@@ -402,8 +414,6 @@ public class Join_Game implements ActionListener {
 
         if (e.getSource().equals(refresh_button)){
             refresh();
-            chat_log = "";
-            chat.setText("");
             System.out.println("Refresh Button Clicked, reload game list");
         }
 
@@ -445,13 +455,13 @@ public class Join_Game implements ActionListener {
                 Ready_or_Cancel.setBackground(new Color(255,0,0));
                 // Kludge, should probably pull from server
                 gl.get(RoomName).my_status(My_Name, 'r');
-                client.ready(My_Name);
+                client.ready();
             }
             else if(gl.get(RoomName).getPlayer_status().get(My_Name).equals("Ready")){
                 Ready_or_Cancel.setText("Ready");
                 Ready_or_Cancel.setBackground(new Color(0,255,0));
                 gl.get(RoomName).my_status(My_Name, 'c');
-                client.ready(My_Name);
+                client.ready();
             }
             get_room_detail(RoomName);
             System.out.println("Set to " + gl.get(RoomName).getPlayer_status().get(My_Name));
@@ -461,17 +471,23 @@ public class Join_Game implements ActionListener {
         else if (e.getSource().equals(send)) {
             String input = unsend.getText();
             if (!input.equals("")) {
-                Time time = new Time(System.currentTimeMillis());
-                chat_log = chat_log + "" + time + "\n" + My_Name +": " + input + "\n\n";
-                chat.setText(chat_log);
+            	if (client != null) {
+                    client.message(My_Name, input);
+                    System.out.println("Send Message");
+            	}else {
+            		JOptionPane.showMessageDialog(getPanel(), "A user can only send a message if connected to a game", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+            	}
+            	
                 unsend.setText("");
-                System.out.println("Send Message");
+
             }
         }
         else if (e.getSource().equals(back)){
             System.out.println("You clicked on Go Back button, back to main menu");
             if (!RoomName.equals(" ")) {
                 gl.get(RoomName).left(My_Name);
+                chat_log = "";
+                chat.setText("");
                 client.leave();
                 client.close();
                 RoomName = " ";

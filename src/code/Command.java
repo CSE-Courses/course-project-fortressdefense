@@ -5,5 +5,6 @@ public enum Command {
 	Leave,
 	Ready,
 	Shutdown,
-	Refresh
+	Refresh,
+	Message
 }
