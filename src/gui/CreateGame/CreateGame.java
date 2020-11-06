@@ -46,19 +46,20 @@ public class CreateGame extends JPanel {
 		// main Panel grid for create game screen
 		this.setBackground(new Color(153, 102, 0));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] {200, 50, 300, 50};
+		gridBagLayout.columnWidths = new int[] {300, 50, 100, 50};
 		gridBagLayout.rowHeights = new int[]{100, 200, 0, 50};
 		gridBagLayout.columnWeights = new double[]{Double.MIN_VALUE, 0.0, 1.0, 0.0};
 		gridBagLayout.rowWeights = new double[]{Double.MIN_VALUE, 1.0, 0.0};
 		setLayout(gridBagLayout);
 		
 		// Title Label
-		JLabel lblDefense = new JLabel("Fortress Defense");
+		JLabel lblDefense = new JLabel("<html>Fortress Defense</html>");
 		lblDefense.setFont(new Font("Arial", Font.BOLD, 80));
 		lblDefense.setForeground(Color.BLACK);
-		lblDefense.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDefense.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_lblDefense = new GridBagConstraints();
-		gbc_lblDefense.gridwidth = 3;
+		gbc_lblDefense.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblDefense.gridwidth = 4;
 		gbc_lblDefense.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDefense.gridx = 0;
 		gbc_lblDefense.gridy = 0;
@@ -74,16 +75,18 @@ public class CreateGame extends JPanel {
 		gbc_panel.gridy = 1;
 		add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{ 100, 175 };
+		gbl_panel.columnWidths = new int[] {300, 200};
 		gbl_panel.rowHeights = new int[] {50, 50, 50, 50, 50, 50, 50, 50};
 		gbl_panel.columnWeights = new double[]{Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{Double.MIN_VALUE, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
 		// Options Title Panel
-		Label label = new Label("Game Options");
+		JLabel label = new JLabel("<html>Game Options</html>");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Arial", Font.BOLD, 30));
 		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label.insets = new Insets(0, 0, 5, 0);
 		gbc_label.gridwidth = 2;
 		gbc_label.gridx = 0;
@@ -91,14 +94,16 @@ public class CreateGame extends JPanel {
 		panel.add(label, gbc_label);
 		
 		// Game Name Label
-		Label label_1 = new Label("                                        Game Name:");
-		label_1.setFont(new Font("Arial", Font.PLAIN, 20));
-		label_1.setAlignment(Label.RIGHT);
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.insets = new Insets(0, 0, 5, 5);
-		gbc_label_1.gridx = 0;
-		gbc_label_1.gridy = 2;
-		panel.add(label_1, gbc_label_1);
+		JLabel lblgameName = new JLabel("<html>Game Name:</html>");
+		lblgameName.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblgameName.setHorizontalAlignment(SwingConstants.RIGHT);
+		GridBagConstraints gbc_lblgameName = new GridBagConstraints();
+		gbc_lblgameName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblgameName.anchor = GridBagConstraints.EAST;
+		gbc_lblgameName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblgameName.gridx = 0;
+		gbc_lblgameName.gridy = 2;
+		panel.add(lblgameName, gbc_lblgameName);
 		
 		// Game name text field
 		JTextField textField = new JTextField();
@@ -111,9 +116,12 @@ public class CreateGame extends JPanel {
 		textField.getDocument().addDocumentListener(new BindingListener(model, "HostName"));
 		
 		// Access Label
-		Label label_2 = new Label("                                                Access:");
-		label_2.setFont(new Font("Arial", Font.PLAIN, 20));
+		JLabel label_2 = new JLabel("<html>Access:</html>");
+		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		label_2.setFont(new Font("Calibri", Font.PLAIN, 20));
 		GridBagConstraints gbc_label_2 = new GridBagConstraints();
+		gbc_label_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_label_2.anchor = GridBagConstraints.EAST;
 		gbc_label_2.insets = new Insets(0, 0, 5, 5);
 		gbc_label_2.gridx = 0;
 		gbc_label_2.gridy = 3;
@@ -131,10 +139,12 @@ public class CreateGame extends JPanel {
 		panel.add(choice, gbc_choice);
 		
 		// Password Label
-		JLabel lblPassword = new JLabel("                                            Password:");
-		lblPassword.setFont(new Font("Arial", Font.PLAIN, 20));
+		JLabel lblPassword = new JLabel("<html>Password:</html>");
+		lblPassword.setFont(new Font("Calibri", Font.PLAIN, 20));
 		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.gridx = 0;
 		gbc_lblPassword.gridy = 4;
@@ -154,9 +164,12 @@ public class CreateGame extends JPanel {
 		choice.addItemListener(new AccessComboHandler(model, textField_1));
 		
 		// Num of Players Label
-		Label label_3 = new Label("                               Number of Players:");
-		label_3.setFont(new Font("Arial", Font.PLAIN, 20));
+		JLabel label_3 = new JLabel("<html>Number of Players:</html>");
+		label_3.setHorizontalAlignment(SwingConstants.RIGHT);
+		label_3.setFont(new Font("Calibri", Font.PLAIN, 20));
 		GridBagConstraints gbc_label_3 = new GridBagConstraints();
+		gbc_label_3.fill = GridBagConstraints.HORIZONTAL;
+		gbc_label_3.anchor = GridBagConstraints.EAST;
 		gbc_label_3.insets = new Insets(0, 0, 5, 5);
 		gbc_label_3.gridx = 0;
 		gbc_label_3.gridy = 5;
