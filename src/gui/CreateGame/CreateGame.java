@@ -330,7 +330,7 @@ public class CreateGame extends JPanel {
 		gbc_btnStartGame.gridx = 1;
 		gbc_btnStartGame.gridy = 2;
 		add(btnStartGame, gbc_btnStartGame);
-		btnStartGame.addActionListener(new StartGameButtonHandler(this, mainFrame, model, game));
+		btnStartGame.addActionListener(new StartGameButtonHandler(this, mainFrame, startHandler));
 		
 		// Message field
 		textField_8 = new JTextField();

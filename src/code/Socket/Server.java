@@ -93,6 +93,12 @@ public class Server implements Runnable{
         chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + message + "\n");
 	}
 	
+	public void start() {
+       for(Worker worker : clientList) {
+            worker.send(Command.Start.toString() + "\n");
+        }
+	}
+	
 	public void setChat(JTextArea chatBox) {
 		this.chat = chatBox;
 	}

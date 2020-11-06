@@ -17,15 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class Client {
-    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    private static ObjectOutputStream output = null;
-    private static ObjectInputStream input = null;
-    private static InputStreamReader command_from_server = null;
-    private static BufferedReader server_command = null;
-    private static OutputStreamWriter command_to_server = null;
-    private static BufferedWriter client_command = null;
-    private static String player_name = "";
-    private static String command = null;
+    private String name;
     private final String serverName;
     private final int serverPort;
     private Socket socket;
@@ -36,11 +28,12 @@ public class Client {
     private JTextArea chat;
     
     
-    public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat) {
+    public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
         this.serverName = serverName;
         this.serverPort = serverPort;
         this.joinGame = joinGame;
         this.chat = chat;
+        this.name = name;
     }
     
     /**
@@ -189,6 +182,10 @@ public class Client {
 		                case Message:
 		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + 
 				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
+		                	break;
+		                case Start:
+		                	joinGame.startDrawPhase();
+		                	break;
                     	default:
                     		break;
                     }
@@ -210,6 +207,10 @@ public class Client {
     
     public void setChat(JTextArea chatBox) {
     	chat = chatBox;
+    }
+    
+    public String getName() {
+    	return name;
     }
     
 

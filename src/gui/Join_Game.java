@@ -59,7 +59,8 @@ public class Join_Game implements ActionListener {
     private Client client;
     private JPanel mainPanel;
     private Join_Game joinGame; // used for passing into button handler;
-
+    private JFrame mainFrame;
+    
     //for test
     public void room_test() {
         room_info r1 = new room_info();
@@ -108,6 +109,7 @@ public class Join_Game implements ActionListener {
     	My_Name = playerName;
     	this.mainPanel = mainPanel;
     	this.joinGame = this;
+    	this.mainFrame = mainFrame;
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
@@ -171,7 +173,7 @@ public class Join_Game implements ActionListener {
             				}
             			}
                         RoomName = rn;
-                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat);
+                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
                         if (client.connect()) {
                             client.join(My_Name);
 
@@ -506,4 +508,10 @@ public class Join_Game implements ActionListener {
     public JButton getBackButton() {
     	return back;
     }
+
+	public void startDrawPhase() {
+		// TODO Auto-generated method stub
+		panel.setVisible(false);
+		this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client).GetPanel());
+	}
 }
