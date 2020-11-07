@@ -390,7 +390,7 @@ public class Join_Game implements ActionListener {
         // TODO: multiple servers
         FindGame client = new FindGame();
         room_info room = new room_info();
-        room.parseMessage(client.sendEcho("whoami"), panel);
+        room.parseMessage(client.pingServer(), panel);
         lobby_data_T.addElement(room.room_detail());
         gl.put(room.room_name, room);
         client.close();
