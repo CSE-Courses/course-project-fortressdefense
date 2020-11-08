@@ -168,12 +168,14 @@ public class Client {
 		                	joinGame.refresh_room_detail();
 		                	break;
 		                case Join:
+		                	Thread.sleep(1000);
 		                   	joinGame.refresh();
 		                	joinGame.refresh_room_detail();
 		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
 		                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
 		                	break;
 		                case Leave:
+		                	Thread.sleep(1000);
 		                   	joinGame.refresh();
 		                	joinGame.refresh_room_detail();
 		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
