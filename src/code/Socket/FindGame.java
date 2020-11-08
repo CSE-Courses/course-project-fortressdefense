@@ -32,11 +32,20 @@ public class FindGame {
 	 */
     public String pingServer() {
     	try {
+            sendBuf = "whoami".getBytes();
+            DatagramPacket packet = new DatagramPacket(sendBuf, sendBuf.length, InetAddress.getByName(getBroadcastAddress()), GameConstants.udpPort);
+            socket.send(packet);
+            socket.setSoTimeout(1000);
+            packet = new DatagramPacket(recieveBuf, recieveBuf.length);
+            socket.receive(packet);
+            String received = new String(packet.getData(), 0, packet.getLength(), "UTF-8");
+            return received.trim();
+            /*
     		// Send Bob's public E and N to Alice.
             byte[] bobE = encryption.getPublicKey().getE();
             byte[] bobN = encryption.getPublicKey().getN();
             byte[] bobNLength = new BigInteger(Integer.toString(bobN.length)).toByteArray();
-            
+
             // send BobE
             DatagramPacket packet = new DatagramPacket(bobE, bobE.length, InetAddress.getByName(getBroadcastAddress()), GameConstants.udpPort);
             socket.send(packet);
@@ -69,6 +78,7 @@ public class FindGame {
             socket.receive(packet);
             String received = new String(encryption.decrypt(packet.getData()));
             return received.trim();
+            */
     	}catch(IOException e) {
     		e.printStackTrace();
     	}

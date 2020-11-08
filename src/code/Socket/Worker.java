@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -65,6 +66,8 @@ public class Worker extends Thread{
                 	case Message:
                 		handleMessage(tokens);
                 		break;
+	                case Password:
+	                	break;
                 	default:
                 		break;
                 }
@@ -73,8 +76,32 @@ public class Worker extends Thread{
 
         clientSocket.close();
     }
+    
+    /**
+     * Creates mesage to send to client about room
+     * @return
+     */
+    private String createMessage() {
 
-    private void handleMessage(String[] tokens) {
+        try {
+        	Socket ip = new Socket();
+			ip.connect(new InetSocketAddress("google.com", 80));
+			String message = server.getModel().GetHostName() + "/" + ip.getLocalAddress().getHostAddress() + "/" + server.getModel().GetCurrentPlayers() + 
+					"/" + server.getModel().GetMaxPlayers() + "/" + server.getModel().GetAccessType();
+			for (int i = 0; i < server.getModel().getPlayers().size(); i++) {
+				message += "/" + server.getModel().getPlayers().get(i).PlayerName + "/" + server.getModel().getPlayers().get(i).getReady();
+			}
+			
+			return message;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return "";
+    }
+
+	private void handleMessage(String[] tokens) {
         try {
             ArrayList<Worker> workerList = server.getWorkerList();
 
@@ -96,6 +123,7 @@ public class Worker extends Thread{
 	private void handleReady(String[] tokens) {
 		player.setReady(!player.getReady());
 		server.getModel().UpdatePlayerTextFields();
+		
         // send other online users current user's status
         for(Worker worker : server.getWorkerList()) {
             if (worker.getUsername() != null) {
@@ -119,6 +147,14 @@ public class Worker extends Thread{
                 if (worker.getUsername() != null) {
                     if (!this.username.equals(worker.getUsername())) {
                     	worker.send(Command.Leave.toString() + " " + message);
+                    }
+                }
+            }
+            
+            for(Worker worker : server.getWorkerList()) {
+                if (worker.getUsername() != null) {
+                    if (!this.username.equals(worker.getUsername())) {
+                    	worker.send(Command.Refresh.toString() + " " + createMessage() + "\n");
                     }
                 }
             }
@@ -151,6 +187,16 @@ public class Worker extends Thread{
                 }
             }
             
+            for(Worker worker : server.getWorkerList()) {
+                if (worker.getUsername() != null) {
+                    if (!this.username.equals(worker.getUsername())) {
+                    	worker.send(Command.Refresh.toString() + " " + createMessage() + "\n");
+                    }
+                }
+            }       
+
+            this.send(Command.Refresh.toString() + " " + createMessage() + "\n");
+            
             server.getChat().setText(server.getChat().getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + message + "\n");
         }
 }
@@ -173,5 +219,4 @@ public class Worker extends Thread{
             }
         }
     }
-		
 }

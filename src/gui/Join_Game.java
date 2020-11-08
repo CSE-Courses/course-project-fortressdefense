@@ -167,7 +167,8 @@ public class Join_Game implements ActionListener {
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
            
             			if (gl.get(rn).getType() == AccessType.Private) {
-            				if (!gl.get(rn).getPassword().equals((String)JOptionPane.showInputDialog(panel, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE))) {
+            				String password = (String)JOptionPane.showInputDialog(panel, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
+            				if (!client.checkPassword(password)) {
             					JOptionPane.showMessageDialog(panel, "Invalid password to join " + rn + ".", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
             					return;
             				}
@@ -188,9 +189,7 @@ public class Join_Game implements ActionListener {
                     else{
                         feedback.setText("Fail to join. Room " + rn +" is full");
                     }
-                    get_room_detail(rn);
                 }
-                refresh();
             }
         });
 
@@ -390,7 +389,7 @@ public class Join_Game implements ActionListener {
         // TODO: multiple servers
         FindGame client = new FindGame();
         room_info room = new room_info();
-        room.parseMessage(client.pingServer(), panel);
+        room.parseMessage(client.pingServer(), this);
         lobby_data_T.addElement(room.room_detail());
         gl.put(room.room_name, room);
         client.close();
@@ -428,13 +427,16 @@ public class Join_Game implements ActionListener {
             for (Map.Entry<String, room_info> room : gl.entrySet()){
                 if (room.getKey().equals(room_name)){
                     if(gl.get(room_name).limit > gl.get(room_name).current_size() && gl.get(room_name).room_status.equals("Waiting")) {
-                        room.getValue().join(My_Name);
                         RoomName = room_name;
                         feedback.setText("You Entered " + room_name);
                         found = true;
-                        get_room_detail(RoomName);
-                        refresh();
-                        gl.get(RoomName).send_update();
+                        client = new Client(gl.get(room_name).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
+                        if (client.connect()) {
+                            client.join(My_Name);
+
+                            gl.get(room_name).join(My_Name);
+                            feedback.setText("You Entered " + RoomName);
+                        }
                         break;
                     }
                     else if(!gl.get(room_name).room_status.equals("Waiting")){
@@ -513,5 +515,27 @@ public class Join_Game implements ActionListener {
 		// TODO Auto-generated method stub
 		panel.setVisible(false);
 		this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client).GetPanel());
+	}
+	
+	public String getName() {
+		return My_Name;
+	}
+	
+	public Boolean getButtonToggled() {
+		return Ready_or_Cancel.getText().equals("Ready");
+	}
+
+	public void refreshTCP(String roomMessage) {
+		// Kludge multiple rooms with same name
+        for (int i = 0; i < lobby_data_T.getSize(); i++) {
+        	if (lobby_data_T.get(i).contains(RoomName)) {
+        		lobby_data_T.remove(i);
+        	}
+        }
+        
+        room_info room = new room_info();
+        room.parseMessageTCP(roomMessage, this);
+        lobby_data_T.addElement(room.room_detail());
+        gl.put(room.room_name, room);
 	}
 }

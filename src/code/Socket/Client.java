@@ -155,12 +155,12 @@ public class Client {
 		                	joinGame.getBackButton().doClick();
 		                	break;
 		                case Refresh:
-		                	joinGame.refresh();
+		                	joinGame.refreshTCP(String.join(" ", tokens).replaceAll(tokens[0], "").trim());
 		                	joinGame.refresh_room_detail();
 		                	break;
 		                case Ready:
 		                	if (joinGame.getRoom().getPlayer_status().get(String.join(" ", tokens).replaceAll(tokens[0], "").trim()).equals("Ready")){
-			                	joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'w');
+			                	joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'c');
 		                	}else {
 		                		joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'r');
 		                	}
@@ -168,16 +168,10 @@ public class Client {
 		                	joinGame.refresh_room_detail();
 		                	break;
 		                case Join:
-		                	Thread.sleep(1000);
-		                   	joinGame.refresh();
-		                	joinGame.refresh_room_detail();
 		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
 		                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
 		                	break;
 		                case Leave:
-		                	Thread.sleep(1000);
-		                   	joinGame.refresh();
-		                	joinGame.refresh_room_detail();
 		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
 				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
 		                	break;
@@ -214,6 +208,24 @@ public class Client {
     public String getName() {
     	return name;
     }
+
+	public boolean checkPassword(String password) {
+		try {
+			String cmd = Command.Password.toString() + "\n";
+			serverOut.write(cmd.getBytes());
+			
+			// get server public key
+			
+			// get write encrypted password to server
+			
+			// get server response checking password and return
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
     
 
     /*

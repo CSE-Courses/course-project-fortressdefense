@@ -7,6 +7,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import gui.Join_Game;
+
 /**
  * Author :Haohua Feng (Eddie)
  *
@@ -114,19 +116,22 @@ public class room_info {
      * arg2 = current players
      * arg3 = max players
      * arg4 = access
-     * arg5 = password (empty if access if public)
-     * arg6 = p1
-     * arg7 = p2 and so on
+     * arg5 = p1
+     * arg6 = p2 and so on
      */
-	public void parseMessage(String sendEcho, JPanel panel) {
+	public void parseMessage(String sendEcho, Join_Game joinGame) {
 		String[] args = sendEcho.split("/");
 		if (args.length > 1) {
 			this.address = args[1];
 			this.access = AccessType.valueOf(args[4]);
-			this.password = args[5];
-			this.create(args[6], Integer.parseInt(args[3]), args[0]);
-			for (int i = 7; i < args.length; i++) {
+			this.create(args[5], Integer.parseInt(args[3]), args[0]);
+			for (int i = 6; i < args.length; i++) {
 				this.join(args[i]);
+				if (args[i].equals(joinGame.getName())) {
+					if (!joinGame.getButtonToggled()) {
+						this.my_status(args[i], 'r');
+					}
+				}
 			}
 		}
 		
@@ -142,5 +147,33 @@ public class room_info {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+    /*
+     * arg0 = game name
+     * arg1 = server ip address
+     * arg2 = current players
+     * arg3 = max players
+     * arg4 = access
+     * arg5 = p1
+     * arg6 = p1 ready (always set to true, but waiting because they have to start game)
+     * arg7 = p2
+     * arg8 = p2 ready
+     */
+	public void parseMessageTCP(String roomMessage, Join_Game join_Game) {
+		// TODO Auto-generated method stub
+		String[] args = roomMessage.split("/");
+		if (args.length > 1) {
+			this.address = args[1];
+			this.access = AccessType.valueOf(args[4]);
+			this.create(args[5], Integer.parseInt(args[3]), args[0]);
+			for (int i = 7; i < args.length; i++) {
+				this.join(args[i]);
+				i++;
+				if (Boolean.parseBoolean(args[i])) {
+					this.my_status(args[i-1], 'r');
+				}
+			}
+		}
 	}
 }

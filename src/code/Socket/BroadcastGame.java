@@ -35,6 +35,16 @@ public class BroadcastGame implements Runnable  {
     	
     	try {
             while (running) {
+            	 DatagramPacket packet = new DatagramPacket(recieveBuf, recieveBuf.length);
+                 socket.receive(packet);
+                 packet = new DatagramPacket(recieveBuf, recieveBuf.length, packet.getAddress(), packet.getPort());
+
+                 String received = createMessage();
+                 
+                 sendBuf = received.getBytes();
+                 packet = new DatagramPacket(sendBuf, sendBuf.length, packet.getAddress(), packet.getPort());
+                 socket.send(packet);
+            	/*
             	// receive bobE
                 byte[] bobE = new byte[1];
                 DatagramPacket packet = new DatagramPacket(bobE, 1);
@@ -73,6 +83,7 @@ public class BroadcastGame implements Runnable  {
                 // send buffer
                 packet = new DatagramPacket(sendBuf, sendBuf.length, packet.getAddress(), packet.getPort());
                 socket.send(packet);
+                */
             }
     	}catch (IOException e) {
     		e.printStackTrace();
@@ -97,7 +108,7 @@ public class BroadcastGame implements Runnable  {
         	Socket ip = new Socket();
 			ip.connect(new InetSocketAddress("google.com", 80));
 			String message = model.GetHostName() + "/" + ip.getLocalAddress().getHostAddress() + "/" + model.GetCurrentPlayers() + 
-					"/" + model.GetMaxPlayers() + "/" + model.GetAccessType() + "/" + model.GetPassword();
+					"/" + model.GetMaxPlayers() + "/" + model.GetAccessType();
 			for (int i = 0; i < model.getPlayers().size(); i++) {
 				message += "/" + model.getPlayers().get(i).PlayerName;
 			}
