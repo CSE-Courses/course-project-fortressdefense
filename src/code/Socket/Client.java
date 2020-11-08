@@ -2,9 +2,12 @@ package code.Socket;
 
 import code.Command;
 import code.Player;
+import code.RSA;
+import code.RSA.PublicKey;
 import gui.Join_Game;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class Client {
     private BufferedReader bufferedIn;
     private Join_Game joinGame;
     private JTextArea chat;
+    private PublicKey serverKey;
+    private String roomName;
     
     
     public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
@@ -47,6 +52,7 @@ public class Client {
             this.serverOut = socket.getOutputStream();
             this.serverIn = socket.getInputStream();
             this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
+            startMessageReader();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,8 +69,6 @@ public class Client {
         try {
             String cmd = Command.Join.toString() + " " + playerName + "\n";
 			serverOut.write(cmd.getBytes());
-            
-			startMessageReader();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -182,6 +186,46 @@ public class Client {
 		                case Start:
 		                	joinGame.startDrawPhase();
 		                	break;
+		                case PublicKey:
+		                	String password = (String)JOptionPane.showInputDialog(null, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
+		                	String keyN = String.join(" ", tokens).replaceAll(tokens[0], "").replaceAll(tokens[1], "").substring(2);
+		                	while (bufferedIn.ready()) {
+		                		line = bufferedIn.readLine();
+		                		keyN += "\r\n" + line;
+		                	}
+		                	/*
+		                	System.out.println(new BigInteger(tokens[1].getBytes()).toString());
+		            		System.out.println(new BigInteger(keyN.getBytes()).toString());
+		            		System.out.println(keyN);
+		            		*/
+		            		byte[] test = new RSA().encrypt(password.getBytes(), new PublicKey(tokens[1].getBytes(), keyN.getBytes()));
+		        			String encryption = new String(test);
+		        			/*System.out.println(test);
+		        			System.out.println(encryption);*/
+		        			try {
+		        				String cmd = Command.Password.toString() +  " " + encryption + "\n";
+		        				serverOut.write(cmd.getBytes());
+		        			} catch (IOException e) {
+		        				// TODO Auto-generated catch block
+		        				e.printStackTrace();
+		        			}
+		                	break;
+		                case Password:
+		                	if (tokens.length > 1) {
+		                		if (Boolean.valueOf(tokens[1])) {
+	                                this.joinGame.getGL().get(this.roomName).join(this.name);
+	                                this.joinGame.setRoomName(this.roomName);
+	                                this.joinGame.getFeedback().setText("You Entered " + this.roomName);
+	                                this.join(this.name);
+		                		}else {
+			                		JOptionPane.showMessageDialog(null, "Invalid password.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		                			this.close();
+		                		}
+		                		
+		                	}else {
+		                		JOptionPane.showMessageDialog(null, "Invalid password.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		                	}
+		                	break;
                     	default:
                     		break;
                     }
@@ -209,22 +253,15 @@ public class Client {
     	return name;
     }
 
-	public boolean checkPassword(String password) {
+	public void getPublicKey(String roomName) {
 		try {
-			String cmd = Command.Password.toString() + "\n";
+			this.roomName = roomName;
+			String cmd = Command.PublicKey.toString() + "\n";
 			serverOut.write(cmd.getBytes());
-			
-			// get server public key
-			
-			// get write encrypted password to server
-			
-			// get server response checking password and return
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return false;
 	}
     
 

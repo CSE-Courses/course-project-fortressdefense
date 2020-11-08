@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
 
 import code.*;
+import code.RSA.PublicKey;
 
 public class Worker extends Thread{
 	private final Socket clientSocket;
@@ -67,7 +69,11 @@ public class Worker extends Thread{
                 		handleMessage(tokens);
                 		break;
 	                case Password:
+	                	handlePassword(tokens, command_from_client);
 	                	break;
+	                case PublicKey:
+	                	handleKey();
+ 	                	break;
                 	default:
                 		break;
                 }
@@ -77,8 +83,38 @@ public class Worker extends Thread{
         clientSocket.close();
     }
     
-    /**
-     * Creates mesage to send to client about room
+    private void handleKey() {
+		PublicKey key = server.getRSA().getPublicKey();
+		/*
+		System.out.println(new BigInteger(key.getE()).toString());
+		System.out.println(new BigInteger(key.getN()).toString());
+		System.out.println(new String(key.getN()));
+		*/
+		String message = Command.PublicKey.toString() + " " + new String(key.getE()) + " " + new String(key.getN()) + "\n";
+		this.username = "";
+		this.send(message);
+	}
+
+	private void handlePassword(String[] tokens, BufferedReader in) {
+		if (tokens.length > 1) {
+			try {
+				while (in.ready()) {
+					tokens[1] += "\r\n" + in.readLine();
+				}
+				String password = new String(server.getRSA().decrypt(tokens[1].getBytes()));
+				String message = Command.Password + " " + server.getModel().GetPassword().equals(password) + "\n";
+				this.send(message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+
+	/**
+     * Creates message to send to client about room
      * @return
      */
     private String createMessage() {

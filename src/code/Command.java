@@ -8,5 +8,6 @@ public enum Command {
 	Refresh,
 	Message,
 	Start,
-	Password
+	Password,
+	PublicKey,
 }

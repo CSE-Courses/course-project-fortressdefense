@@ -34,7 +34,6 @@ public class room_info {
     public Integer limit;
     public String room_status = "";
     private String address;
-    private String password;
     private AccessType access;
 
     public void create(String name, Integer lim, String rn){
@@ -143,10 +142,6 @@ public class room_info {
 	
 	public AccessType getType() {
 		return access;
-	}
-	
-	public String getPassword() {
-		return password;
 	}
 	
     /*

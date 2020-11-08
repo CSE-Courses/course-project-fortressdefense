@@ -167,11 +167,12 @@ public class Join_Game implements ActionListener {
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
            
             			if (gl.get(rn).getType() == AccessType.Private) {
-            				String password = (String)JOptionPane.showInputDialog(panel, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
-            				if (!client.checkPassword(password)) {
-            					JOptionPane.showMessageDialog(panel, "Invalid password to join " + rn + ".", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
-            					return;
-            				}
+
+                            client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
+                            if (client.connect()) {
+                            	client.getPublicKey(rn);
+                            }
+                            return;
             			}
                         RoomName = rn;
                         client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
@@ -427,9 +428,17 @@ public class Join_Game implements ActionListener {
             for (Map.Entry<String, room_info> room : gl.entrySet()){
                 if (room.getKey().equals(room_name)){
                     if(gl.get(room_name).limit > gl.get(room_name).current_size() && gl.get(room_name).room_status.equals("Waiting")) {
-                        RoomName = room_name;
-                        feedback.setText("You Entered " + room_name);
                         found = true;
+                    	if (gl.get(room_name).getType() == AccessType.Private) {
+
+                            client = new Client(gl.get(room_name).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
+                            if (client.connect()) {
+                            	client.getPublicKey(room_name);
+                            }
+                            return;
+            			}
+                    	RoomName = room_name;
+                        feedback.setText("You Entered " + room_name);
                         client = new Client(gl.get(room_name).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
                         if (client.connect()) {
                             client.join(My_Name);
@@ -537,5 +546,18 @@ public class Join_Game implements ActionListener {
         room.parseMessageTCP(roomMessage, this);
         lobby_data_T.addElement(room.room_detail());
         gl.put(room.room_name, room);
+	}
+
+	public HashMap<String, room_info> getGL() {
+		return gl;
+	}
+	
+	public JLabel getFeedback() {
+		return feedback;
+	}
+
+	public void setRoomName(String roomName2) {
+		// TODO Auto-generated method stub
+		RoomName = roomName2;
 	}
 }

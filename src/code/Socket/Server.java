@@ -18,6 +18,7 @@ public class Server implements Runnable{
     private Boolean ongoing;
     private ServerSocket serverSocket;
     private JTextArea chat;
+    private RSA encryption;
 
     private final int serverPort;
 
@@ -25,6 +26,7 @@ public class Server implements Runnable{
         this.serverPort = serverPort;
         this.model = model;
         this.chat = chat;
+        encryption = new RSA();
     }
 
     public ArrayList<Worker> getWorkerList() {
@@ -105,5 +107,9 @@ public class Server implements Runnable{
 	
 	public JTextArea getChat() {
 		return chat;
+	}
+	
+	public RSA getRSA() {
+		return encryption;
 	}
 }
