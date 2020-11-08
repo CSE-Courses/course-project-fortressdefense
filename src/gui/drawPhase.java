@@ -1,6 +1,7 @@
 package gui;
 import code.*;
 import code.Deck.*;
+import code.Socket.*;
 import code.card_class.AttackCard;
 import code.card_class.CardType;
 import code.card_class.DefenseCard;
@@ -66,6 +67,12 @@ public class drawPhase {
 			}
 		});
 	}
+	
+	//gets current health:
+			public int getHealth()
+			{
+				return newHealth;
+			}
 
 	/**
 	 * Create the application.
