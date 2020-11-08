@@ -1,6 +1,8 @@
 package gui;
 import code.*;
 import code.Deck.*;
+import code.Socket.Client;
+import code.Socket.Server;
 import code.card_class.AttackCard;
 import code.card_class.CardType;
 import code.card_class.DefenseCard;
@@ -62,6 +64,8 @@ public class drawPhaseOtherPlayer {
 	Timer tm;
 	int i = 30;
 	int numDots = 0;//used for waiting message
+	private Client client;
+	private Server gameServer;
 	
 	public JPanel GetPanel() {
 		return (JPanel) frame.getContentPane();
@@ -71,7 +75,7 @@ public class drawPhaseOtherPlayer {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					drawPhaseOtherPlayer window = new drawPhaseOtherPlayer();
+					drawPhaseOtherPlayer window = new drawPhaseOtherPlayer(null, null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -83,7 +87,9 @@ public class drawPhaseOtherPlayer {
 	/**
 	 * Create the application.
 	 */
-	public drawPhaseOtherPlayer() {
+	public drawPhaseOtherPlayer(Server server, Client client) {
+		this.gameServer = server;
+		this.client = client;
 		initialize();
 	}
 
@@ -195,7 +201,15 @@ public class drawPhaseOtherPlayer {
 		playerIcon.setBounds(710, 0, 100, 100);
 		frame.getContentPane().add(playerIcon);
 		
-		JLabel lblName = new JLabel("<dynamic>'s Turn");
+		JLabel lblName;
+		// Kludge: server should send turn name
+		if (client != null) {
+			lblName = new JLabel(client.getName() + "'s Turn");
+		}else if (gameServer != null) {
+			lblName = new JLabel(gameServer.getModel().getPlayers().get(0).PlayerName + "'s Turn");
+		}else {
+			lblName = new JLabel("<Dynamic>'s Turn");
+		}
 		lblName.setForeground(Color.RED);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblName.setBorder(UIManager.getBorder("InternalFrame.border"));

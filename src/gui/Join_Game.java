@@ -59,7 +59,8 @@ public class Join_Game implements ActionListener {
     private Client client;
     private JPanel mainPanel;
     private Join_Game joinGame; // used for passing into button handler;
-
+    private JFrame mainFrame;
+    
     //for test
     public void room_test() {
         room_info r1 = new room_info();
@@ -103,11 +104,12 @@ public class Join_Game implements ActionListener {
         }
     }
 
-    public Join_Game(String playerName, JPanel mainPanel) throws IOException {
+    public Join_Game(String playerName, JPanel mainPanel, JFrame mainFrame) throws IOException {
         //room_test();
     	My_Name = playerName;
     	this.mainPanel = mainPanel;
     	this.joinGame = this;
+    	this.mainFrame = mainFrame;
         frame = new JFrame();
         panel = new JPanel();
         frame.setTitle("FORTRESS DEFENSE / Join Game");
@@ -157,19 +159,23 @@ public class Join_Game implements ActionListener {
 
                     if(!RoomName.equals(" ")) {
                         gl.get(RoomName).left(My_Name);
+                        chat_log = "";
+                        chat.setText("");
                         client.leave();
                         client.close();
                     }
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
            
             			if (gl.get(rn).getType() == AccessType.Private) {
-            				if (!gl.get(rn).getPassword().equals((String)JOptionPane.showInputDialog(panel, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE))) {
-            					JOptionPane.showMessageDialog(panel, "Invalid password to join " + rn + ".", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
-            					return;
-            				}
+
+                            client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
+                            if (client.connect()) {
+                            	client.getPublicKey(rn);
+                            }
+                            return;
             			}
                         RoomName = rn;
-                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame);
+                        client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
                         if (client.connect()) {
                             client.join(My_Name);
 
@@ -184,9 +190,7 @@ public class Join_Game implements ActionListener {
                     else{
                         feedback.setText("Fail to join. Room " + rn +" is full");
                     }
-                    get_room_detail(rn);
                 }
-                refresh();
             }
         });
 
@@ -283,6 +287,16 @@ public class Join_Game implements ActionListener {
                 chooseCharacter();
             }
         });
+        
+		mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	if (client != null) {
+			    	client.leave();
+			    	client.close();
+		    	}
+		    }
+		});
 
     }
 
@@ -364,7 +378,7 @@ public class Join_Game implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        Join_Game joinGame = new Join_Game("Haohua Feng", null);
+        Join_Game joinGame = new Join_Game("Haohua Feng", null, null);
         joinGame.frame.setVisible(true);
         
     }
@@ -376,7 +390,7 @@ public class Join_Game implements ActionListener {
         // TODO: multiple servers
         FindGame client = new FindGame();
         room_info room = new room_info();
-        room.parseMessage(client.sendEcho("whoami"), panel);
+        room.parseMessage(client.pingServer(), this);
         lobby_data_T.addElement(room.room_detail());
         gl.put(room.room_name, room);
         client.close();
@@ -402,8 +416,6 @@ public class Join_Game implements ActionListener {
 
         if (e.getSource().equals(refresh_button)){
             refresh();
-            chat_log = "";
-            chat.setText("");
             System.out.println("Refresh Button Clicked, reload game list");
         }
 
@@ -416,13 +428,24 @@ public class Join_Game implements ActionListener {
             for (Map.Entry<String, room_info> room : gl.entrySet()){
                 if (room.getKey().equals(room_name)){
                     if(gl.get(room_name).limit > gl.get(room_name).current_size() && gl.get(room_name).room_status.equals("Waiting")) {
-                        room.getValue().join(My_Name);
-                        RoomName = room_name;
-                        feedback.setText("You Entered " + room_name);
                         found = true;
-                        get_room_detail(RoomName);
-                        refresh();
-                        gl.get(RoomName).send_update();
+                    	if (gl.get(room_name).getType() == AccessType.Private) {
+
+                            client = new Client(gl.get(room_name).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
+                            if (client.connect()) {
+                            	client.getPublicKey(room_name);
+                            }
+                            return;
+            			}
+                    	RoomName = room_name;
+                        feedback.setText("You Entered " + room_name);
+                        client = new Client(gl.get(room_name).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
+                        if (client.connect()) {
+                            client.join(My_Name);
+
+                            gl.get(room_name).join(My_Name);
+                            feedback.setText("You Entered " + RoomName);
+                        }
                         break;
                     }
                     else if(!gl.get(room_name).room_status.equals("Waiting")){
@@ -445,13 +468,13 @@ public class Join_Game implements ActionListener {
                 Ready_or_Cancel.setBackground(new Color(255,0,0));
                 // Kludge, should probably pull from server
                 gl.get(RoomName).my_status(My_Name, 'r');
-                client.ready(My_Name);
+                client.ready();
             }
             else if(gl.get(RoomName).getPlayer_status().get(My_Name).equals("Ready")){
                 Ready_or_Cancel.setText("Ready");
                 Ready_or_Cancel.setBackground(new Color(0,255,0));
                 gl.get(RoomName).my_status(My_Name, 'c');
-                client.ready(My_Name);
+                client.ready();
             }
             get_room_detail(RoomName);
             System.out.println("Set to " + gl.get(RoomName).getPlayer_status().get(My_Name));
@@ -461,17 +484,23 @@ public class Join_Game implements ActionListener {
         else if (e.getSource().equals(send)) {
             String input = unsend.getText();
             if (!input.equals("")) {
-                Time time = new Time(System.currentTimeMillis());
-                chat_log = chat_log + "" + time + "\n" + My_Name +": " + input + "\n\n";
-                chat.setText(chat_log);
+            	if (client != null) {
+                    client.message(My_Name, input);
+                    System.out.println("Send Message");
+            	}else {
+            		JOptionPane.showMessageDialog(getPanel(), "A user can only send a message if connected to a game", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+            	}
+            	
                 unsend.setText("");
-                System.out.println("Send Message");
+
             }
         }
         else if (e.getSource().equals(back)){
             System.out.println("You clicked on Go Back button, back to main menu");
             if (!RoomName.equals(" ")) {
                 gl.get(RoomName).left(My_Name);
+                chat_log = "";
+                chat.setText("");
                 client.leave();
                 client.close();
                 RoomName = " ";
@@ -490,4 +519,45 @@ public class Join_Game implements ActionListener {
     public JButton getBackButton() {
     	return back;
     }
+
+	public void startDrawPhase() {
+		// TODO Auto-generated method stub
+		panel.setVisible(false);
+		this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client).GetPanel());
+	}
+	
+	public String getName() {
+		return My_Name;
+	}
+	
+	public Boolean getButtonToggled() {
+		return Ready_or_Cancel.getText().equals("Ready");
+	}
+
+	public void refreshTCP(String roomMessage) {
+		// Kludge multiple rooms with same name
+        for (int i = 0; i < lobby_data_T.getSize(); i++) {
+        	if (lobby_data_T.get(i).contains(RoomName)) {
+        		lobby_data_T.remove(i);
+        	}
+        }
+        
+        room_info room = new room_info();
+        room.parseMessageTCP(roomMessage, this);
+        lobby_data_T.addElement(room.room_detail());
+        gl.put(room.room_name, room);
+	}
+
+	public HashMap<String, room_info> getGL() {
+		return gl;
+	}
+	
+	public JLabel getFeedback() {
+		return feedback;
+	}
+
+	public void setRoomName(String roomName2) {
+		// TODO Auto-generated method stub
+		RoomName = roomName2;
+	}
 }

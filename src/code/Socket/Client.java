@@ -2,27 +2,25 @@ package code.Socket;
 
 import code.Command;
 import code.Player;
+import code.RSA;
+import code.RSA.PublicKey;
 import gui.Join_Game;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.Socket;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Client {
-    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    private static ObjectOutputStream output = null;
-    private static ObjectInputStream input = null;
-    private static InputStreamReader command_from_server = null;
-    private static BufferedReader server_command = null;
-    private static OutputStreamWriter command_to_server = null;
-    private static BufferedWriter client_command = null;
-    private static String player_name = "";
-    private static String command = null;
+    private String name;
     private final String serverName;
     private final int serverPort;
     private Socket socket;
@@ -30,12 +28,17 @@ public class Client {
     private OutputStream serverOut;
     private BufferedReader bufferedIn;
     private Join_Game joinGame;
+    private JTextArea chat;
+    private PublicKey serverKey;
+    private String roomName;
     
     
-    public Client(String serverName, int serverPort, Join_Game joinGame) {
+    public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
         this.serverName = serverName;
         this.serverPort = serverPort;
         this.joinGame = joinGame;
+        this.chat = chat;
+        this.name = name;
     }
     
     /**
@@ -49,6 +52,7 @@ public class Client {
             this.serverOut = socket.getOutputStream();
             this.serverIn = socket.getInputStream();
             this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
+            startMessageReader();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,8 +69,6 @@ public class Client {
         try {
             String cmd = Command.Join.toString() + " " + playerName + "\n";
 			serverOut.write(cmd.getBytes());
-            
-			startMessageReader();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,9 +80,9 @@ public class Client {
      * @param playerName
      * @author Hoahua Feng, Andrew Jank
      */
-    public void ready(String playerName) {
+    public void ready() {
         try {
-            String cmd = Command.Ready.toString() + " " + playerName + "\n";
+            String cmd = Command.Ready.toString() + "\n";
 			serverOut.write(cmd.getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -96,6 +98,7 @@ public class Client {
         try {
             String cmd = Command.Leave.toString() + "\n";
 			serverOut.write(cmd.getBytes());
+			chat.setText("");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,6 +116,16 @@ public class Client {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+    }
+    
+    public void message(String playerName, String msg) {
+		try {
+			String cmd = Command.Message.toString() + " " + playerName + ": " + msg + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -146,17 +159,72 @@ public class Client {
 		                	joinGame.getBackButton().doClick();
 		                	break;
 		                case Refresh:
-		                	joinGame.refresh();
+		                	joinGame.refreshTCP(String.join(" ", tokens).replaceAll(tokens[0], "").trim());
 		                	joinGame.refresh_room_detail();
 		                	break;
 		                case Ready:
 		                	if (joinGame.getRoom().getPlayer_status().get(String.join(" ", tokens).replaceAll(tokens[0], "").trim()).equals("Ready")){
-			                	joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'w');
+			                	joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'c');
 		                	}else {
 		                		joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'r');
 		                	}
 	
 		                	joinGame.refresh_room_detail();
+		                	break;
+		                case Join:
+		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
+		                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
+		                	break;
+		                case Leave:
+		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + 
+				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
+		                	break;
+		                case Message:
+		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + 
+				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
+		                	break;
+		                case Start:
+		                	joinGame.startDrawPhase();
+		                	break;
+		                case PublicKey:
+		                	String password = (String)JOptionPane.showInputDialog(null, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
+		                	String keyN = String.join(" ", tokens).replaceAll(tokens[0], "").replaceAll(tokens[1], "").substring(2);
+		                	while (bufferedIn.ready()) {
+		                		line = bufferedIn.readLine();
+		                		keyN += "\r\n" + line;
+		                	}
+		                	/*
+		                	System.out.println(new BigInteger(tokens[1].getBytes()).toString());
+		            		System.out.println(new BigInteger(keyN.getBytes()).toString());
+		            		System.out.println(keyN);
+		            		*/
+		            		byte[] test = new RSA().encrypt(password.getBytes(), new PublicKey(tokens[1].getBytes(), keyN.getBytes()));
+		        			String encryption = new String(test);
+		        			/*System.out.println(test);
+		        			System.out.println(encryption);*/
+		        			try {
+		        				String cmd = Command.Password.toString() +  " " + encryption + "\n";
+		        				serverOut.write(cmd.getBytes());
+		        			} catch (IOException e) {
+		        				// TODO Auto-generated catch block
+		        				e.printStackTrace();
+		        			}
+		                	break;
+		                case Password:
+		                	if (tokens.length > 1) {
+		                		if (Boolean.valueOf(tokens[1])) {
+	                                this.joinGame.getGL().get(this.roomName).join(this.name);
+	                                this.joinGame.setRoomName(this.roomName);
+	                                this.joinGame.getFeedback().setText("You Entered " + this.roomName);
+	                                this.join(this.name);
+		                		}else {
+			                		JOptionPane.showMessageDialog(null, "Invalid password.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		                			this.close();
+		                		}
+		                		
+		                	}else {
+		                		JOptionPane.showMessageDialog(null, "Invalid password.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		                	}
 		                	break;
                     	default:
                     		break;
@@ -172,6 +240,29 @@ public class Client {
             }
         }
     }
+    
+    public JTextArea getChat() {
+    	return chat;
+    }
+    
+    public void setChat(JTextArea chatBox) {
+    	chat = chatBox;
+    }
+    
+    public String getName() {
+    	return name;
+    }
+
+	public void getPublicKey(String roomName) {
+		try {
+			this.roomName = roomName;
+			String cmd = Command.PublicKey.toString() + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
     
 
     /*

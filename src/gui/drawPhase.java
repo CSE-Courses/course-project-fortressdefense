@@ -1,6 +1,8 @@
 package gui;
 import code.*;
 import code.Deck.*;
+import code.Socket.Client;
+import code.Socket.Server;
 import code.card_class.AttackCard;
 import code.card_class.CardType;
 import code.card_class.DefenseCard;
@@ -53,12 +55,14 @@ public class drawPhase {
 	int newHealth = 0;//updates healthpoints
 	
 	private JFrame mainFrame;
+	private Server gameServer; // null is game is not host
+	private Client client; // null if game is host
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					drawPhase window = new drawPhase(new code.Game(), frmFortressDefense);
+					drawPhase window = new drawPhase(frmFortressDefense, null, null);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,8 +74,11 @@ public class drawPhase {
 	/**
 	 * Create the application.
 	 */
-	public drawPhase(code.Game phase, JFrame mainFrame) {
-		turn = phase;
+	public drawPhase(JFrame mainFrame, Server gameServer, Client client) {
+		turn = gameServer.getModel().getGame();
+		this.mainFrame = mainFrame;
+		this.client = client;
+		this.gameServer = gameServer;
 		if (turn.PlayerList.size() == 0) {
 			turn.PlayerList.add(new Player("Test Player"));
 		}
@@ -194,9 +201,8 @@ public class drawPhase {
 				if(i == -1)
 				{
 					tm.stop();
-					mainFrame.add(new drawPhaseOtherPlayer().GetPanel());
+					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null).GetPanel());
 					GetPanel().setVisible(false);
-					System.exit(0);
 					
 				}
 				lblTimer.setText(Integer.toString(i));

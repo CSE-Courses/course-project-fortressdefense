@@ -8,19 +8,18 @@ import javax.swing.*;
 
 import code.Game;
 import code.ServerModel;
+import code.Socket.Client;
 import code.Player;
 import gui.drawPhase;
 
 public class SendButtonHandler implements ActionListener {
 
 	private JTextField _message;
-	private JTextArea _chat;
-	private String _host;
+	private StartServerButtonHandler startBtnHandler;
 	
-	public SendButtonHandler(JTextField message, JTextArea chat, String host) {
+	public SendButtonHandler(JTextField message, StartServerButtonHandler btnhandler) {
 		_message = message;
-		_chat = chat;
-		_host = host;
+		this.startBtnHandler = btnhandler;
 
 	}
 	
@@ -28,8 +27,7 @@ public class SendButtonHandler implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String input = _message.getText();
         if (!input.equals("")) {
-            Time time = new Time(System.currentTimeMillis());
-            _chat.setText(_chat.getText() + time + "\n" + _host +": " + input + "\n\n");
+            startBtnHandler.getTCPServer().message(input);
             _message.setText("");
         }
 
