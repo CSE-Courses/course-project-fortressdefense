@@ -178,7 +178,7 @@ public class drawPhaseOtherPlayer {
 		healthBar.setBackground(Color.DARK_GRAY);
 		healthBar.setBounds(273, 185, 508, 46);
 		frame.getContentPane().add(healthBar);
-		healthBar.setValue(gui.drawPhase.this.getHealth()););
+		healthBar.setValue(gui.drawPhase.this.getHealth());
 		
 		JLabel lblMsgBox = new JLabel("");
 		lblMsgBox.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
