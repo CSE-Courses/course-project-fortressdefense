@@ -142,6 +142,7 @@ public class Client {
         t.start();
     }
     
+    private int health;
     /**
      * reads all messages from server
      * @author Hoahua Feng, Andrew Jank
@@ -184,6 +185,7 @@ public class Client {
 				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
 		                	break;
 		                case Start:
+		                	health = Integer.parseInt(tokens[1]);
 		                	joinGame.startDrawPhase();
 		                	break;
 		                case PublicKey:
@@ -239,6 +241,11 @@ public class Client {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public int getHealth()
+    {
+    	return health;
     }
     
     public JTextArea getChat() {

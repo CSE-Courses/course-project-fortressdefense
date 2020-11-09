@@ -1,9 +1,10 @@
 package gui;
 import code.*;
 import code.Deck.*;
-import code.Socket.Client;
-import code.Socket.Server;
+import code.Socket.*;
+
 import code.card_class.AttackCard;
+import code.card_class.Card;
 import code.card_class.CardType;
 import code.card_class.DefenseCard;
 import code.card_class.SpecialCard;
@@ -54,6 +55,8 @@ public class drawPhase {
 	int numD = 0;//number of defense cards
 	int newHealth = 0;//updates healthpoints
 	
+	private Card selected;
+	
 	private JFrame mainFrame;
 	private Server gameServer; // null is game is not host
 	private Client client; // null if game is host
@@ -70,6 +73,12 @@ public class drawPhase {
 			}
 		});
 	}
+	
+	//gets current health:
+			public int getHealth()
+			{
+				return newHealth;
+			}
 
 	/**
 	 * Create the application.
@@ -189,6 +198,8 @@ public class drawPhase {
 		cardPanel.add(lblCard8);
 		
 		
+		
+		
 		JLabel lblTimer = new JLabel("30");
 		lblTimer.setFont(new Font("Sitka Subheading", Font.PLAIN, 36));
 		lblTimer.setBounds(407, 71, 67, 46);
@@ -201,7 +212,7 @@ public class drawPhase {
 				if(i == -1)
 				{
 					tm.stop();
-					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null).GetPanel());
+					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null, hand).GetPanel());
 					GetPanel().setVisible(false);
 					
 				}
@@ -269,6 +280,19 @@ public class drawPhase {
 		Image archerTowerImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/archerTower.PNG")).getImage();
 		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.PNG")).getImage();
 		Image tradeImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/trade.PNG")).getImage();
+		
+		if(gameServer != null)
+		{
+			healthBar.setValue(gameServer.getModel().getPlayers().get(0).points);
+			lblBar.setText("HEALTHPOINTS: " + gameServer.getModel().getPlayers().get(0).points);
+		}
+		else if(client != null)
+		{
+			healthBar.setValue(client.getHealth());
+			lblBar.setText("HEALTHPOINTS: " + client.getHealth());
+		}
+		
+		
 		
 		JButton btnCard1 = new JButton("");
 		btnCard1.setVisible(false);
@@ -404,6 +428,7 @@ public class drawPhase {
 				lblCard6.setVisible(false);
 				lblCard7.setVisible(false);
 				lblCard8.setVisible(true);
+				
 				lblSelected.setText("");
 			}
 		});
@@ -474,47 +499,57 @@ public class drawPhase {
 		btnPass.setBounds(20, 306, 187, 68);
 		frmFortressDefense.getContentPane().add(btnPass);
 		
+		
+		
 		JButton btnDiscard = new JButton("DISCARD");
 		btnDiscard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(lblCard1.isVisible())
 				{
+					selected = hand.Select(0);
 					lblSelected.setText("<html> Discard " + hand.Select(0).getCard_name() + " selected </html>");
+					
 					lblMsgBox.setText("<html> Click GO! to discard  " + hand.Select(0).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard2.isVisible())
 				{
+					selected = hand.Select(1);
 					lblSelected.setText("<html> Discard " + hand.Select(1).getCard_name() + " selected </html>");
 					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(1).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard3.isVisible())
 				{
+					selected = hand.Select(2);
 					lblSelected.setText("<html> Discard " + hand.Select(2).getCard_name() + " selected </html>");
 					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(2).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard4.isVisible())
 				{
+					selected = hand.Select(3);
 					lblSelected.setText("<html> Discard " + hand.Select(3).getCard_name() + " selected </html>");
 					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(3).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard5.isVisible())
 				{
+					selected = hand.Select(4);
 					lblSelected.setText("<html> Discard " + hand.Select(4).getCard_name() + " selected </html>");
 					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(4).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard6.isVisible())
 				{
+					selected = hand.Select(5);
 					lblSelected.setText("<html> Discard " + hand.Select(5).getCard_name() + " selected </html>");
 					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(5).getCard_name() + " </html>");
 					discard = true;
 				}
 				else if(lblCard7.isVisible())
 				{
+					selected = hand.Select(6);
 					lblSelected.setText("<html> Discard " + hand.Select(6).getCard_name() + " selected </html>");
 					lblMsgBox.setText("<html> Click GO! to discard " + hand.Select(6).getCard_name() + " </html>");
 					discard = true;
@@ -728,40 +763,511 @@ public class drawPhase {
 					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
 				}
 				else if(discard)
-				{
+				{	
+					hand.Remove(selected);
+					if(selected.getType() == CardType.Defense)
+					{
+						newHealth = newHealth - selected.getDamage();
+					}
 					if(lblCard1.isVisible())
 					{
+						
+						if(btnCard1.getIcon() == axeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Axe)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == battleAxeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Battle_Axe)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == crossbowImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Crossbow)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == maceImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Mace)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == stickImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Stick)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == swordImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Sword)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == barbedWireImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Barbed_Wire)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == ironDoorImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Iron_Door)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == reinforcedGateImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Reinforced_Gate)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == steelChainsImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Steel_Chains)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == stoneWallImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Stone_Wall)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == woodenWallImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Wooden_Wall)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == earthquakeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Earthquake)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == floodImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Flood)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == thunderstormImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Thunderstorm)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == tornadoImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Tornado)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == archerTowerImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == SpecialCard.Archer_Tower)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == scoutImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == SpecialCard.Scout)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard1.getIcon() == tradeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == SpecialCard.Trade)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
 						lblCard1.setVisible(false);
 						btnCard1.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(0).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(0).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(0).getDamage();
-							
+						JOptionPane.showMessageDialog(null, "<html> The " + selected.getCard_name() + " card has been discarded </html>");
 							//updates the health bar based on card discarded
 							healthBar.setValue(newHealth);
 							
 							//updates the healthpoints
 							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
-						//System.exit(0);
 					}
 					else if(lblCard2.isVisible())
 					{
+						if(btnCard2.getIcon() == axeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Axe)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == battleAxeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Battle_Axe)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == crossbowImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Crossbow)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == maceImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Mace)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == stickImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Stick)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == swordImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == AttackCard.Sword)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == barbedWireImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Barbed_Wire)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == ironDoorImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Iron_Door)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == reinforcedGateImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Reinforced_Gate)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == steelChainsImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Steel_Chains)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == stoneWallImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Stone_Wall)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == woodenWallImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Wooden_Wall)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == earthquakeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Earthquake)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == floodImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Flood)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == thunderstormImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Thunderstorm)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == tornadoImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == DefenseCard.Tornado)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+									newHealth = newHealth - hand.Select(i).getDamage();
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == archerTowerImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == SpecialCard.Archer_Tower)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == scoutImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == SpecialCard.Scout)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
+						else if(btnCard2.getIcon() == tradeImg)
+						{
+							boolean removed = false;
+							for(int i = 0; i < hand.Size() || removed == false; i++)
+							{
+								if(hand.Select(i).getCard_name() == SpecialCard.Trade)
+								{
+									hand.Remove(hand.Select(i));
+									removed = true;
+								}
+							}
+						}
 						lblCard2.setVisible(false);
 						btnCard2.setVisible(false);
 						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(1).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(1).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(1).getDamage();
 							
 							//updates the health bar based on card discarded
 							healthBar.setValue(newHealth);
 							
 							//updates the healthpoints
 							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
-						//System.exit(0);
 					}
 					else if(lblCard3.isVisible())
 					{
@@ -770,6 +1276,7 @@ public class drawPhase {
 						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(2).getCard_name() + " card has been discarded </html>");
 						if(hand.Select(2).getType() == CardType.Defense)
 						{
+							hand.Remove(hand.Select(2));
 							newHealth = newHealth - hand.Select(2).getDamage();
 							
 							//updates the health bar based on card discarded
@@ -787,6 +1294,7 @@ public class drawPhase {
 						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(3).getCard_name() + " card has been discarded </html>");
 						if(hand.Select(3).getType() == CardType.Defense)
 						{
+							hand.Remove(hand.Select(3));
 							newHealth = newHealth - hand.Select(3).getDamage();
 							
 							//updates the health bar based on card discarded
@@ -804,6 +1312,7 @@ public class drawPhase {
 						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(4).getCard_name() + " card has been discarded </html>");
 						if(hand.Select(4).getType() == CardType.Defense)
 						{
+							hand.Remove(hand.Select(4));
 							newHealth = newHealth - hand.Select(4).getDamage();
 							
 							//updates the health bar based on card discarded
@@ -821,6 +1330,7 @@ public class drawPhase {
 						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(5).getCard_name() + " card has been discarded </html>");
 						if(hand.Select(5).getType() == CardType.Defense)
 						{
+							hand.Remove(hand.Select(5));
 							newHealth = newHealth - hand.Select(5).getDamage();
 							
 							//updates the health bar based on card discarded
@@ -838,6 +1348,7 @@ public class drawPhase {
 						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(6).getCard_name() + " card has been discarded </html>");
 						if(hand.Select(6).getType() == CardType.Defense)
 						{
+							hand.Remove(hand.Select(6));
 							newHealth = newHealth - hand.Select(6).getDamage();
 							
 							//updates the health bar based on card discarded

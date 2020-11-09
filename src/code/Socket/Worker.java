@@ -237,6 +237,11 @@ public class Worker extends Thread{
         }
 }
 	
+    public int getHealth()
+    {
+    	return player.points;
+    }
+    
 	private String getUsername() {
 		return username;
 	}

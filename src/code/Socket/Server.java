@@ -97,7 +97,7 @@ public class Server implements Runnable{
 	
 	public void start() {
        for(Worker worker : clientList) {
-            worker.send(Command.Start.toString() + "\n");
+    	   worker.send(Command.Start.toString() + " " + worker.getHealth() + "\n");
         }
 	}
 	
