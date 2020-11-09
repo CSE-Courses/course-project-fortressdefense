@@ -6,11 +6,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class Send implements Runnable{
+public class Chat_Send implements Runnable{
     private DataOutputStream os;
     private BufferedReader reader;
     private boolean status = true;
-    private String msg;
 
     @Override
     public void run() {
@@ -19,7 +18,7 @@ public class Send implements Runnable{
         }
     }
 
-    public Send(Socket client,String name) {
+    public Chat_Send(Socket client, String name) {
         try {
             os = new DataOutputStream(client.getOutputStream());
             reader = new BufferedReader(new InputStreamReader(System.in));
