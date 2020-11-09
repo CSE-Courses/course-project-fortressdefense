@@ -7,19 +7,19 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 
-public class Server {
+public class Server_Game_Phase_Chat {
     private final HashSet<Client> clients;
 
     public static void main(String[] args) {
-        Server server = new Server();
+        Server_Game_Phase_Chat serverGamePhase = new Server_Game_Phase_Chat();
         try {
-            server.start();
+            serverGamePhase.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Server() {
+    public Server_Game_Phase_Chat() {
         clients = new HashSet<>();
     }
 

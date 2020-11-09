@@ -25,6 +25,10 @@ public class MainMenu {
 	    }
 	    
 	    ImageIcon cardImage = new ImageIcon(imgURL);    
+        Image image = cardImage.getImage();
+        Image newimg = image.getScaledInstance(500, 350,  java.awt.Image.SCALE_SMOOTH);  
+        cardImage = new ImageIcon(newimg);
+        
 	    label.setIcon(cardImage);
 	    Dimension d = new Dimension(cardImage.getIconWidth() + 10, cardImage.getIconHeight() + 10);
 	    label.setSize(d);
@@ -38,7 +42,6 @@ public class MainMenu {
 		JFrame frame = new JFrame("FORTRESS DEFENSE");
 
 		Color c1 = new Color(153, 102, 0);
-		//Color c2 = new Color(0, 0, 153);
     
 		JPanel panel = new JPanel();
 
@@ -46,7 +49,6 @@ public class MainMenu {
 		logo.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(logo);
 
-	    
 	    JButton cgb = new JButton("Create Game");
 	    cgb.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    cgb.setSize(new Dimension(150, 75));

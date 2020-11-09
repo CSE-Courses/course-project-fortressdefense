@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Receive implements Runnable{
+public class Chat_Receive implements Runnable{
     private DataInputStream is;
     private boolean status=true;
 
@@ -15,7 +15,7 @@ public class Receive implements Runnable{
         }
     }
 
-    public Receive(Socket client) {
+    public Chat_Receive(Socket client) {
         try {
             is = new DataInputStream(client.getInputStream());
         } catch (IOException e) {
@@ -27,7 +27,7 @@ public class Receive implements Runnable{
     public void receive() {
         String msg=null;
         try {
-            msg=is.readUTF();
+            msg = is.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
             status = false;
