@@ -1,6 +1,7 @@
 package gui;
 import code.AccessType;
 import code.GameConstants;
+import code.Hand;
 import code.room_info;
 import code.Socket.Client;
 import code.Socket.FindGame;
@@ -523,7 +524,7 @@ public class Join_Game implements ActionListener {
 	public void startDrawPhase() {
 		// TODO Auto-generated method stub
 		panel.setVisible(false);
-		this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client).GetPanel());
+		this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client, new Hand()).GetPanel());
 	}
 	
 	public String getName() {
