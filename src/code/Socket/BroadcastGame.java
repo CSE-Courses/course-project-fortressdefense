@@ -1,17 +1,23 @@
 package code.Socket;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.*;
+import java.nio.ByteBuffer;
 
+import code.RSA;
+import code.RSA.PublicKey;
 import code.ServerModel;
 
 public class BroadcastGame implements Runnable  {
 	private ServerModel model;
     private DatagramSocket socket;
+    private final RSA encryption;
     private boolean running;
-    private byte[] sendBuf = new byte[256];
-    private byte[] recieveBuf = new byte[256];
+    private byte[] sendBuf = new byte[128];
+    private byte[] recieveBuf = new byte[128];
 	public BroadcastGame(int serverPort, ServerModel serverModel) {
+		encryption = new RSA();
         try {
 			socket = new DatagramSocket(serverPort);
 			model = serverModel;
@@ -29,22 +35,55 @@ public class BroadcastGame implements Runnable  {
     	
     	try {
             while (running) {
-                DatagramPacket packet = new DatagramPacket(recieveBuf, recieveBuf.length);
+            	 DatagramPacket packet = new DatagramPacket(recieveBuf, recieveBuf.length);
+                 socket.receive(packet);
+                 packet = new DatagramPacket(recieveBuf, recieveBuf.length, packet.getAddress(), packet.getPort());
+
+                 String received = createMessage();
+                 
+                 sendBuf = received.getBytes();
+                 packet = new DatagramPacket(sendBuf, sendBuf.length, packet.getAddress(), packet.getPort());
+                 socket.send(packet);
+            	/*
+            	// receive bobE
+                byte[] bobE = new byte[1];
+                DatagramPacket packet = new DatagramPacket(bobE, 1);
                 socket.receive(packet);
-                packet = new DatagramPacket(recieveBuf, recieveBuf.length, packet.getAddress(), packet.getPort());
-
-                String received = new String(packet.getData(), 0, packet.getLength(), "UTF-8");
-
-                if (received.equals("end")) {
-                    running = false;
-                    continue;
-                }else if (received.contains("whoami")) {
-                	received = createMessage();
-                }
+                packet = new DatagramPacket(bobE, 1, packet.getAddress(), packet.getPort());
+                bobE = packet.getData();
                 
-                sendBuf = received.getBytes();
+                // receive bobN length
+                byte[] length = new byte[2];
+            	packet = new DatagramPacket(length, 2);
+                socket.receive(packet);
+                packet = new DatagramPacket(length, 2, packet.getAddress(), packet.getPort());
+                length = packet.getData();
+                
+                // receive bobN
+                byte[] bobN = new byte[Integer.parseInt(new BigInteger(length).toString())];
+                packet = new DatagramPacket(bobN, bobN.length);
+                socket.receive(packet);
+                packet = new DatagramPacket(bobN, bobN.length, packet.getAddress(), packet.getPort());
+                bobN = packet.getData();
+                
+                PublicKey bobPublicKey = new PublicKey(bobE, bobN);
+                
+            	sendBuf = encryption.encrypt(createMessage().getBytes(), bobPublicKey);
+            	
+            	// send length of send length
+            	byte[] sendLength = new BigInteger(Integer.toString(sendBuf.length)).toByteArray();
+            	byte[] lengthOfSendLength = new BigInteger(Integer.toString(sendLength.length)).toByteArray();
+              	packet = new DatagramPacket(lengthOfSendLength, lengthOfSendLength.length, packet.getAddress(), packet.getPort());
+                socket.send(packet);
+            	
+                // send buffer length
+            	packet = new DatagramPacket(sendLength, sendLength.length, packet.getAddress(), packet.getPort());
+                socket.send(packet);
+                
+                // send buffer
                 packet = new DatagramPacket(sendBuf, sendBuf.length, packet.getAddress(), packet.getPort());
                 socket.send(packet);
+                */
             }
     	}catch (IOException e) {
     		e.printStackTrace();
@@ -69,7 +108,7 @@ public class BroadcastGame implements Runnable  {
         	Socket ip = new Socket();
 			ip.connect(new InetSocketAddress("google.com", 80));
 			String message = model.GetHostName() + "/" + ip.getLocalAddress().getHostAddress() + "/" + model.GetCurrentPlayers() + 
-					"/" + model.GetMaxPlayers() + "/" + model.GetAccessType() + "/" + model.GetPassword();
+					"/" + model.GetMaxPlayers() + "/" + model.GetAccessType();
 			for (int i = 0; i < model.getPlayers().size(); i++) {
 				message += "/" + model.getPlayers().get(i).PlayerName;
 			}

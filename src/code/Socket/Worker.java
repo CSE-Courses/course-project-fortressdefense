@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import code.*;
+import code.RSA.PublicKey;
 
 public class Worker extends Thread{
 	private final Socket clientSocket;
@@ -60,6 +64,16 @@ public class Worker extends Thread{
                 		break;
                 	case Ready:
                 		handleReady(tokens);
+                		break;
+                	case Message:
+                		handleMessage(tokens);
+                		break;
+	                case Password:
+	                	handlePassword(tokens, command_from_client);
+	                	break;
+	                case PublicKey:
+	                	handleKey();
+ 	                	break;
                 	default:
                 		break;
                 }
@@ -68,17 +82,89 @@ public class Worker extends Thread{
 
         clientSocket.close();
     }
+    
+    private void handleKey() {
+		PublicKey key = server.getRSA().getPublicKey();
+		/*
+		System.out.println(new BigInteger(key.getE()).toString());
+		System.out.println(new BigInteger(key.getN()).toString());
+		System.out.println(new String(key.getN()));
+		*/
+		String message = Command.PublicKey.toString() + " " + new String(key.getE()) + " " + new String(key.getN()) + "\n";
+		this.username = "";
+		this.send(message);
+	}
 
-    private void handleReady(String[] tokens) {
-    	if (tokens.length >= 2) {
-    		player.setReady(!player.getReady());
-    		server.getModel().UpdatePlayerTextFields();
+	private void handlePassword(String[] tokens, BufferedReader in) {
+		if (tokens.length > 1) {
+			try {
+				while (in.ready()) {
+					tokens[1] += "\r\n" + in.readLine();
+				}
+				String password = new String(server.getRSA().decrypt(tokens[1].getBytes()));
+				String message = Command.Password + " " + server.getModel().GetPassword().equals(password) + "\n";
+				this.send(message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+
+	/**
+     * Creates message to send to client about room
+     * @return
+     */
+    private String createMessage() {
+
+        try {
+        	Socket ip = new Socket();
+			ip.connect(new InetSocketAddress("google.com", 80));
+			String message = server.getModel().GetHostName() + "/" + ip.getLocalAddress().getHostAddress() + "/" + server.getModel().GetCurrentPlayers() + 
+					"/" + server.getModel().GetMaxPlayers() + "/" + server.getModel().GetAccessType();
+			for (int i = 0; i < server.getModel().getPlayers().size(); i++) {
+				message += "/" + server.getModel().getPlayers().get(i).PlayerName + "/" + server.getModel().getPlayers().get(i).getReady();
+			}
+			
+			return message;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return "";
+    }
+
+	private void handleMessage(String[] tokens) {
+        try {
+            ArrayList<Worker> workerList = server.getWorkerList();
+
             // send other online users current user's status
-            for(Worker worker : server.getWorkerList()) {
+            String message = String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n";
+            for(Worker worker : workerList) {
                 if (worker.getUsername() != null) {
-                    if (!this.username.equals(worker.getUsername())) {
-                        worker.send(Command.Ready.toString() + " " + worker.getUsername() + "\n");
-                    }
+                	worker.send(Command.Message.toString() + " " + message);
+                }
+            }
+            
+            server.getChat().setText(server.getChat().getText() + new Time(System.currentTimeMillis()) + "\n" + message + "\n");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void handleReady(String[] tokens) {
+		player.setReady(!player.getReady());
+		server.getModel().UpdatePlayerTextFields();
+		
+        // send other online users current user's status
+        for(Worker worker : server.getWorkerList()) {
+            if (worker.getUsername() != null) {
+                if (!this.username.equals(worker.getUsername())) {
+                    worker.send(Command.Ready.toString() + " " + this.getUsername() + "\n");
                 }
             }
         }
@@ -92,13 +178,25 @@ public class Worker extends Thread{
             ArrayList<Worker> workerList = server.getWorkerList();
 
             // send other online users current user's status
+            String message = this.getUsername() + " has left the game.\n";
             for(Worker worker : workerList) {
                 if (worker.getUsername() != null) {
                     if (!this.username.equals(worker.getUsername())) {
-                        worker.send(Command.Refresh.toString() + "\n");
+                    	worker.send(Command.Leave.toString() + " " + message);
                     }
                 }
             }
+            
+            for(Worker worker : server.getWorkerList()) {
+                if (worker.getUsername() != null) {
+                    if (!this.username.equals(worker.getUsername())) {
+                    	worker.send(Command.Refresh.toString() + " " + createMessage() + "\n");
+                    }
+                }
+            }
+            
+            server.getChat().setText(server.getChat().getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + message + "\n");
+            
 			clientSocket.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -116,13 +214,26 @@ public class Worker extends Thread{
             ArrayList<Worker> workerList = server.getWorkerList();
 
             // send current user all other online logins
+            String message = this.getUsername() + " has joined the game.\n";
             for(Worker worker : workerList) {
                 if (worker.getUsername() != null) {
                     if (!this.username.equals(worker.getUsername())) {
-                        worker.send(Command.Refresh.toString() + "\n");
+                        worker.send(Command.Join.toString() + " " + message);
                     }
                 }
             }
+            
+            for(Worker worker : server.getWorkerList()) {
+                if (worker.getUsername() != null) {
+                    if (!this.username.equals(worker.getUsername())) {
+                    	worker.send(Command.Refresh.toString() + " " + createMessage() + "\n");
+                    }
+                }
+            }       
+
+            this.send(Command.Refresh.toString() + " " + createMessage() + "\n");
+            
+            server.getChat().setText(server.getChat().getText() + new Time(System.currentTimeMillis()) + "\n" + "[System]: " + message + "\n");
         }
 }
 	
@@ -144,5 +255,4 @@ public class Worker extends Thread{
             }
         }
     }
-		
 }

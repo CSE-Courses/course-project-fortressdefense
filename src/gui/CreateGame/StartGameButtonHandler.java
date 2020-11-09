@@ -14,30 +14,29 @@ public class StartGameButtonHandler implements ActionListener {
 
 	private JPanel create;
 	private JFrame mainFrame;
-	private ServerModel serverModel;
-	private Game game;
+	private StartServerButtonHandler startButtonHandler;
 	
-	public StartGameButtonHandler(JPanel createPanel, JFrame mainFrame, ServerModel model, Game curGame) {
+	public StartGameButtonHandler(JPanel createPanel, JFrame mainFrame, StartServerButtonHandler btnHandler) {
 		create = createPanel;
 		this.mainFrame = mainFrame;
-		serverModel = model;
-		game = curGame;
-
+		this.startButtonHandler = btnHandler;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		for (int i = 0; i < serverModel.GetMaxPlayers(); i++) {
-			if (!game.PlayerList.get(i).getReady()) {
+		for (int i = 0; i < startButtonHandler.getModel().getPlayers().size(); i++) {
+			if (!startButtonHandler.getModel().getPlayers().get(i).getReady()) {
 				JOptionPane.showMessageDialog(mainFrame, "A game can only be started when all players are ready.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		}
-		if (serverModel.GetCurrentPlayers() >= 2) {
-			this.mainFrame.add(new drawPhase(game, mainFrame).GetPanel());
+		if (startButtonHandler.getModel().GetCurrentPlayers() >= 2) {
+			this.mainFrame.add(new drawPhase(mainFrame, startButtonHandler.getTCPServer(), null).GetPanel());
 			create.setVisible(false);
+			startButtonHandler.getTCPServer().start();
 		}else {
-			JOptionPane.showMessageDialog(mainFrame, "Two (2) Players needed to start a game.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+			int dif = startButtonHandler.getModel().GetMaxPlayers() - startButtonHandler.getModel().GetCurrentPlayers();
+			JOptionPane.showMessageDialog(mainFrame, dif + " Players needed to start a game.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}

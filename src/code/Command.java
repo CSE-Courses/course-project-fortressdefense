@@ -5,5 +5,9 @@ public enum Command {
 	Leave,
 	Ready,
 	Shutdown,
-	Refresh
+	Refresh,
+	Message,
+	Start,
+	Password,
+	PublicKey,
 }
