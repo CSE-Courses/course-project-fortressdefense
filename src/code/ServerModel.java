@@ -76,6 +76,10 @@ public class ServerModel {
 	public ArrayList<Player> getPlayers() {
 		return game.PlayerList;
 	}
+	
+	public Game getGame() {
+		return game;
+	}
 
     @Override
     public String toString() {

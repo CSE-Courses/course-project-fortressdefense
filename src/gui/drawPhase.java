@@ -2,6 +2,7 @@ package gui;
 import code.*;
 import code.Deck.*;
 import code.Socket.*;
+
 import code.card_class.AttackCard;
 import code.card_class.CardType;
 import code.card_class.DefenseCard;
@@ -54,12 +55,14 @@ public class drawPhase {
 	int newHealth = 0;//updates healthpoints
 	
 	private JFrame mainFrame;
+	private Server gameServer; // null is game is not host
+	private Client client; // null if game is host
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					drawPhase window = new drawPhase(new code.Game(), frmFortressDefense);
+					drawPhase window = new drawPhase(frmFortressDefense, null, null);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -77,8 +80,11 @@ public class drawPhase {
 	/**
 	 * Create the application.
 	 */
-	public drawPhase(code.Game phase, JFrame mainFrame) {
-		turn = phase;
+	public drawPhase(JFrame mainFrame, Server gameServer, Client client) {
+		turn = gameServer.getModel().getGame();
+		this.mainFrame = mainFrame;
+		this.client = client;
+		this.gameServer = gameServer;
 		if (turn.PlayerList.size() == 0) {
 			turn.PlayerList.add(new Player("Test Player"));
 		}
@@ -189,6 +195,8 @@ public class drawPhase {
 		cardPanel.add(lblCard8);
 		
 		
+		
+		
 		JLabel lblTimer = new JLabel("30");
 		lblTimer.setFont(new Font("Sitka Subheading", Font.PLAIN, 36));
 		lblTimer.setBounds(407, 71, 67, 46);
@@ -201,9 +209,8 @@ public class drawPhase {
 				if(i == -1)
 				{
 					tm.stop();
-					mainFrame.add(new drawPhaseOtherPlayer().GetPanel());
+					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null).GetPanel());
 					GetPanel().setVisible(false);
-					System.exit(0);
 					
 				}
 				lblTimer.setText(Integer.toString(i));
@@ -270,6 +277,17 @@ public class drawPhase {
 		Image archerTowerImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/archerTower.PNG")).getImage();
 		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.PNG")).getImage();
 		Image tradeImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/trade.PNG")).getImage();
+		
+		if(gameServer != null)
+		{
+			healthBar.setValue(gameServer.getModel().getPlayers().get(0).points);
+			lblBar.setText("HEALTHPOINTS: " + gameServer.getModel().getPlayers().get(0).points);
+		}
+		else if(client != null)
+		{
+			healthBar.setValue(client.getHealth());
+			lblBar.setText("HEALTHPOINTS: " + client.getHealth());
+		}
 		
 		JButton btnCard1 = new JButton("");
 		btnCard1.setVisible(false);
