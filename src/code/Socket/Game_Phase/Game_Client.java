@@ -1,4 +1,4 @@
-package code.Socket.Game_Phase_Chart;
+package code.Socket.Game_Phase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,13 +6,17 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class Client {
+/**
+ * Author Haohua Feng
+ * Client with send and receive Thread
+ * Not implement: Get Address and Port from UDP, then use them to make TCP connection.
+ * */
+public class Game_Client {
     public static void main(String[] args) throws IOException {
-        //address and port
         InetAddress address = InetAddress.getByName("localhost");
         int port = 16225;
 
-        BufferedReader console=new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter your name to start");
         String name = console.readLine();
         if(name.equals(""))
@@ -25,12 +29,11 @@ public class Client {
         }
 
         assert client != null;
-        Send s = new Send(client, name);
+        Game_Send s = new Game_Send(client, name);
         Thread send_thread = new Thread(s);
         send_thread.start();
-        Receive r = new Receive(client);
+        Game_Receive r = new Game_Receive(client);
         Thread receive_thread = new Thread(r);
         receive_thread.start();
     }
 }
-
