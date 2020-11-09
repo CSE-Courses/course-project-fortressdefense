@@ -411,6 +411,9 @@ public class drawPhase {
 		JButton btnAttack = new JButton("");
 		btnAttack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(numA == 4 && numD == 4){
+					attackPhase ap = new attackPhase();
+				}
 				if(numA == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Attack cards </html>");
@@ -433,6 +436,9 @@ public class drawPhase {
 		JButton btnDefense = new JButton("");
 		btnDefense.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(numA == 4 && numD == 4){
+					attackPhase ap = new attackPhase();
+				}
 				if(numD == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Defense cards </html>");

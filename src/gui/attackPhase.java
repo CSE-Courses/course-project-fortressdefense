@@ -9,7 +9,7 @@ import javax.swing.*;
 public class attackPhase {
 
 	Timer tm;
-	int i = 15;
+	int i = 4;
 	int j=0;
 	boolean discard = false;
 
@@ -65,24 +65,56 @@ public class attackPhase {
 		});
 
 		JButton playerIcon = new JButton("");
-		Image pc = new ImageIcon(this.getClass().getResource("characters/my_character1.png")).getImage();
+		Image pc = new ImageIcon(this.getClass().getResource("characters/my_character3.png")).getImage();
 		playerIcon.setIcon(new ImageIcon(pc));
 
 		JButton playerIcon1 = new JButton("");
-		Image pc1 = new ImageIcon(this.getClass().getResource("characters/my_character2.png")).getImage();
+		Image pc1 = new ImageIcon(this.getClass().getResource("characters/my_character17.png")).getImage();
 		playerIcon1.setIcon(new ImageIcon(pc1));
 
 		JButton playerIcon2 = new JButton("");
-		Image pc2 = new ImageIcon(this.getClass().getResource("characters/my_character3.png")).getImage();
+		Image pc2 = new ImageIcon(this.getClass().getResource("characters/my_character11.png")).getImage();
 		playerIcon2.setIcon(new ImageIcon(pc2));
 
 		JButton playerIcon3 = new JButton("");
-		Image pc3 = new ImageIcon(this.getClass().getResource("characters/my_character4.png")).getImage();
+		Image pc3 = new ImageIcon(this.getClass().getResource("characters/my_character14.png")).getImage();
 		playerIcon3.setIcon(new ImageIcon(pc3));
 
 		JButton playerIcon4 = new JButton("");
-		Image pc4 = new ImageIcon(this.getClass().getResource("characters/my_character5.png")).getImage();
+		Image pc4 = new ImageIcon(this.getClass().getResource("characters/my_character20.png")).getImage();
 		playerIcon4.setIcon(new ImageIcon(pc4));
+
+		JButton playerIcon5 = new JButton("");
+		Image pc5 = new ImageIcon(this.getClass().getResource("characters/my_character18.png")).getImage();
+		playerIcon5.setIcon(new ImageIcon(pc5));
+
+		JButton playerIcon6 = new JButton("");
+		Image pc6 = new ImageIcon(this.getClass().getResource("characters/my_character19.png")).getImage();
+		playerIcon6.setIcon(new ImageIcon(pc6));
+
+		JButton playerIcon7 = new JButton("");
+		Image pc7 = new ImageIcon(this.getClass().getResource("characters/my_character12.png")).getImage();
+		playerIcon7.setIcon(new ImageIcon(pc7));
+
+		JButton playerIcon8 = new JButton("");
+		Image pc8 = new ImageIcon(this.getClass().getResource("characters/my_character13.png")).getImage();
+		playerIcon8.setIcon(new ImageIcon(pc8));
+
+		JButton playerIcon11 = new JButton("");
+		Image pc11 = new ImageIcon(this.getClass().getResource("characters/my_character15.png")).getImage();
+		playerIcon11.setIcon(new ImageIcon(pc11));
+
+		JButton playerIcon12 = new JButton("");
+		Image pc12 = new ImageIcon(this.getClass().getResource("characters/my_character16.png")).getImage();
+		playerIcon12.setIcon(new ImageIcon(pc12));
+
+		JButton playerIcon14 = new JButton("");
+		Image pc14 = new ImageIcon(this.getClass().getResource("characters/my_character21.png")).getImage();
+		playerIcon14.setIcon(new ImageIcon(pc14));
+
+		JButton playerIcon15 = new JButton("");
+		Image pc15 = new ImageIcon(this.getClass().getResource("characters/my_character22.png")).getImage();
+		playerIcon15.setIcon(new ImageIcon(pc15));
 
 		JLabel p2 = new JLabel("PLAYER 2");
 		p2.setForeground(c2);
@@ -223,7 +255,7 @@ public class attackPhase {
 					else {
 						turn.setText("Player " + (j % 5) + " Turn");
 					}
-					i=15;
+					i=3;
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
@@ -380,6 +412,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -391,6 +432,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -402,6 +452,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -413,6 +472,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -424,6 +492,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -435,6 +512,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -446,6 +532,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -457,6 +552,15 @@ public class attackPhase {
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb1.getValue()>=20) {
+						playerIcon1.setIcon(new ImageIcon(pc1));
+					}
+					else if(hb1.getValue()<20 && hb1.getValue()>=10) {
+						playerIcon1.setIcon(new ImageIcon(pc5));
+					}
+					else if(hb1.getValue()<10) {
+						playerIcon1.setIcon(new ImageIcon(pc6));
+					}
 				}
 			}
 		});
@@ -475,6 +579,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -486,6 +599,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -497,6 +619,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -508,6 +639,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -519,6 +659,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -530,6 +679,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -541,6 +699,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -552,6 +719,15 @@ public class attackPhase {
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb2.getValue()>=20) {
+						playerIcon2.setIcon(new ImageIcon(pc2));
+					}
+					else if(hb2.getValue()<20 && hb2.getValue()>=10) {
+						playerIcon2.setIcon(new ImageIcon(pc7));
+					}
+					else if(hb2.getValue()<10) {
+						playerIcon2.setIcon(new ImageIcon(pc8));
+					}
 				}
 			}
 		});
@@ -570,6 +746,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -581,6 +766,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -592,6 +786,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -603,6 +806,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -614,6 +826,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -625,6 +846,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -636,6 +866,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -647,6 +886,15 @@ public class attackPhase {
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb3.getValue()>=20) {
+						playerIcon3.setIcon(new ImageIcon(pc3));
+					}
+					else if(hb3.getValue()<20 && hb3.getValue()>=10) {
+						playerIcon3.setIcon(new ImageIcon(pc11));
+					}
+					else if(hb3.getValue()<10) {
+						playerIcon3.setIcon(new ImageIcon(pc12));
+					}
 				}
 			}
 		});
@@ -665,6 +913,15 @@ public class attackPhase {
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -676,6 +933,15 @@ public class attackPhase {
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -687,6 +953,15 @@ public class attackPhase {
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -698,6 +973,15 @@ public class attackPhase {
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -709,6 +993,15 @@ public class attackPhase {
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -719,6 +1012,15 @@ public class attackPhase {
 					String text = "Health Points : " + Integer.toString(healthAfterAttack);
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -730,6 +1032,15 @@ public class attackPhase {
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -741,6 +1052,15 @@ public class attackPhase {
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
+					if(hb4.getValue()>=20) {
+						playerIcon4.setIcon(new ImageIcon(pc4));
+					}
+					else if(hb4.getValue()<20 && hb4.getValue()>=10) {
+						playerIcon4.setIcon(new ImageIcon(pc14));
+					}
+					else if(hb4.getValue()<10) {
+						playerIcon4.setIcon(new ImageIcon(pc15));
+					}
 				}
 			}
 		});
