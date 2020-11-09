@@ -13,8 +13,10 @@ import java.util.HashSet;
  * Important change:
  *          * Receive input from players. All computations are now taking in server
  *            Then, send back to all players
+ *
  *          * before: computes in player's local machine and send result to server
  *            Then send back to all players.
+ *
  *
  * Not implement: Get Address and Port from UDP then use TCP connection
  * */
