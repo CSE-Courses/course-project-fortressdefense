@@ -24,6 +24,8 @@ public class AccessComboHandler implements ItemListener {
 			serverModel.SetAccessType((String)e.getItem());
 			if (serverModel.GetAccessType() == AccessType.Public) {
 				passTextField.setEnabled(false);
+				passTextField.setText("");
+				serverModel.SetPassword("");
 			}
 			else if (serverModel.GetAccessType() == AccessType.Private) {
 				passTextField.setEnabled(true);

@@ -6,11 +6,15 @@ import javax.swing.border.Border;
 
 import code.AccessType;
 import code.Game;
+import code.GameConstants;
 import code.Player;
 import code.ServerModel;
+import code.Socket.BroadcastGame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.swing.border.LineBorder;
 
@@ -32,28 +36,30 @@ public class CreateGame extends JPanel {
 	 */
 	public CreateGame(String hostPlayerName, JPanel mainPanel, JFrame mainFrame) {
 		Game game = new Game();
-		ServerModel model = new ServerModel(game.PlayerList);
+		ServerModel model = new ServerModel(game);
+		Executor executor = Executors.newSingleThreadExecutor();
+		Executor tcpServer = Executors.newSingleThreadExecutor();
 		Player p1 = new Player(hostPlayerName);
 		p1.setReady(true);
 		game.PlayerList.add(p1);
 		
-		
 		// main Panel grid for create game screen
 		this.setBackground(new Color(153, 102, 0));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] {200, 50, 300, 50};
+		gridBagLayout.columnWidths = new int[] {300, 50, 100, 50};
 		gridBagLayout.rowHeights = new int[]{100, 200, 0, 50};
 		gridBagLayout.columnWeights = new double[]{Double.MIN_VALUE, 0.0, 1.0, 0.0};
 		gridBagLayout.rowWeights = new double[]{Double.MIN_VALUE, 1.0, 0.0};
 		setLayout(gridBagLayout);
 		
 		// Title Label
-		JLabel lblDefense = new JLabel("Fortress Defense");
+		JLabel lblDefense = new JLabel("<html>Fortress Defense</html>");
 		lblDefense.setFont(new Font("Arial", Font.BOLD, 80));
 		lblDefense.setForeground(Color.BLACK);
-		lblDefense.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDefense.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_lblDefense = new GridBagConstraints();
-		gbc_lblDefense.gridwidth = 3;
+		gbc_lblDefense.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblDefense.gridwidth = 4;
 		gbc_lblDefense.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDefense.gridx = 0;
 		gbc_lblDefense.gridy = 0;
@@ -69,16 +75,18 @@ public class CreateGame extends JPanel {
 		gbc_panel.gridy = 1;
 		add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{ 100, 175 };
+		gbl_panel.columnWidths = new int[] {300, 200};
 		gbl_panel.rowHeights = new int[] {50, 50, 50, 50, 50, 50, 50, 50};
 		gbl_panel.columnWeights = new double[]{Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{Double.MIN_VALUE, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
 		// Options Title Panel
-		Label label = new Label("Game Options");
+		JLabel label = new JLabel("<html>Game Options</html>");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Arial", Font.BOLD, 30));
 		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label.insets = new Insets(0, 0, 5, 0);
 		gbc_label.gridwidth = 2;
 		gbc_label.gridx = 0;
@@ -86,14 +94,16 @@ public class CreateGame extends JPanel {
 		panel.add(label, gbc_label);
 		
 		// Game Name Label
-		Label label_1 = new Label("                                        Game Name:");
-		label_1.setFont(new Font("Arial", Font.PLAIN, 20));
-		label_1.setAlignment(Label.RIGHT);
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.insets = new Insets(0, 0, 5, 5);
-		gbc_label_1.gridx = 0;
-		gbc_label_1.gridy = 2;
-		panel.add(label_1, gbc_label_1);
+		JLabel lblgameName = new JLabel("<html>Game Name:</html>");
+		lblgameName.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblgameName.setHorizontalAlignment(SwingConstants.RIGHT);
+		GridBagConstraints gbc_lblgameName = new GridBagConstraints();
+		gbc_lblgameName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblgameName.anchor = GridBagConstraints.EAST;
+		gbc_lblgameName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblgameName.gridx = 0;
+		gbc_lblgameName.gridy = 2;
+		panel.add(lblgameName, gbc_lblgameName);
 		
 		// Game name text field
 		JTextField textField = new JTextField();
@@ -106,9 +116,12 @@ public class CreateGame extends JPanel {
 		textField.getDocument().addDocumentListener(new BindingListener(model, "HostName"));
 		
 		// Access Label
-		Label label_2 = new Label("                                                Access:");
-		label_2.setFont(new Font("Arial", Font.PLAIN, 20));
+		JLabel label_2 = new JLabel("<html>Access:</html>");
+		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		label_2.setFont(new Font("Calibri", Font.PLAIN, 20));
 		GridBagConstraints gbc_label_2 = new GridBagConstraints();
+		gbc_label_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_label_2.anchor = GridBagConstraints.EAST;
 		gbc_label_2.insets = new Insets(0, 0, 5, 5);
 		gbc_label_2.gridx = 0;
 		gbc_label_2.gridy = 3;
@@ -126,10 +139,12 @@ public class CreateGame extends JPanel {
 		panel.add(choice, gbc_choice);
 		
 		// Password Label
-		JLabel lblPassword = new JLabel("                                            Password:");
-		lblPassword.setFont(new Font("Arial", Font.PLAIN, 20));
+		JLabel lblPassword = new JLabel("<html>Password:</html>");
+		lblPassword.setFont(new Font("Calibri", Font.PLAIN, 20));
 		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.gridx = 0;
 		gbc_lblPassword.gridy = 4;
@@ -149,9 +164,12 @@ public class CreateGame extends JPanel {
 		choice.addItemListener(new AccessComboHandler(model, textField_1));
 		
 		// Num of Players Label
-		Label label_3 = new Label("                               Number of Players:");
-		label_3.setFont(new Font("Arial", Font.PLAIN, 20));
+		JLabel label_3 = new JLabel("<html>Number of Players:</html>");
+		label_3.setHorizontalAlignment(SwingConstants.RIGHT);
+		label_3.setFont(new Font("Calibri", Font.PLAIN, 20));
 		GridBagConstraints gbc_label_3 = new GridBagConstraints();
+		gbc_label_3.fill = GridBagConstraints.HORIZONTAL;
+		gbc_label_3.anchor = GridBagConstraints.EAST;
 		gbc_label_3.insets = new Insets(0, 0, 5, 5);
 		gbc_label_3.gridx = 0;
 		gbc_label_3.gridy = 5;
@@ -168,6 +186,24 @@ public class CreateGame extends JPanel {
 		gbc_spinner.gridx = 1;
 		gbc_spinner.gridy = 5;
 		
+		//Chat Window
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.gridwidth = 2;
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 2;
+		gbc_scrollPane.gridy = 1;
+		add(scrollPane, gbc_scrollPane);
+		
+		// Chat box
+		JTextArea textArea = new JTextArea();
+		textArea.setLineWrap(true);
+		textArea.setEditable(false);
+		scrollPane.setViewportView(textArea);
+		
+		
 		// Start Server Button
 		JButton btnStartSever = new JButton("Start Server");
 		GridBagConstraints gbc_btnStartSever = new GridBagConstraints();
@@ -183,8 +219,19 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridx = 1;
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
-		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice));
-		btnStartSever.addActionListener(new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice));
+		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, 
+				textField_1, choice, executor, tcpServer, this, textArea);
+		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, startHandler));
+		btnStartSever.addActionListener(startHandler);
+		
+		mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	if (startHandler.getTCPServer() != null) {
+			    	startHandler.getTCPServer().close();
+		    	}
+		    }
+		});
 		
 		// Player Panel
 		Panel panel_1 = new Panel();
@@ -280,23 +327,6 @@ public class CreateGame extends JPanel {
 		panel.add(spinner, gbc_spinner);
 		spinner.addChangeListener(new SpinnerHandler(model, panel_1));
 		
-		//Chat Window
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridwidth = 2;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.gridx = 2;
-		gbc_scrollPane.gridy = 1;
-		add(scrollPane, gbc_scrollPane);
-		
-		// Chat box
-		JTextArea textArea = new JTextArea();
-		textArea.setLineWrap(true);
-		textArea.setEditable(false);
-		scrollPane.setViewportView(textArea);
-		
 		// Back to Main Menu Button
 		JButton btnBackToMain = new JButton("BACK TO MAIN MENU");
 		GridBagConstraints gbc_btnBackToMain = new GridBagConstraints();
@@ -304,7 +334,7 @@ public class CreateGame extends JPanel {
 		gbc_btnBackToMain.gridx = 0;
 		gbc_btnBackToMain.gridy = 2;
 		add(btnBackToMain, gbc_btnBackToMain);
-		btnBackToMain.addActionListener(new CreateGameBackButtonHandler(this, mainPanel));
+		btnBackToMain.addActionListener(new CreateGameBackButtonHandler(this, mainPanel, startHandler));
 		
 		// Start Game Button
 		JButton btnStartGame = new JButton("START GAME");
@@ -313,7 +343,7 @@ public class CreateGame extends JPanel {
 		gbc_btnStartGame.gridx = 1;
 		gbc_btnStartGame.gridy = 2;
 		add(btnStartGame, gbc_btnStartGame);
-		btnStartGame.addActionListener(new StartGameButtonHandler(this, mainFrame, model, game));
+		btnStartGame.addActionListener(new StartGameButtonHandler(this, mainFrame, startHandler));
 		
 		// Message field
 		textField_8 = new JTextField();
@@ -334,15 +364,7 @@ public class CreateGame extends JPanel {
 		gbc_btnNewButton.gridx = 3;
 		gbc_btnNewButton.gridy = 2;
 		add(btnNewButton, gbc_btnNewButton);
-		btnNewButton.addActionListener(new SendButtonHandler(textField_8, textArea, hostPlayerName));
-		
-		// Temporary code, keep in for demo
-		Player p2 = new Player("Jane Doe");
-		Player p3 = new Player("Joe Shmoe");
-		game.PlayerList.add(p2);
-		game.PlayerList.add(p3);
-		p2.setReady(true);
-		model.UpdatePlayerTextFields();
+		btnNewButton.addActionListener(new SendButtonHandler(textField_8, startHandler));
 	}
 
 }

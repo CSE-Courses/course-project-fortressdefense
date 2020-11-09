@@ -1,11 +1,12 @@
 package code;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import code.card_class.*;
 import code.Deck.*;
 
-public class Hand {
+public class Hand implements Serializable {
 
 	private ArrayList<Card> cards;
 	private int numAttackDraw;

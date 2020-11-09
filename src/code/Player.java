@@ -1,6 +1,8 @@
 package code;
 import code.Deck.*;
 import code.card_class.*;
+
+import java.io.Serializable;
 import java.util.*;
 import javafx.util.Pair;
 
@@ -9,7 +11,7 @@ import javafx.util.Pair;
  * @author Mohan Vellayan
  */
 
-public class Player {
+public class Player implements Serializable {
 
 	public String PlayerName;
 	
@@ -18,6 +20,8 @@ public class Player {
     private boolean hasArcherTower;
     
     public int points;
+    
+    private boolean isReady;
     
     public Player(String playerName){  
         this.PlayerName = playerName;
@@ -68,5 +72,13 @@ public class Player {
     
     public boolean getHasArcherTower() {
     	return hasArcherTower;
+    }
+    
+    public void setReady(Boolean ready) {
+    	this.isReady = ready;
+    }
+    
+    public Boolean getReady() {
+    	return isReady;
     }
 }

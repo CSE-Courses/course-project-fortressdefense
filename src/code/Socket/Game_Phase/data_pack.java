@@ -1,6 +1,7 @@
-package code.Socket;
+package code.Socket.Game_Phase;
 
-import code.Deck.Player;
+import code.Player;
+
 import java.util.ArrayList;
 
 
@@ -10,7 +11,32 @@ public class data_pack implements java.io.Serializable {
     private String turn = new String("");
     private String used_card_name = new String("");
     private String message = "";
+    private String phase = "";
+    private String chat_msg = "";
+    public boolean new_msg = false;
     private int round = 1;
+    private int room_size;
+
+    public void send_chat_msg(String msg){
+        chat_msg = msg;
+        new_msg = true;
+    }
+
+    public String receive_chat_msg(){
+        return chat_msg;
+    }
+
+    public String getPhase(){
+        return phase;
+    }
+
+    public void setRoom_size(int n){
+        room_size = n;
+    }
+
+    public int getRoom_size(){
+        return room_size;
+    }
 
     public void add_player(Player player){
         if (!player_name_list.contains(player.PlayerName)){
@@ -68,6 +94,7 @@ public class data_pack implements java.io.Serializable {
 
     public void write_message(String m){
         message = m;
+        new_msg = false;
     }
 
     public String getMessage(){
