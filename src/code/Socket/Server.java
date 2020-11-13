@@ -2,12 +2,14 @@ package code.Socket;
 
 import code.*;
 import code.Socket.Game_Phase.data_pack;
+import code.card_class.CardType;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.swing.JTextArea;
 
@@ -111,5 +113,28 @@ public class Server implements Runnable{
 	
 	public RSA getRSA() {
 		return encryption;
+	}
+	
+	public void draw(CardType type) {
+		switch (type) {
+			case Attack:
+				model.getPlayers().get(0).getHand().Draw(model.getGame().AttackDeck);
+				break;
+			case Defense:
+				model.getPlayers().get(0).getHand().Draw(model.getGame().DefenseDeck);
+				break;
+			default:
+				break;
+			
+		}
+	}
+	
+	public void discard(UUID id) {
+		for (int i = 0; i < model.getPlayers().get(0).getHand().Size(); i++) {
+			if (model.getPlayers().get(0).getHand().Select(i).getID().equals(id)){
+				model.getPlayers().get(0).getHand().Remove(model.getPlayers().get(0).getHand().Select(i));
+				break;
+			}
+		}
 	}
 }

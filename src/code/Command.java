@@ -10,4 +10,6 @@ public enum Command {
 	Start,
 	Password,
 	PublicKey,
+	Draw,
+	Discard,
 }

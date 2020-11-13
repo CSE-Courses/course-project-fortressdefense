@@ -524,7 +524,8 @@ public class Join_Game implements ActionListener {
 	public void startDrawPhase() {
 		// TODO Auto-generated method stub
 		panel.setVisible(false);
-		this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client, new Hand()).GetPanel());
+		//this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client, new Hand()).GetPanel());
+		this.mainFrame.add(new drawPhase(this.mainFrame, null, this.client).GetPanel());
 	}
 	
 	public String getName() {
