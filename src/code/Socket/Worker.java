@@ -10,9 +10,12 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import code.*;
 import code.RSA.PublicKey;
+import code.card_class.Card;
+import code.card_class.CardType;
 
 public class Worker extends Thread{
 	private final Socket clientSocket;
@@ -74,6 +77,12 @@ public class Worker extends Thread{
 	                case PublicKey:
 	                	handleKey();
  	                	break;
+	                case Draw:
+	                	handleDraw(tokens);
+	                	break;
+	                case Discard:
+	                	handleDiscard(tokens);
+	                	break;
                 	default:
                 		break;
                 }
@@ -83,7 +92,37 @@ public class Worker extends Thread{
         clientSocket.close();
     }
     
-    private void handleKey() {
+    private void handleDraw(String[] tokens) {
+    	if (tokens.length > 1) {
+    		switch (CardType.valueOf(tokens[1])) {
+				case Attack:
+					player.getHand().Draw(server.getModel().getGame().AttackDeck);
+					Card card = player.getHand().Select(player.getHand().Size() - 1);
+					String message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+					this.send(message);
+					break;
+				case Defense:
+					player.getHand().Draw(server.getModel().getGame().DefenseDeck);
+					card = player.getHand().Select(player.getHand().Size() - 1);
+					message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+					this.send(message);
+					break;
+				default:
+					break;
+    		}
+    	}
+	}
+    
+    private void handleDiscard(String[] tokens) {
+		for (int i = 0; i < player.getHand().Size(); i++) {
+			if (player.getHand().Select(i).getID().equals(UUID.fromString(tokens[1]))){
+				player.getHand().Remove(player.getHand().Select(i));
+				break;
+			}
+		}
+    }
+
+	private void handleKey() {
 		PublicKey key = server.getRSA().getPublicKey();
 		/*
 		System.out.println(new BigInteger(key.getE()).toString());

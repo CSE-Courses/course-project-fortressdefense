@@ -1,9 +1,11 @@
 package code.Socket;
 
 import code.Command;
+import code.Hand;
 import code.Player;
 import code.RSA;
 import code.RSA.PublicKey;
+import code.card_class.*;
 import gui.Join_Game;
 
 import java.io.*;
@@ -12,6 +14,7 @@ import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
@@ -31,6 +34,7 @@ public class Client {
     private JTextArea chat;
     private PublicKey serverKey;
     private String roomName;
+    private Hand hand;
     
     
     public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
@@ -39,6 +43,7 @@ public class Client {
         this.joinGame = joinGame;
         this.chat = chat;
         this.name = name;
+        this.hand = new Hand();
     }
     
     /**
@@ -126,6 +131,30 @@ public class Client {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    public void draw(CardType type) {
+    	try {
+    		String cmd = Command.Draw.toString() + " " + type.toString() + "\n";
+    		serverOut.write(cmd.getBytes());
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void dicard(UUID id) {
+    	try {
+    		String cmd = Command.Discard.toString() + " " + id.toString() + "\n";
+    		serverOut.write(cmd.getBytes());
+    		for (int i = 0; i < hand.Size(); i++) {
+    			if (hand.Select(i).getID().equals(id)){
+    				hand.Remove(hand.Select(i));
+    				break;
+    			}
+    		}
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
     }
     
     /**
@@ -228,6 +257,21 @@ public class Client {
 		                		JOptionPane.showMessageDialog(null, "Invalid password.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 		                	}
 		                	break;
+		                case Draw:
+		                	if (tokens.length > 3) {
+		                		ICardEnum type;
+		                		try {
+		                			type = AttackCard.valueOf(tokens[1]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+			                			type = DefenseCard.valueOf(tokens[1]);
+			                		} catch (IllegalArgumentException e1) {
+			                			type = SpecialCard.valueOf(tokens[1]);
+			                		}
+		                		}
+		                		
+		                		hand.Add(new Card(type, CardType.valueOf(tokens[2]), Integer.parseInt(tokens[3])));
+		                	}
                     	default:
                     		break;
                     }
@@ -271,6 +315,9 @@ public class Client {
 		}
 	}
     
+	public Hand getHand() {
+		return hand;
+	}
 
     /*
     public static void main(String[] args) throws Exception {

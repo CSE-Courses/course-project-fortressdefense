@@ -1,5 +1,6 @@
 package code.card_class;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * card = new card("Name of the card(all upper case)")
@@ -17,14 +18,14 @@ public class Card {
     private int damage;
 
     private String description;
-    
+    private UUID id;
     
     public Boolean PlayAtStart = false;
     public Card(ICardEnum name, CardType type, int damage) {
         this.card_name=name;
         this.type=type;
         this.damage=damage;
-        
+        this.id = UUID.randomUUID();
         if (this.type.equals(CardType.Attack)){
             this.description = "Deals " + this.damage + " damage to an opponent.";
         }
@@ -60,5 +61,13 @@ public class Card {
     
     public void setType(CardType type) {
     	this.type = type;
+    }
+    
+    public void setID(UUID id) {
+    	this.id = id;
+    }
+    
+    public UUID getID() {
+    	return id;
     }
 }

@@ -53,7 +53,6 @@ public class drawPhase {
 	int curBound = 10;//sets the card btn position
 	int numA = 0;//number of attack cards
 	int numD = 0;//number of defense cards
-	int newHealth = 0;//updates healthpoints
 	
 	private Card selected;
 	
@@ -73,29 +72,26 @@ public class drawPhase {
 			}
 		});
 	}
-	
-	//gets current health:
-			public int getHealth()
-			{
-				return newHealth;
-			}
 
+			
+		private Hand hand;
 	/**
 	 * Create the application.
 	 */
 	public drawPhase(JFrame mainFrame, Server gameServer, Client client) {
-		turn = gameServer.getModel().getGame();
 		this.mainFrame = mainFrame;
 		this.client = client;
 		this.gameServer = gameServer;
-		if (turn.PlayerList.size() == 0) {
-			turn.PlayerList.add(new Player("Test Player"));
+		
+		if (this.gameServer != null) {
+			hand = this.gameServer.getModel().getPlayers().get(0).getHand();
 		}
+		else if (this.client != null) {
+			hand = this.client.getHand();
+		}
+		
 		initialize();
 	}
-	
-	private code.Game turn;//initializes decks
-	code.Hand hand = new code.Hand();//initializes the player's hand
 
 	/**
 	 * Initialize the contents of the frame.
@@ -234,8 +230,13 @@ public class drawPhase {
 		lblSeconds.setFont(new Font("Sitka Subheading", Font.PLAIN, 26));
 		lblSeconds.setBounds(454, 76, 152, 41);
 		frmFortressDefense.getContentPane().add(lblSeconds);
-
-		JLabel lblName = new JLabel(turn.PlayerList.get(0).PlayerName + "'s Turn");
+		
+		JLabel lblName = null;
+		if (client != null) {
+			lblName = new JLabel(client.getName() + "'s Turn");
+		}else if (gameServer != null) {
+			lblName = new JLabel(gameServer.getModel().getPlayers().get(0).PlayerName + "'s Turn");
+		}
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblName.setBorder(UIManager.getBorder("InternalFrame.border"));
 		lblName.setForeground(Color.RED);
@@ -576,7 +577,23 @@ public class drawPhase {
 				}
 				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")
 				{
-					hand.Draw(turn.AttackDeck);//draws card and adds it to hand
+					if (gameServer != null) {
+						gameServer.draw(CardType.Attack);
+						hand = gameServer.getModel().getPlayers().get(0).getHand();
+					}
+					else if (client != null) {
+						client.draw(CardType.Attack);
+						try {
+							mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+							Thread.sleep(1000);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						mainFrame.setCursor(Cursor.getDefaultCursor());
+						hand = client.getHand();
+					}
+					
 					numA++;
 					
 					if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Axe)
@@ -654,7 +671,20 @@ public class drawPhase {
 				}
 				else if(lblSelected.getText() == "<html> Defense Deck selected </html>")
 				{
-					hand.Draw(turn.DefenseDeck);
+					if (gameServer != null) {
+						gameServer.draw(CardType.Defense);
+						hand = gameServer.getModel().getPlayers().get(0).getHand();
+					}
+					else if (client != null) {
+						client.draw(CardType.Defense);
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						hand = client.getHand();
+					}
 					numD++;
 					
 					if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Earthquake)
@@ -713,8 +743,6 @@ public class drawPhase {
 					cardPanel.add(curBtn);
 					curBtn.setVisible(true);
 					
-					newHealth = newHealth + hand.Select(hand.Size()-1).getDamage();
-					
 					/*if(newHealth < 0)
 					{
 						healthBar.setValue(0);
@@ -723,10 +751,10 @@ public class drawPhase {
 					else
 					{*/
 						//updates the health bar based on card picked up
-						healthBar.setValue(newHealth);
+						healthBar.setValue(healthBar.getValue() + hand.Select(hand.Size()-1).getDamage());
 						
 						//updates the healthpoints
-						lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						lblBar.setText("HEALTHPOINTS: " + Integer.toString(healthBar.getValue()));
 					//}
 	
 					curBound = curBound + 130;
@@ -764,14 +792,21 @@ public class drawPhase {
 				}
 				else if(discard)
 				{	
-					hand.Remove(selected);
+					if (gameServer != null) {
+						gameServer.discard(selected.getID());
+						hand = gameServer.getModel().getPlayers().get(0).getHand();
+					}
+					else if (client != null) {
+						client.dicard(selected.getID());
+						hand = client.getHand();
+					}
+					
 					if(selected.getType() == CardType.Defense)
 					{
-						newHealth = newHealth - selected.getDamage();
 						//updates the health bar based on card discarded
-						healthBar.setValue(newHealth);
+						healthBar.setValue(healthBar.getValue() + selected.getDamage());
 						//updates the healthpoints
-						lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
+						lblBar.setText("HEALTHPOINTS: " + Integer.toString(healthBar.getValue()));
 					}
 					if(lblCard1.isVisible())
 					{

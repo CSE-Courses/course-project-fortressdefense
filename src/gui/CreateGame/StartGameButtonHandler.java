@@ -9,6 +9,7 @@ import code.Game;
 import code.ServerModel;
 import code.Player;
 import gui.drawPhase;
+import gui.drawPhaseOtherPlayer;
 
 public class StartGameButtonHandler implements ActionListener {
 
@@ -31,7 +32,8 @@ public class StartGameButtonHandler implements ActionListener {
 			}
 		}
 		if (startButtonHandler.getModel().GetCurrentPlayers() >= 2) {
-			this.mainFrame.add(new drawPhase(mainFrame, startButtonHandler.getTCPServer(), null).GetPanel());
+			//this.mainFrame.add(new drawPhase(mainFrame, startButtonHandler.getTCPServer(), null).GetPanel());
+			this.mainFrame.add(new drawPhaseOtherPlayer(startButtonHandler.getTCPServer(), null, startButtonHandler.getTCPServer().getModel().getPlayers().get(0).getHand()).GetPanel());
 			create.setVisible(false);
 			startButtonHandler.getTCPServer().start();
 		}else {
