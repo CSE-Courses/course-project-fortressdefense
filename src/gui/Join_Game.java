@@ -168,7 +168,6 @@ public class Join_Game implements ActionListener {
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
            
             			if (gl.get(rn).getType() == AccessType.Private) {
-
                             client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
                             if (client.connect()) {
                             	client.getPublicKey(rn);
@@ -379,9 +378,8 @@ public class Join_Game implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        Join_Game joinGame = new Join_Game("Haohua Feng", null, null);
+        Join_Game joinGame = new Join_Game("TestSubject", null, null);
         joinGame.frame.setVisible(true);
-        
     }
 
     public void refresh(){
@@ -521,12 +519,42 @@ public class Join_Game implements ActionListener {
     	return back;
     }
 
+    //#97 Switch between two GUI
+    private drawPhase startDraw;
+
+    private drawPhaseOtherPlayer waitForDraw;
+
 	public void startDrawPhase() {
 		// TODO Auto-generated method stub
 		panel.setVisible(false);
-		//this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client, new Hand()).GetPanel());
-		this.mainFrame.add(new drawPhase(this.mainFrame, null, this.client).GetPanel());
+		if(waitForDraw != null){
+		    this.mainFrame.remove(waitForDraw.GetPanel());
+		    this.mainFrame.repaint();
+		}
+        if(startDraw != null) {
+            this.mainFrame.remove(startDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+		startDraw = null;
+        startDraw = new drawPhase(this.mainFrame, null, this.client);
+		this.mainFrame.add(startDraw.GetPanel());
 	}
+
+	public void waitForDrawPhase(){
+        // TODO Auto-generated method stub
+        panel.setVisible(false);
+        if(startDraw != null) {
+            this.mainFrame.remove(startDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if(waitForDraw != null){
+            this.mainFrame.remove(waitForDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        waitForDraw = null;
+        waitForDraw = new drawPhaseOtherPlayer(null, this.client, this.client.getHand());
+        this.mainFrame.add(waitForDraw.GetPanel());
+    }
 	
 	public String getName() {
 		return My_Name;
