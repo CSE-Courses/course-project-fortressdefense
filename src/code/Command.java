@@ -12,4 +12,7 @@ public enum Command {
 	PublicKey,
 	Draw,
 	Discard,
+	SwitchTurn,
+	GetTurn,
+	//EndDrawPhase,
 }

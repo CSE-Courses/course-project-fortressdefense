@@ -21,6 +21,8 @@ public class Server implements Runnable{
     private ServerSocket serverSocket;
     private JTextArea chat;
     private RSA encryption;
+    private String turn;
+    private String phase;
 
     private final int serverPort;
 
@@ -57,7 +59,42 @@ public class Server implements Runnable{
             e.printStackTrace();
         }
     }
-    
+
+    /**
+     * Switch turn for draw phase #97
+     * need modify for attack phase
+     * @author Hoahua Feng
+     */
+    public void nextTurn(){
+        if(turn == null){
+            return;
+        }
+        else {
+            int index;
+            for(Worker worker : clientList){
+                if(worker.getUsername().equals(turn)){
+                    index = clientList.indexOf(worker);
+                    if(index + 1 < getWorkerList().size()){
+                        index += 1;
+                        turn = getWorkerList().get(index).getUsername();
+                    }
+                    else {
+                        turn = null; // end draw phase
+                    }
+                    break;
+                }
+            }
+        }
+        System.out.println("Current turn: " + turn);
+    }
+
+    public String getTurn(){
+        if(turn != null) {
+            return turn;
+        }
+        return null;
+    }
+
     public void removeWorker(Worker serverWorker) {
     	clientList.remove(serverWorker);
     }
@@ -98,8 +135,12 @@ public class Server implements Runnable{
 	}
 	
 	public void start() {
+        //#97 turn for draw, start draw phase, set turn to first player in client list
+        phase = "draw";
+        turn = clientList.get(0).getUsername();
        for(Worker worker : clientList) {
-    	   worker.send(Command.Start.toString() + " " + worker.getHealth() + "\n");
+           //Start draw phase, client[0]'s turn
+    	   worker.send(Command.Start.toString() + " " + worker.getHealth() + " " + turn + "\n");
         }
 	}
 	
@@ -118,14 +159,13 @@ public class Server implements Runnable{
 	public void draw(CardType type) {
 		switch (type) {
 			case Attack:
-				model.getPlayers().get(0).getHand().Draw(model.getGame().AttackDeck);
+				model.getPlayers().get(1).getHand().Draw(model.getGame().AttackDeck);
 				break;
 			case Defense:
-				model.getPlayers().get(0).getHand().Draw(model.getGame().DefenseDeck);
+				model.getPlayers().get(1).getHand().Draw(model.getGame().DefenseDeck);
 				break;
 			default:
 				break;
-			
 		}
 	}
 	

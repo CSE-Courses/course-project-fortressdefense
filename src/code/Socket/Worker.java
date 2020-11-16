@@ -23,6 +23,7 @@ public class Worker extends Thread{
     private OutputStream outputStream;
     private String username;
     private Player player;
+    private String thisTurn;
 
     public Worker(Server server, Socket clientSocket) {
         this.server = server;
@@ -83,13 +84,36 @@ public class Worker extends Thread{
 	                case Discard:
 	                	handleDiscard(tokens);
 	                	break;
+                    case SwitchTurn:    //#97
+                        handleSwitchTurn();
+                        break;
+                    case GetTurn:
+                        handelGetTurn();
+                        break;
                 	default:
                 		break;
                 }
             }
         }
-
         clientSocket.close();
+    }
+
+    /**
+     * #97 turn for draw phase
+     */
+    private void handleSwitchTurn(){
+        server.nextTurn();
+        thisTurn = server.getTurn();
+        for(Worker worker : server.getWorkerList()){
+            String toClientCmd = Command.GetTurn + " " + thisTurn + "\n";
+            worker.send(toClientCmd);
+        }
+    }
+
+    private void handelGetTurn(){
+        thisTurn = server.getTurn();
+        String toClientCmd = Command.GetTurn + " " + thisTurn + "\n";
+        send(toClientCmd);
     }
     
     private void handleDraw(String[] tokens) {
@@ -112,6 +136,7 @@ public class Worker extends Thread{
     		}
     	}
 	}
+
     
     private void handleDiscard(String[] tokens) {
 		for (int i = 0; i < player.getHand().Size(); i++) {
@@ -280,8 +305,9 @@ public class Worker extends Thread{
     {
     	return player.points;
     }
-    
-	private String getUsername() {
+
+    //before is private, change to public #97
+	public String getUsername() {
 		return username;
 	}
 	
