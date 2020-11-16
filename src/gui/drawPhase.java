@@ -32,9 +32,9 @@ import javax.swing.JSeparator;
 import javax.swing.JPanel;
 
 
-/*
+/**
  * Creates the Draw Phase GUI window
- * @author Alec Willette
+ * @author Alec Willette, Haohua Feng(#97 turn command)
  * 
  * */
 

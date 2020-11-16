@@ -47,9 +47,9 @@ import javax.swing.UIManager;
 import java.awt.ComponentOrientation;
 import javax.swing.JPanel;
 
-/*
+/**
  * Creates the Draw Phase GUI window during another player's turn
- * @author Alec Willette
+ * @author Alec Willette, Haohua Feng(#97 turn command)
  * 11/1/2020
  * */
 

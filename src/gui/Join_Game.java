@@ -24,7 +24,7 @@ import java.util.List;
  * lobby_data : get games info form server
  * player_status : According to which game you joined, get player status in that room.(ready / waiting)
  *
- * Haohua Feng(Eddie)
+ * @author Haohua Feng(Eddie)
  * */
 
 public class Join_Game implements ActionListener {
