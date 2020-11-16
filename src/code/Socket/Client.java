@@ -2,24 +2,17 @@ package code.Socket;
 
 import code.Command;
 import code.Hand;
-import code.Player;
 import code.RSA;
 import code.RSA.PublicKey;
 import code.card_class.*;
 import gui.Join_Game;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.net.Socket;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class Client {
@@ -35,6 +28,7 @@ public class Client {
     private PublicKey serverKey;
     private String roomName;
     private Hand hand;
+    private String currentTurn;
     
     
     public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
@@ -156,6 +150,25 @@ public class Client {
     		e.printStackTrace();
     	}
     }
+
+    //#97 switch turn
+	public void switchTurn(){
+    	try {
+			String cmd = Command.SwitchTurn.toString() + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	//may be unnecessary
+	public void getTurn(){
+		try {
+			String cmd = Command.GetTurn.toString() + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
     
     /**
      * Thread that reads all messages from server
@@ -198,7 +211,6 @@ public class Client {
 		                	}else {
 		                		joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'r');
 		                	}
-	
 		                	joinGame.refresh_room_detail();
 		                	break;
 		                case Join:
@@ -213,10 +225,28 @@ public class Client {
 		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + 
 				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
 		                	break;
+
 		                case Start:
 		                	health = Integer.parseInt(tokens[1]);
-		                	joinGame.startDrawPhase();
+		                	String temp_turn = tokens[2];
+		                	currentTurn = temp_turn;
+							if(temp_turn.equals(name)){
+								joinGame.startDrawPhase();
+							}
+							else {
+								joinGame.waitForDrawPhase();
+							}
 		                	break;
+						case GetTurn:
+							currentTurn = tokens[1];
+							if(name.equals(tokens[1])) {
+								joinGame.startDrawPhase();
+							}
+							else {
+								joinGame.waitForDrawPhase();
+							}
+							break;
+
 		                case PublicKey:
 		                	String password = (String)JOptionPane.showInputDialog(null, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 		                	String keyN = String.join(" ", tokens).replaceAll(tokens[0], "").replaceAll(tokens[1], "").substring(2);
@@ -269,7 +299,6 @@ public class Client {
 			                			type = SpecialCard.valueOf(tokens[1]);
 			                		}
 		                		}
-		                		
 		                		hand.Add(new Card(type, CardType.valueOf(tokens[2]), Integer.parseInt(tokens[3])));
 		                	}
                     	default:
@@ -317,6 +346,13 @@ public class Client {
     
 	public Hand getHand() {
 		return hand;
+	}
+
+	public Object obtainTurn(){
+    	if(currentTurn != null){
+    		return currentTurn;
+		}
+		return null;
 	}
 
     /*
