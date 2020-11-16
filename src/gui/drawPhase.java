@@ -72,9 +72,8 @@ public class drawPhase {
 			}
 		});
 	}
-
 			
-		private Hand hand;
+	private Hand hand;
 	/**
 	 * Create the application.
 	 */
@@ -208,9 +207,9 @@ public class drawPhase {
 				if(i == -1)
 				{
 					tm.stop();
-					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null, hand).GetPanel());
-					GetPanel().setVisible(false);
-					
+					client.switchTurn();
+//					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null, hand).GetPanel());
+//					GetPanel().setVisible(false);
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
@@ -233,9 +232,9 @@ public class drawPhase {
 		
 		JLabel lblName = null;
 		if (client != null) {
-			lblName = new JLabel(client.getName() + "'s Turn");
+			lblName = new JLabel(client.obtainTurn() + "'s Turn");
 		}else if (gameServer != null) {
-			lblName = new JLabel(gameServer.getModel().getPlayers().get(0).PlayerName + "'s Turn");
+			lblName = new JLabel(gameServer.getTurn() + "'s Turn");
 		}
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblName.setBorder(UIManager.getBorder("InternalFrame.border"));
@@ -573,7 +572,9 @@ public class drawPhase {
 			public void actionPerformed(ActionEvent e) {
 				if(lblSelected.getText() == "PASS selected")
 				{
-					System.exit(0);
+					client.switchTurn();
+					tm.stop();
+					//System.exit(0);
 				}
 				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")
 				{
@@ -847,6 +848,7 @@ public class drawPhase {
 				lblSelected.setText("");
 				lblMsgBox.setText("");
 			}
+
 		});
 		btnGo.setBackground(new Color(0, 128, 0));
 		btnGo.setFont(new Font("Britannic Bold", Font.PLAIN, 99));
@@ -872,5 +874,4 @@ public class drawPhase {
 	public JPanel GetPanel() {
 		return (JPanel) frmFortressDefense.getContentPane();
 	}
-
 }

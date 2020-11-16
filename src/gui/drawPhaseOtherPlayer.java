@@ -67,6 +67,7 @@ public class drawPhaseOtherPlayer {
 	private Client client;
 	private Server gameServer;
 	private Hand hand;
+	private String turn;
 	
 	public JPanel GetPanel() {
 		return (JPanel) frame.getContentPane();
@@ -141,7 +142,8 @@ public class drawPhaseOtherPlayer {
 				if(i == -1)
 				{
 					tm.stop();
-					System.exit(0);
+					//client.switchTurn();
+					//System.exit(0);
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
@@ -219,9 +221,9 @@ public class drawPhaseOtherPlayer {
 		JLabel lblName;
 		// Kludge: server should send turn name
 		if (client != null) {
-			lblName = new JLabel(client.getName() + "'s Turn");
+			lblName = new JLabel(client.obtainTurn() + "'s Turn");
 		}else if (gameServer != null) {
-			lblName = new JLabel(gameServer.getModel().getPlayers().get(0).PlayerName + "'s Turn");
+			lblName = new JLabel(gameServer.getTurn() + "'s Turn");
 		}else {
 			lblName = new JLabel("<Dynamic>'s Turn");
 		}
