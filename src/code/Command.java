@@ -13,4 +13,6 @@ public enum Command {
 	Draw,
 	Discard,
 	SwitchTurn,
+	GetTurn,
+	//EndDrawPhase,
 }
