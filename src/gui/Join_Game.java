@@ -552,7 +552,7 @@ public class Join_Game implements ActionListener {
             this.mainFrame.repaint();
         }
         waitForDraw = null;
-        waitForDraw = new drawPhaseOtherPlayer(null, this.client, this.client.getHand());
+        waitForDraw = new drawPhaseOtherPlayer(this.mainFrame, null, this.client, this.client.getHand());
         this.mainFrame.add(waitForDraw.GetPanel());
     }
 	

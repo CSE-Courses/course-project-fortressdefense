@@ -102,12 +102,7 @@ public class Worker extends Thread{
      * #97 turn for draw phase
      */
     private void handleSwitchTurn(){
-        server.nextTurn();
-        thisTurn = server.getTurn();
-        for(Worker worker : server.getWorkerList()){
-            String toClientCmd = Command.GetTurn + " " + thisTurn + "\n";
-            worker.send(toClientCmd);
-        }
+    	server.nextTurn();
     }
 
     private void handelGetTurn(){

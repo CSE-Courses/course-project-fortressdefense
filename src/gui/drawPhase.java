@@ -207,9 +207,15 @@ public class drawPhase {
 				if(i == -1)
 				{
 					tm.stop();
-					client.switchTurn();
-//					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null, hand).GetPanel());
-//					GetPanel().setVisible(false);
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+						GetPanel().setVisible(false);
+					    mainFrame.remove(GetPanel());
+					    mainFrame.repaint();
+					    mainFrame.add(new drawPhaseOtherPlayer(mainFrame, gameServer, null, hand).GetPanel());
+					}
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
@@ -572,8 +578,16 @@ public class drawPhase {
 			public void actionPerformed(ActionEvent e) {
 				if(lblSelected.getText() == "PASS selected")
 				{
-					client.switchTurn();
 					tm.stop();
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+						GetPanel().setVisible(false);
+					    mainFrame.remove(GetPanel());
+					    mainFrame.repaint();
+					    mainFrame.add(new drawPhaseOtherPlayer(mainFrame, gameServer, null, hand).GetPanel());
+					}
 					//System.exit(0);
 				}
 				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")

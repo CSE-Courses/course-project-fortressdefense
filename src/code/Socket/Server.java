@@ -22,7 +22,7 @@ public class Server implements Runnable{
     private JTextArea chat;
     private RSA encryption;
     private String turn;
-    private String phase;
+    private int drawPhaseRound;
 
     private final int serverPort;
 
@@ -71,12 +71,16 @@ public class Server implements Runnable{
         }
         else {
             int index;
-            for(Worker worker : clientList){
-                if(worker.getUsername().equals(turn)){
-                    index = clientList.indexOf(worker);
-                    if(index + 1 < getWorkerList().size()){
+            for(Player player : this.getModel().getPlayers()){
+                if(player.PlayerName.equals(turn)){
+                    index = this.getModel().getPlayers().indexOf(player);
+                    if(index + 1 < this.getModel().getPlayers().size()){
                         index += 1;
-                        turn = getWorkerList().get(index).getUsername();
+                        turn = this.getModel().getPlayers().get(index).PlayerName;
+                        for(Worker worker : this.getWorkerList()){
+                            String toClientCmd = Command.GetTurn + " " + turn + "\n";
+                            worker.send(toClientCmd);
+                        }
                     }
                     else {
                         turn = null; // end draw phase
@@ -136,8 +140,7 @@ public class Server implements Runnable{
 	
 	public void start() {
         //#97 turn for draw, start draw phase, set turn to first player in client list
-        phase = "draw";
-        turn = clientList.get(0).getUsername();
+       turn = this.getModel().getPlayers().get(0).PlayerName;
        for(Worker worker : clientList) {
            //Start draw phase, client[0]'s turn
     	   worker.send(Command.Start.toString() + " " + worker.getHealth() + " " + turn + "\n");
@@ -159,10 +162,10 @@ public class Server implements Runnable{
 	public void draw(CardType type) {
 		switch (type) {
 			case Attack:
-				model.getPlayers().get(1).getHand().Draw(model.getGame().AttackDeck);
+				model.getPlayers().get(0).getHand().Draw(model.getGame().AttackDeck);
 				break;
 			case Defense:
-				model.getPlayers().get(1).getHand().Draw(model.getGame().DefenseDeck);
+				model.getPlayers().get(0).getHand().Draw(model.getGame().DefenseDeck);
 				break;
 			default:
 				break;
