@@ -757,20 +757,6 @@ public class drawPhase {
 					curBtn.setBounds(curBound, 22, 119, 176);
 					cardPanel.add(curBtn);
 					curBtn.setVisible(true);
-					
-					/*if(newHealth < 0)
-					{
-						healthBar.setValue(0);
-						lblBar.setText("HEALTHPOINTS: 0");
-					}
-					else
-					{*/
-						//updates the health bar based on card picked up
-						healthBar.setValue(healthBar.getValue() + hand.Select(hand.Size()-1).getDamage());
-						
-						//updates the healthpoints
-						lblBar.setText("HEALTHPOINTS: " + Integer.toString(healthBar.getValue()));
-					//}
 	
 					curBound = curBound + 130;
 					
@@ -816,13 +802,6 @@ public class drawPhase {
 						hand = client.getHand();
 					}
 					
-					if(selected.getType() == CardType.Defense)
-					{
-						//updates the health bar based on card discarded
-						healthBar.setValue(healthBar.getValue() + selected.getDamage());
-						//updates the healthpoints
-						lblBar.setText("HEALTHPOINTS: " + Integer.toString(healthBar.getValue()));
-					}
 					if(lblCard1.isVisible())
 					{
 						lblCard1.setVisible(false);
