@@ -197,7 +197,6 @@ public class Client {
                 if (tokens != null && tokens.length > 0) {
                     switch(Command.valueOf(tokens[0])) {
 		                case Shutdown:
-		                	// Kludge, should just set it to main frame, dont know how to check with form is visible when in draw/attack phase
 		                	JOptionPane.showMessageDialog(joinGame.getPanel(), "Connection to server lost!", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 		                	joinGame.getBackButton().doClick();
 		                	break;

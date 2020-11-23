@@ -506,7 +506,10 @@ public class Join_Game implements ActionListener {
             }
             
     		mainPanel.setVisible(true);
+
     		panel.setVisible(false);
+    		mainFrame.getContentPane().removeAll();
+    		mainFrame.getContentPane().add(mainPanel);
         }
         //frame.repaint();
     }
