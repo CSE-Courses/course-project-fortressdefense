@@ -25,10 +25,10 @@ public class Client {
     private BufferedReader bufferedIn;
     private Join_Game joinGame;
     private JTextArea chat;
-    private PublicKey serverKey;
     private String roomName;
     private Hand hand;
     private String currentTurn;
+    private int currentRound;
     
     
     public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
@@ -230,6 +230,7 @@ public class Client {
 		                	health = Integer.parseInt(tokens[1]);
 		                	String temp_turn = tokens[2];
 		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[3]);
 							if(temp_turn.equals(name)){
 								joinGame.startDrawPhase();
 							}
@@ -239,6 +240,8 @@ public class Client {
 		                	break;
 						case GetTurn:
 							currentTurn = tokens[1];
+		                	currentRound = Integer.parseInt(tokens[2]);
+		                	
 							if(name.equals(tokens[1])) {
 								joinGame.startDrawPhase();
 							}
@@ -353,5 +356,9 @@ public class Client {
     		return currentTurn;
 		}
 		return null;
+	}
+	
+	public int getRound() {
+		return currentRound;
 	}
 }

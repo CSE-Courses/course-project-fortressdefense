@@ -1,8 +1,9 @@
 package code.Socket;
 
 import code.*;
-import code.Socket.Game_Phase.data_pack;
 import code.card_class.CardType;
+import gui.drawPhase;
+import gui.drawPhaseOtherPlayer;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -11,25 +12,29 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 public class Server implements Runnable{
     private ArrayList<Worker> clientList = new ArrayList<Worker>();
-    private data_pack Data = new data_pack();
     private ServerModel model;
     private Boolean ongoing;
     private ServerSocket serverSocket;
     private JTextArea chat;
     private RSA encryption;
     private String turn;
+    private JFrame mainFrame;
+    private drawPhase drawPhase;
+    private drawPhaseOtherPlayer waitingDraw;
     private int drawPhaseRound;
 
     private final int serverPort;
 
-    public Server(int serverPort, ServerModel model, JTextArea chat) {
+    public Server(int serverPort, ServerModel model, JTextArea chat, JFrame mainFrame) {
         this.serverPort = serverPort;
         this.model = model;
         this.chat = chat;
+        this.mainFrame = mainFrame;
         encryption = new RSA();
     }
 
@@ -78,12 +83,43 @@ public class Server implements Runnable{
                         index += 1;
                         turn = this.getModel().getPlayers().get(index).PlayerName;
                         for(Worker worker : this.getWorkerList()){
-                            String toClientCmd = Command.GetTurn + " " + turn + "\n";
+                            String toClientCmd = Command.GetTurn + " " + turn + " " + drawPhaseRound + "\n";
                             worker.send(toClientCmd);
+                        }
+                        
+                        if (index == 0) {
+    						drawPhase.GetPanel().setVisible(false);
+    					    mainFrame.remove(waitingDraw.GetPanel());
+    					    mainFrame.repaint();
+    					    drawPhase = new drawPhase(mainFrame, this, null);
+    					    mainFrame.add(drawPhase.GetPanel());
+                        }else {
+    						drawPhase.GetPanel().setVisible(false);
+    					    mainFrame.remove(drawPhase.GetPanel());
+    					    mainFrame.repaint();
+    					    waitingDraw = new drawPhaseOtherPlayer(mainFrame, this, null, this.getModel().getPlayers().get(0).getHand());
+    					    mainFrame.add(waitingDraw.GetPanel());
                         }
                     }
                     else {
-                        turn = null; // end draw phase
+                    	this.drawPhaseRound +=1;
+                    	if (drawPhaseRound > 8) {
+                    		// attack phase
+                    	} else {
+                        	turn = this.getModel().getPlayers().get(0).PlayerName;
+                            for(Worker worker : this.getWorkerList()){
+                                String toClientCmd = Command.GetTurn + " " + turn + " " + drawPhaseRound + "\n";
+                                worker.send(toClientCmd);
+                            }
+                            
+    						drawPhase.GetPanel().setVisible(false);
+    					    mainFrame.remove(waitingDraw.GetPanel());
+    					    mainFrame.repaint();
+    					    drawPhase = new drawPhase(mainFrame, this, null);
+    					    mainFrame.add(drawPhase.GetPanel());
+                    	}
+                        
+
                     }
                     break;
                 }
@@ -139,12 +175,16 @@ public class Server implements Runnable{
 	}
 	
 	public void start() {
-        //#97 turn for draw, start draw phase, set turn to first player in client list
-       turn = this.getModel().getPlayers().get(0).PlayerName;
-       for(Worker worker : clientList) {
-           //Start draw phase, client[0]'s turn
-    	   worker.send(Command.Start.toString() + " " + worker.getHealth() + " " + turn + "\n");
-        }
+	    //#97 turn for draw, start draw phase, set turn to first player in client list
+	    drawPhaseRound = 1;
+	    turn = this.getModel().getPlayers().get(0).PlayerName;
+	    for(Worker worker : clientList) {
+	        //Start draw phase, client[0]'s turn
+		    worker.send(Command.Start.toString() + " " + worker.getHealth() + " " + turn + " " + drawPhaseRound + "\n");
+	    }
+	   
+	    drawPhase = new drawPhase(mainFrame, this, null);
+	    this.mainFrame.add(drawPhase.GetPanel());
 	}
 	
 	public void setChat(JTextArea chatBox) {
@@ -179,5 +219,9 @@ public class Server implements Runnable{
 				break;
 			}
 		}
+	}
+	
+	public int getRound() {
+		return drawPhaseRound;
 	}
 }

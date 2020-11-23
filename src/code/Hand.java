@@ -93,4 +93,20 @@ public class Hand implements Serializable {
 	public void Remove(Card card) {
 		cards.remove(card);
 	}
+	
+	public int getNumAttack() {
+		return numAttackDraw;
+	}
+	
+	public int getNumDefense() {
+		return numDefenseDraw;
+	}
+	
+	public void incNumAttack() {
+		numAttackDraw += 1;
+	}
+	
+	public void incNumDefense() {
+		numDefenseDraw += 1;
+	}
 }

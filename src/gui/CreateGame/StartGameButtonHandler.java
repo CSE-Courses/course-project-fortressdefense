@@ -33,7 +33,6 @@ public class StartGameButtonHandler implements ActionListener {
 		}
 		if (startButtonHandler.getModel().GetCurrentPlayers() == startButtonHandler.getModel().GetMaxPlayers()) {
 			startButtonHandler.getTCPServer().start();
-			this.mainFrame.add(new drawPhase(mainFrame, startButtonHandler.getTCPServer(), null).GetPanel());
 			create.setVisible(false);
 		}else {
 			int dif = startButtonHandler.getModel().GetMaxPlayers() - startButtonHandler.getModel().GetCurrentPlayers();

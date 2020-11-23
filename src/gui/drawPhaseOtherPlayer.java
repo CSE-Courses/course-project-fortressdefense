@@ -95,7 +95,6 @@ public class drawPhaseOtherPlayer {
 		this.client = client;
 		this.hand = theHand;
 		this.mainFrame = mainFrame;
-		System.out.println(hand.Size());
 		initialize();
 	}
 
@@ -144,21 +143,6 @@ public class drawPhaseOtherPlayer {
 				if(i == -1)
 				{
 					tm.stop();
-					if (gameServer != null) {
-						gameServer.nextTurn();
-						if (gameServer.getTurn().equals(gameServer.getModel().getPlayers().get(0).PlayerName)) {
-							GetPanel().setVisible(false);
-						    mainFrame.remove(GetPanel());
-						    mainFrame.repaint();
-						    mainFrame.add(new drawPhase(mainFrame, gameServer, null).GetPanel());
-						}else {
-							GetPanel().setVisible(false);
-						    mainFrame.remove(GetPanel());
-						    mainFrame.repaint();
-						    mainFrame.add(new drawPhaseOtherPlayer(mainFrame, gameServer, null, hand).GetPanel());
-						}
-
-					}
 					//System.exit(0);
 				}
 				lblTimer.setText(Integer.toString(i));
@@ -225,7 +209,12 @@ public class drawPhaseOtherPlayer {
 		lblMsgBox.setBounds(10, 105, 216, 139);
 		frame.getContentPane().add(lblMsgBox);
 		
-		JLabel lblRoundNum = new JLabel("ROUND 5/8");
+		JLabel lblRoundNum = null;
+		if (client != null) {
+			lblRoundNum = new JLabel("ROUND " + client.getRound() + "/8");
+		}else if (gameServer != null) {
+			lblRoundNum = new JLabel("ROUND " + gameServer.getRound() + "/8");
+		}
 		lblRoundNum.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 30));
 		lblRoundNum.setBounds(20, 255, 195, 90);
 		frame.getContentPane().add(lblRoundNum);

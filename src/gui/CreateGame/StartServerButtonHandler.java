@@ -27,9 +27,10 @@ public class StartServerButtonHandler implements ActionListener {
 	private Server server;
 	private JPanel panel;
 	private JTextArea chat;
+	private JFrame mainFrame;
 	
 	public StartServerButtonHandler(ServerModel model, JButton startButton, JButton endButton,JTextField textField, JSpinner spinner, 
-			JTextField textField_1, JComboBox<String> choice, Executor executor, Executor tcpServer, JPanel panel, JTextArea chatBox) {
+			JTextField textField_1, JComboBox<String> choice, Executor executor, Executor tcpServer, JPanel panel, JTextArea chatBox, JFrame mainFrame) {
 		serverModel = model;
 		start = startButton;
 		end = endButton;
@@ -41,6 +42,7 @@ public class StartServerButtonHandler implements ActionListener {
 		this.tcpServer = tcpServer;
 		this.panel = panel;
 		this.chat = chatBox;
+		this.mainFrame = mainFrame;
 	}
 	
 	@Override
@@ -58,7 +60,7 @@ public class StartServerButtonHandler implements ActionListener {
 			password.setEditable(false);
 			this.choice.setEnabled(false);
 			
-			server = new Server(GameConstants.tcpPort, serverModel, chat);
+			server = new Server(GameConstants.tcpPort, serverModel, chat, mainFrame);
 			tcpServer.execute(server);	
 			
 			// Server Broadcast
