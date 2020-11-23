@@ -110,6 +110,12 @@ public class drawPhaseOtherPlayer {
 		JButton btnExit = new JButton("EXIT GAME");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (client != null) {
+					client.leave();
+				}else if (gameServer != null) {
+					gameServer.close();
+				}
+
 				System.exit(0);
 			}
 		});

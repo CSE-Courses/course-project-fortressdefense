@@ -590,4 +590,19 @@ public class Join_Game implements ActionListener {
 		// TODO Auto-generated method stub
 		RoomName = roomName2;
 	}
+
+	public void startAttackPhase() {
+        // TODO Auto-generated method stub
+        panel.setVisible(false);
+        if(startDraw != null) {
+            this.mainFrame.remove(startDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if(waitForDraw != null){
+            this.mainFrame.remove(waitForDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        this.mainFrame.add(new attackPhase(this.mainFrame, null, this.client).getPanel());
+		
+	}
 }

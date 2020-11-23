@@ -304,6 +304,14 @@ public class Client {
 		                		}
 		                		hand.Add(new Card(type, CardType.valueOf(tokens[2]), Integer.parseInt(tokens[3])));
 		                	}
+		                	break;
+		                case StartAttackPhase:
+		                	health = Integer.parseInt(tokens[1]);
+		                	temp_turn = tokens[2];
+		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[3]);
+							joinGame.startAttackPhase();
+		                	break;
                     	default:
                     		break;
                     }

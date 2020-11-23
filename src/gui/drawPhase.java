@@ -108,6 +108,12 @@ public class drawPhase {
 			@Override
 			//exit button
 			public void actionPerformed(ActionEvent e) {
+				if (client != null) {
+					client.leave();
+				}else if (gameServer != null) {
+					gameServer.close();
+				}
+
 				System.exit(0);
 			}
 		});
@@ -560,9 +566,6 @@ public class drawPhase {
 		JButton btnAttack = new JButton("");
 		btnAttack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(hand.getNumAttack() == 4 && hand.getNumDefense() == 4){
-					attackPhase ap = new attackPhase();
-				}
 				if(hand.getNumAttack() == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Attack cards </html>");
@@ -585,9 +588,6 @@ public class drawPhase {
 		JButton btnDefense = new JButton("");
 		btnDefense.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(hand.getNumAttack() == 4 && hand.getNumDefense() == 4){
-					attackPhase ap = new attackPhase();
-				}
 				if(hand.getNumDefense() == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Defense cards </html>");
@@ -799,7 +799,7 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
+					JOptionPane.showMessageDialog(mainFrame, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
 					
 					tm.stop();
 					if (client != null) {
@@ -917,7 +917,7 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
+					JOptionPane.showMessageDialog(mainFrame, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
 					
 
 					tm.stop();
@@ -975,7 +975,7 @@ public class drawPhase {
 						btnCard7.setVisible(false);
 					}
 					
-					
+					tm.stop();
 					if (client != null) {
 						client.switchTurn();
 					}else if (gameServer != null) {

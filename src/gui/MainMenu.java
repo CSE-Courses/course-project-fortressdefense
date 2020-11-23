@@ -99,34 +99,6 @@ public class MainMenu {
 			}
 	    });
 	    
-	    JButton draw = new JButton("Draw Phase");
-	    draw.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    draw.setBackground(c1);
-	    panel.add(draw);
-	    panel.add(Box.createVerticalStrut(25));
-	    
-	    draw.addActionListener(new ActionListener(){       
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				drawPhase dp = new drawPhase(frame, null, null);
-				dp.frmFortressDefense.setVisible(true);
-			}
-	    });
-	    
-	    JButton attack = new JButton("Attack Phase");
-	    attack.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    attack.setBackground(c1);
-	    panel.add(attack);
-	    
-	    attack.addActionListener(new ActionListener(){       
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				attackPhase ap = new attackPhase();
-			}
-	    });
-	    
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	    
 	    frame.getContentPane().add(panel);

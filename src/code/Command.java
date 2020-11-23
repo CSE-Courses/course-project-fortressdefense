@@ -14,5 +14,5 @@ public enum Command {
 	Discard,
 	SwitchTurn,
 	GetTurn,
-	//EndDrawPhase,
+	StartAttackPhase,
 }
