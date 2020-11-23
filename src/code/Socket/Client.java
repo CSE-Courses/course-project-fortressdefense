@@ -25,10 +25,10 @@ public class Client {
     private BufferedReader bufferedIn;
     private Join_Game joinGame;
     private JTextArea chat;
-    private PublicKey serverKey;
     private String roomName;
     private Hand hand;
     private String currentTurn;
+    private int currentRound;
     
     
     public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
@@ -197,7 +197,6 @@ public class Client {
                 if (tokens != null && tokens.length > 0) {
                     switch(Command.valueOf(tokens[0])) {
 		                case Shutdown:
-		                	// Kludge, should just set it to main frame, dont know how to check with form is visible when in draw/attack phase
 		                	JOptionPane.showMessageDialog(joinGame.getPanel(), "Connection to server lost!", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 		                	joinGame.getBackButton().doClick();
 		                	break;
@@ -230,6 +229,7 @@ public class Client {
 		                	health = Integer.parseInt(tokens[1]);
 		                	String temp_turn = tokens[2];
 		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[3]);
 							if(temp_turn.equals(name)){
 								joinGame.startDrawPhase();
 							}
@@ -239,6 +239,8 @@ public class Client {
 		                	break;
 						case GetTurn:
 							currentTurn = tokens[1];
+		                	currentRound = Integer.parseInt(tokens[2]);
+		                	
 							if(name.equals(tokens[1])) {
 								joinGame.startDrawPhase();
 							}
@@ -301,6 +303,14 @@ public class Client {
 		                		}
 		                		hand.Add(new Card(type, CardType.valueOf(tokens[2]), Integer.parseInt(tokens[3])));
 		                	}
+		                	break;
+		                case StartAttackPhase:
+		                	health = Integer.parseInt(tokens[1]);
+		                	temp_turn = tokens[2];
+		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[3]);
+							joinGame.startAttackPhase();
+		                	break;
                     	default:
                     		break;
                     }
@@ -354,104 +364,8 @@ public class Client {
 		}
 		return null;
 	}
-
-    /*
-    public static void main(String[] args) throws Exception {
-        while(player_name.equals("")) {
-            System.out.println("Demo\nEnter Your Name");
-            player_name = reader.readLine();
-            if(player_name.length() == 0){
-                System.out.println("[Client] *Error: Name cannot be Empty");
-            }
-        }
-        Player player = new Player(player_name);
-        System.out.println("[Client] Initiated Player: " + player_name);
-
-        System.out.println("Enter port");
-        Scanner s = new Scanner(System.in);
-        int port = s.nextInt();
-        System.out.println("Enter Host Address");
-        //"172.20.5.78"
-        String host_address = reader.readLine();
-
-        Socket server = new Socket(host_address, port);
-        System.out.println("[Client] Connected to Server" + server.getInetAddress() + ": " + port);
-
-        join_server(server, player);
-
-        try(server){
-            boolean ongoing = true;
-            while (ongoing){
-                if(Data.getTurn().equals(player_name)){
-                    System.out.println("[Client] It is your turn. What do you want to do?"+
-                            "\n\t \t 1.attack\t2.defense(Heal your self)\t3.pass");
-                    int selection = s.nextInt();
-                    if(selection == 1) {
-                        System.out.println("\t \t Who do you want to attack?");
-                        String attack_name = reader.readLine();
-                        System.out.println("\t \t By how much?");
-                        int damage = s.nextInt();
-                        for(Player value: Data.getPlayer_list()){
-                            if(value.PlayerName.equals(attack_name)){
-                                value.points -= damage;
-                                break;
-                            }
-                        }
-                        Data.write_message(player_name + " deals " + damage + " damage to " + attack_name);
-                    }
-                    else if(selection == 2) {
-                        System.out.println("\t \t By how much?");
-                        int damage = s.nextInt();
-                        for(Player value: Data.getPlayer_list()) {
-                            if (value.PlayerName.equals(player_name)) {
-                                value.points += damage;
-                                break;
-                            }
-                        }
-                        Data.write_message(player_name + " recover " + damage + " HP");
-                    }
-                    else{
-                        System.out.println("\t \t Pass");
-                        Data.write_message(player_name + " passed turn");
-                    }
-                    command = "push";
-                }
-                else {
-                    System.out.println("[Client] Waiting for input from server");
-                    command_from_server = new InputStreamReader(server.getInputStream());
-                    server_command = new BufferedReader(command_from_server);
-                    command = server_command.readLine();
-                    System.out.println("[Server] Auto Receive from Server");
-                    System.out.println("[Client] Input = " + command);
-                }
-
-                switch (command) {
-                    case "pull": {
-                        receive_from_server(server);
-                        break;
-                    }
-                    case "push": {
-                        if (!Data.getTurn().equals(player_name)) {
-                            System.out.println("[Server] It is Player " + Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
-                        } else {
-                            Data.next_turn();
-                            send_to_server(server);
-                        }
-                        break;
-                    }
-                    case "quit": {
-                        Data.del_player(player);
-                        Data.write_message("Player " + player_name + " quited");
-                        ongoing = false;
-                    }
-                    default:
-                }
-                command = null;
-            }
-            server.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    */
+	
+	public int getRound() {
+		return currentRound;
+	}
 }

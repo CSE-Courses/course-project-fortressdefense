@@ -31,11 +31,9 @@ public class StartGameButtonHandler implements ActionListener {
 				return;
 			}
 		}
-		if (startButtonHandler.getModel().GetCurrentPlayers() >= 2) {
-			//this.mainFrame.add(new drawPhase(mainFrame, startButtonHandler.getTCPServer(), null).GetPanel());
-			this.mainFrame.add(new drawPhaseOtherPlayer(startButtonHandler.getTCPServer(), null, startButtonHandler.getTCPServer().getModel().getPlayers().get(0).getHand()).GetPanel());
-			create.setVisible(false);
+		if (startButtonHandler.getModel().GetCurrentPlayers() == startButtonHandler.getModel().GetMaxPlayers()) {
 			startButtonHandler.getTCPServer().start();
+			create.setVisible(false);
 		}else {
 			int dif = startButtonHandler.getModel().GetMaxPlayers() - startButtonHandler.getModel().GetCurrentPlayers();
 			JOptionPane.showMessageDialog(mainFrame, dif + " Players needed to start a game.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);

@@ -51,8 +51,6 @@ public class drawPhase {
 	boolean discard = false;
 	JButton curBtn;//tracks the current card button
 	int curBound = 10;//sets the card btn position
-	int numA = 0;//number of attack cards
-	int numD = 0;//number of defense cards
 	
 	private Card selected;
 	
@@ -110,6 +108,12 @@ public class drawPhase {
 			@Override
 			//exit button
 			public void actionPerformed(ActionEvent e) {
+				if (client != null) {
+					client.leave();
+				}else if (gameServer != null) {
+					gameServer.close();
+				}
+
 				System.exit(0);
 			}
 		});
@@ -207,9 +211,11 @@ public class drawPhase {
 				if(i == -1)
 				{
 					tm.stop();
-					client.switchTurn();
-//					mainFrame.add(new drawPhaseOtherPlayer(gameServer, null, hand).GetPanel());
-//					GetPanel().setVisible(false);
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+					}
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
@@ -249,7 +255,12 @@ public class drawPhase {
 		lblBar.setBounds(380, 114, 254, 46);
 		frmFortressDefense.getContentPane().add(lblBar);
 		
-		JLabel lblRoundNum = new JLabel("ROUND 5/8");
+		JLabel lblRoundNum = null;
+		if (client != null) {
+			lblRoundNum = new JLabel("ROUND " + client.getRound() + "/8");
+		}else if (gameServer != null) {
+			lblRoundNum = new JLabel("ROUND " + gameServer.getRound() + "/8");
+		}
 		lblRoundNum.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 30));
 		lblRoundNum.setBounds(10, 216, 195, 90);
 		frmFortressDefense.getContentPane().add(lblRoundNum);
@@ -433,13 +444,129 @@ public class drawPhase {
 			}
 		});
 		
+		curBtn = btnCard1;
+		curBound = 10;
+		for(int i = 0; i < hand.Size(); i++)
+		{
+			if(hand.Select(i).getCard_name() == AttackCard.Axe)
+			{
+				curBtn.setIcon(new ImageIcon(axeImg));
+			}
+			else if(hand.Select(i).getCard_name() == AttackCard.Battle_Axe)
+			{
+				curBtn.setIcon(new ImageIcon(battleAxeImg));
+			}
+			else if(hand.Select(i).getCard_name() == AttackCard.Crossbow)
+			{
+				curBtn.setIcon(new ImageIcon(crossbowImg));
+			}
+			else if(hand.Select(i).getCard_name() == AttackCard.Mace)
+			{
+				curBtn.setIcon(new ImageIcon(maceImg));
+			}
+			else if(hand.Select(i).getCard_name() == AttackCard.Stick)
+			{
+				curBtn.setIcon(new ImageIcon(stickImg));
+			}
+			else if(hand.Select(i).getCard_name() == AttackCard.Sword)
+			{
+				curBtn.setIcon(new ImageIcon(swordImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Barbed_Wire)
+			{
+				curBtn.setIcon(new ImageIcon(barbedWireImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Earthquake)
+			{
+				curBtn.setIcon(new ImageIcon(earthquakeImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Flood)
+			{
+				curBtn.setIcon(new ImageIcon(floodImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Iron_Door)
+			{
+				curBtn.setIcon(new ImageIcon(ironDoorImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Reinforced_Gate)
+			{
+				curBtn.setIcon(new ImageIcon(reinforcedGateImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Steel_Chains)
+			{
+				curBtn.setIcon(new ImageIcon(steelChainsImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Stone_Wall)
+			{
+				curBtn.setIcon(new ImageIcon(stoneWallImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Thunderstorm)
+			{
+				curBtn.setIcon(new ImageIcon(thunderstormImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Tornado)
+			{
+				curBtn.setIcon(new ImageIcon(tornadoImg));
+			}
+			else if(hand.Select(i).getCard_name() == DefenseCard.Wooden_Wall)
+			{
+				curBtn.setIcon(new ImageIcon(woodenWallImg));
+			}
+			else if(hand.Select(i).getCard_name() == SpecialCard.Archer_Tower)
+			{
+				curBtn.setIcon(new ImageIcon(archerTowerImg));
+			}
+			else if(hand.Select(i).getCard_name() == SpecialCard.Scout)
+			{
+				curBtn.setIcon(new ImageIcon(scoutImg));
+			}
+			else if(hand.Select(i).getCard_name() == SpecialCard.Trade)
+			{
+				curBtn.setIcon(new ImageIcon(tradeImg));
+			}
+
+			curBtn.setBounds(curBound, 22, 119, 176);
+			cardPanel.add(curBtn);
+			curBtn.setVisible(true);
+
+			curBound = curBound + 130;
+
+			if(curBtn == btnCard1)
+			{
+				curBtn = btnCard2;
+			}
+			else if(curBtn == btnCard2)
+			{
+				curBtn = btnCard3;
+			}
+			else if(curBtn == btnCard3)
+			{
+				curBtn = btnCard4;
+			}
+			else if(curBtn == btnCard4)
+			{
+				curBtn = btnCard5;
+			}
+			else if(curBtn == btnCard5)
+			{
+				curBtn = btnCard6;
+			}
+			else if(curBtn == btnCard6)
+			{
+				curBtn = btnCard7;
+			}
+			else if(curBtn == btnCard7)
+			{
+				curBtn = btnCard8;
+			}
+
+		}
+		
+		
 		JButton btnAttack = new JButton("");
 		btnAttack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(numA == 4 && numD == 4){
-					attackPhase ap = new attackPhase();
-				}
-				if(numA == 4)
+				if(hand.getNumAttack() == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Attack cards </html>");
 					lblSelected.setText("");
@@ -461,10 +588,7 @@ public class drawPhase {
 		JButton btnDefense = new JButton("");
 		btnDefense.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(numA == 4 && numD == 4){
-					attackPhase ap = new attackPhase();
-				}
-				if(numD == 4)
+				if(hand.getNumDefense() == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Defense cards </html>");
 					lblSelected.setText("");
@@ -572,8 +696,12 @@ public class drawPhase {
 			public void actionPerformed(ActionEvent e) {
 				if(lblSelected.getText() == "PASS selected")
 				{
-					client.switchTurn();
 					tm.stop();
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+					}
 					//System.exit(0);
 				}
 				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")
@@ -595,7 +723,10 @@ public class drawPhase {
 						hand = client.getHand();
 					}
 					
-					numA++;
+					if (client != null) {
+						// server already does this, need it for client
+						hand.incNumAttack();
+					}
 					
 					if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Axe)
 					{
@@ -668,7 +799,14 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
+					JOptionPane.showMessageDialog(mainFrame, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
+					
+					tm.stop();
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+					}
 				}
 				else if(lblSelected.getText() == "<html> Defense Deck selected </html>")
 				{
@@ -686,7 +824,11 @@ public class drawPhase {
 						}
 						hand = client.getHand();
 					}
-					numD++;
+					
+					if (client != null) {
+						// server already does this, need it for client
+						hand.incNumDefense();
+					}
 					
 					if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Earthquake)
 					{
@@ -743,20 +885,6 @@ public class drawPhase {
 					curBtn.setBounds(curBound, 22, 119, 176);
 					cardPanel.add(curBtn);
 					curBtn.setVisible(true);
-					
-					/*if(newHealth < 0)
-					{
-						healthBar.setValue(0);
-						lblBar.setText("HEALTHPOINTS: 0");
-					}
-					else
-					{*/
-						//updates the health bar based on card picked up
-						healthBar.setValue(healthBar.getValue() + hand.Select(hand.Size()-1).getDamage());
-						
-						//updates the healthpoints
-						lblBar.setText("HEALTHPOINTS: " + Integer.toString(healthBar.getValue()));
-					//}
 	
 					curBound = curBound + 130;
 					
@@ -789,7 +917,16 @@ public class drawPhase {
 						curBtn = btnCard8;
 					}
 					
-					JOptionPane.showMessageDialog(null, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
+					JOptionPane.showMessageDialog(mainFrame, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
+					
+
+					tm.stop();
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+					}
+					
 				}
 				else if(discard)
 				{	
@@ -802,13 +939,6 @@ public class drawPhase {
 						hand = client.getHand();
 					}
 					
-					if(selected.getType() == CardType.Defense)
-					{
-						//updates the health bar based on card discarded
-						healthBar.setValue(healthBar.getValue() + selected.getDamage());
-						//updates the healthpoints
-						lblBar.setText("HEALTHPOINTS: " + Integer.toString(healthBar.getValue()));
-					}
 					if(lblCard1.isVisible())
 					{
 						lblCard1.setVisible(false);
@@ -843,6 +973,13 @@ public class drawPhase {
 					{
 						lblCard7.setVisible(false);
 						btnCard7.setVisible(false);
+					}
+					
+					tm.stop();
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
 					}
 				}
 				lblSelected.setText("");

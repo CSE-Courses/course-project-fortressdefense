@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import code.Socket.*;
+
 public class attackPhase {
 
 	Timer timer;
@@ -29,8 +31,15 @@ public class attackPhase {
 	private int maceValue = 5;
 	private int stickValue = 1;
 	private int swordValue = 4;
-
-	public attackPhase() {
+	private Server server;
+	private Client client;
+	private JFrame frame;
+	private JFrame mainFrame;
+	
+	public attackPhase(JFrame mainFrame, Server server, Client client) {
+		this.server = server;
+		this.client = client;
+		this.mainFrame = mainFrame;
 		runAttackGUI();
 	}
 
@@ -38,7 +47,7 @@ public class attackPhase {
 		Color c1 = new Color(153, 102, 0);
 		Color c2 = new Color(0, 0, 153);
 
-		JFrame frame = new JFrame("FORTRESS DEFENSE");
+		frame = new JFrame("FORTRESS DEFENSE");
 		frame.setBackground(c1);
 
 		JPanel tpanel = new JPanel();
@@ -1441,7 +1450,7 @@ public class attackPhase {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
-		frame.setVisible(true);
+		frame.setVisible(false);
 	}
 	
 	public void showWinner() {
@@ -1472,5 +1481,9 @@ public class attackPhase {
 
 		dialog.setSize(500, 500);
 		dialog.setVisible(true);
+	}
+	
+	public JPanel getPanel() {
+		return (JPanel) frame.getContentPane();
 	}
 }

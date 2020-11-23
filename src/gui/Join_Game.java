@@ -506,7 +506,10 @@ public class Join_Game implements ActionListener {
             }
             
     		mainPanel.setVisible(true);
+
     		panel.setVisible(false);
+    		mainFrame.getContentPane().removeAll();
+    		mainFrame.getContentPane().add(mainPanel);
         }
         //frame.repaint();
     }
@@ -552,7 +555,7 @@ public class Join_Game implements ActionListener {
             this.mainFrame.repaint();
         }
         waitForDraw = null;
-        waitForDraw = new drawPhaseOtherPlayer(null, this.client, this.client.getHand());
+        waitForDraw = new drawPhaseOtherPlayer(this.mainFrame, null, this.client, this.client.getHand());
         this.mainFrame.add(waitForDraw.GetPanel());
     }
 	
@@ -589,5 +592,20 @@ public class Join_Game implements ActionListener {
 	public void setRoomName(String roomName2) {
 		// TODO Auto-generated method stub
 		RoomName = roomName2;
+	}
+
+	public void startAttackPhase() {
+        // TODO Auto-generated method stub
+        panel.setVisible(false);
+        if(startDraw != null) {
+            this.mainFrame.remove(startDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if(waitForDraw != null){
+            this.mainFrame.remove(waitForDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        this.mainFrame.add(new attackPhase(this.mainFrame, null, this.client).getPanel());
+		
 	}
 }

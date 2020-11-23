@@ -68,6 +68,7 @@ public class drawPhaseOtherPlayer {
 	private Server gameServer;
 	private Hand hand;
 	private String turn;
+	private JFrame mainFrame;
 	
 	public JPanel GetPanel() {
 		return (JPanel) frame.getContentPane();
@@ -77,7 +78,7 @@ public class drawPhaseOtherPlayer {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					drawPhaseOtherPlayer window = new drawPhaseOtherPlayer(null, null, null);
+					drawPhaseOtherPlayer window = new drawPhaseOtherPlayer(null, null, null, null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -89,11 +90,11 @@ public class drawPhaseOtherPlayer {
 	/**
 	 * Create the application.
 	 */
-	public drawPhaseOtherPlayer(Server server, Client client, Hand theHand) {
+	public drawPhaseOtherPlayer(JFrame mainFrame, Server server, Client client, Hand theHand) {
 		this.gameServer = server;
 		this.client = client;
 		this.hand = theHand;
-		System.out.println(hand.Size());
+		this.mainFrame = mainFrame;
 		initialize();
 	}
 
@@ -109,6 +110,12 @@ public class drawPhaseOtherPlayer {
 		JButton btnExit = new JButton("EXIT GAME");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (client != null) {
+					client.leave();
+				}else if (gameServer != null) {
+					gameServer.close();
+				}
+
 				System.exit(0);
 			}
 		});
@@ -142,7 +149,6 @@ public class drawPhaseOtherPlayer {
 				if(i == -1)
 				{
 					tm.stop();
-					//client.switchTurn();
 					//System.exit(0);
 				}
 				lblTimer.setText(Integer.toString(i));
@@ -209,7 +215,12 @@ public class drawPhaseOtherPlayer {
 		lblMsgBox.setBounds(10, 105, 216, 139);
 		frame.getContentPane().add(lblMsgBox);
 		
-		JLabel lblRoundNum = new JLabel("ROUND 5/8");
+		JLabel lblRoundNum = null;
+		if (client != null) {
+			lblRoundNum = new JLabel("ROUND " + client.getRound() + "/8");
+		}else if (gameServer != null) {
+			lblRoundNum = new JLabel("ROUND " + gameServer.getRound() + "/8");
+		}
 		lblRoundNum.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 30));
 		lblRoundNum.setBounds(20, 255, 195, 90);
 		frame.getContentPane().add(lblRoundNum);

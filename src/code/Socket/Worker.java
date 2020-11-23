@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.sql.Time;
@@ -102,12 +101,7 @@ public class Worker extends Thread{
      * #97 turn for draw phase
      */
     private void handleSwitchTurn(){
-        server.nextTurn();
-        thisTurn = server.getTurn();
-        for(Worker worker : server.getWorkerList()){
-            String toClientCmd = Command.GetTurn + " " + thisTurn + "\n";
-            worker.send(toClientCmd);
-        }
+    	server.nextTurn();
     }
 
     private void handelGetTurn(){
