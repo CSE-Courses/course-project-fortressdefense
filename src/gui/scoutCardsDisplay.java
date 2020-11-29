@@ -296,9 +296,8 @@ public class scoutCardsDisplay {
 				if(i == -1)
 				{
 					tm.stop();
-					//mainFrame.add(new drawPhaseOtherPlayer(gameServer, null, hand).GetPanel());
-					GetPanel().setVisible(false);
-					System.exit(0);
+					viewAttack();
+					//System.exit(0);
 					
 				}
 				lblTimer.setText(Integer.toString(i));
@@ -306,6 +305,12 @@ public class scoutCardsDisplay {
 			}
 		});
 		tm.start();
+	}
+	
+	public void viewAttack()
+	{
+		mainFrame.getContentPane().add(new attackPhase(mainFrame, gameServer, client).getPanel());
+		GetPanel().setVisible(false);
 	}
 
 	public JPanel GetPanel() {

@@ -359,10 +359,11 @@ public class attackPhase {
 				/*if(turn.getText() == "Your Turn") {
 					card5Clicked = true;
 				}*/
-				if(card5.getIcon() == scout)
-				{
+				//if(card5.getIcon() == scout)
+				//{
+					card5.setVisible(false);
 					viewScout();
-				}
+				//}
 			}
 		});
 
