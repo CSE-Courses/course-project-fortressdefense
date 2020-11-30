@@ -31,11 +31,15 @@ public class attackPhase {
 	private int maceValue = 5;
 	private int stickValue = 1;
 	private int swordValue = 4;
+	private int quakeValue = 8;
+	private int floodValue = 3;
+	private int doorValue = -10;
+	private int gateValue = -14;
 	private Server server;
 	private Client client;
 	private JFrame frame;
 	private JFrame mainFrame;
-	
+
 	public attackPhase(JFrame mainFrame, Server server, Client client) {
 		this.server = server;
 		this.client = client;
@@ -138,7 +142,7 @@ public class attackPhase {
 		p1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		p1.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel hp1 = new JLabel("Health Points : 12");
+		JLabel hp1 = new JLabel("Health Points : 4");
 		hp1.setForeground(c2);
 		hp1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -148,7 +152,7 @@ public class attackPhase {
 		hb1.setForeground(new Color(50, 205, 50));
 		hb1.setMaximum(20);
 		hb1.setBackground(Color.DARK_GRAY);
-		hb1.setValue(12);
+		hb1.setValue(4);
 
 		lpanel.add(playerIcon2);
 		lpanel.add(p2);
@@ -181,7 +185,7 @@ public class attackPhase {
 		p4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		p4.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel hp4 = new JLabel("Health Points : 11");
+		JLabel hp4 = new JLabel("Health Points : 8");
 		hp4.setForeground(c2);
 		hp4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp4.setHorizontalAlignment(SwingConstants.CENTER);
@@ -191,7 +195,7 @@ public class attackPhase {
 		hb4.setForeground(new Color(50, 205, 50));
 		hb4.setMaximum(20);
 		hb4.setBackground(Color.DARK_GRAY);
-		hb4.setValue(11);
+		hb4.setValue(8);
 
 		rpanel.add(playerIcon3);
 		rpanel.add(p3);
@@ -207,7 +211,7 @@ public class attackPhase {
 		attack.setFont(new Font("Times New Roman", Font.BOLD, 50));
 		attack.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel lblTimer = new JLabel("5");
+		JLabel lblTimer = new JLabel("1");
 		lblTimer.setForeground(c2);
 		lblTimer.setFont(new Font("Times New Roman", Font.BOLD, 75));
 		lblTimer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -217,7 +221,7 @@ public class attackPhase {
 		time.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		time.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel hp = new JLabel("HEALTH POINTS: 15");
+		JLabel hp = new JLabel("HEALTH POINTS : 15");
 		hp.setForeground(c2);
 		hp.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp.setHorizontalAlignment(SwingConstants.CENTER);
@@ -278,13 +282,13 @@ public class attackPhase {
 		spanel.add(card2);
 
 		JButton card3 = new JButton("");
-		Image baxeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/battleAxe.PNG")).getImage();
+		Image baxeImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/earthquake.PNG")).getImage();
 		card3.setIcon(new ImageIcon(baxeImg));
 		card3.setBackground(c1);
 		spanel.add(card3);
 
 		JButton card4 = new JButton("");
-		Image mace = new ImageIcon(this.getClass().getResource("Images/attackIMG/mace.PNG")).getImage();
+		Image mace = new ImageIcon(this.getClass().getResource("Images/damageIMG/flood.PNG")).getImage();
 		card4.setIcon(new ImageIcon(mace));
 		card4.setBackground(c1);
 		spanel.add(card4);
@@ -302,12 +306,14 @@ public class attackPhase {
 		spanel.add(card6);
 
 		JButton card7 = new JButton("");
-		card7.setIcon(new ImageIcon(axeImg));
+		Image door = new ImageIcon(this.getClass().getResource("Images/defenseIMG/ironDoor.PNG")).getImage();
+		card7.setIcon(new ImageIcon(door));
 		card7.setBackground(c1);
 		spanel.add(card7);
 
 		JButton card8 = new JButton("");
-		card8.setIcon(new ImageIcon(baxeImg));
+		Image gate = new ImageIcon(this.getClass().getResource("Images/defenseIMG/reinforcedGate.PNG")).getImage();
+		card8.setIcon(new ImageIcon(gate));
 		card8.setBackground(c1);
 		spanel.add(card8);
 
@@ -337,6 +343,21 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(turn.getText() == "Your Turn") {
 					card3Clicked = true;
+					card3.setIcon(null);
+					card3.setVisible(false);
+					card3Clicked = false;
+					int textValue = Integer.parseInt(hp.getText().substring(16));
+					int healthAfterAttack = textValue - quakeValue;
+					String text = "";
+					if(healthAfterAttack <= 0) {
+						text = "Health Points : " + Integer.toString(0);
+					} 
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
+					}
+					hp.setText(text);
+					hb.setValue(healthAfterAttack);
+					turn.setText("Player 1 Turn");
 				}
 			}
 		});
@@ -347,6 +368,21 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(turn.getText() == "Your Turn") {
 					card4Clicked = true;
+					card4.setIcon(null);
+					card4.setVisible(false);
+					card4Clicked = false;
+					int textValue = Integer.parseInt(hp.getText().substring(16));
+					int healthAfterAttack = textValue - floodValue;
+					String text = "";
+					if(healthAfterAttack <= 0) {
+						text = "Health Points : " + Integer.toString(0);
+					} 
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
+					}
+					hp.setText(text);
+					hb.setValue(healthAfterAttack);
+					turn.setText("Player 1 Turn");
 				}
 			}
 		});
@@ -377,6 +413,24 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(turn.getText() == "Your Turn") {
 					card7Clicked = true;
+					card7.setIcon(null);
+					card7.setVisible(false);
+					card7Clicked = false;
+					int textValue = Integer.parseInt(hp.getText().substring(16));
+					int healthAfterAttack = textValue - doorValue;
+					String text = "";
+					if(healthAfterAttack <= 0) {
+						text = "Health Points : " + Integer.toString(0);
+					} 
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
+					}
+					hp.setText(text);
+					hb.setValue(healthAfterAttack);
+					System.out.println(textValue);
+					System.out.println(text);
+					System.out.println(healthAfterAttack);
+					turn.setText("Player 1 Turn");
 				}
 			}
 		});
@@ -387,6 +441,21 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(turn.getText() == "Your Turn") {
 					card8Clicked = true;
+					card8.setIcon(null);
+					card8.setVisible(false);
+					card8Clicked = false;
+					int textValue = Integer.parseInt(hp.getText().substring(16));
+					int healthAfterAttack = textValue - gateValue;
+					String text = "";
+					if(healthAfterAttack <= 0) {
+						text = "Health Points : " + Integer.toString(0);
+					} 
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
+					}
+					hp.setText(text);
+					hb.setValue(healthAfterAttack);
+					turn.setText("Player 1 Turn");
 				}
 			}
 		});
