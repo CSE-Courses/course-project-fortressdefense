@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import code.Socket.*;
+import code.*;
 
 public class attackPhase {
 
@@ -294,8 +295,8 @@ public class attackPhase {
 		spanel.add(card4);
 
 		JButton card5 = new JButton("");
-		Image stick = new ImageIcon(this.getClass().getResource("Images/attackIMG/stick.PNG")).getImage();
-		card5.setIcon(new ImageIcon(stick));
+		Image scout = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.PNG")).getImage();
+		card5.setIcon(new ImageIcon(scout));
 		card5.setBackground(c1);
 		spanel.add(card5);
 
@@ -391,9 +392,14 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				/*if(turn.getText() == "Your Turn") {
 					card5Clicked = true;
-				}
+				}*/
+				//if(card5.getIcon() == scout)
+				//{
+					card5.setVisible(false);
+					viewScout();
+				//}
 			}
 		});
 
@@ -1554,5 +1560,11 @@ public class attackPhase {
 	
 	public JPanel getPanel() {
 		return (JPanel) frame.getContentPane();
+	}
+	
+	public void viewScout()
+	{
+		mainFrame.getContentPane().add(new scoutCardGUI(mainFrame, server, client, turnStrings).GetPanel());
+		getPanel().setVisible(false);
 	}
 }
