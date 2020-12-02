@@ -177,7 +177,7 @@ public class CreateGame extends JPanel {
 		
 		// Num Players Spinner
 		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(6, 2, 6, 1));
+		spinner.setModel(new SpinnerNumberModel(5, 2, 5, 1));
 		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
 		GridBagConstraints gbc_spinner = new GridBagConstraints();
 		gbc_spinner.fill = GridBagConstraints.VERTICAL;
@@ -309,18 +309,6 @@ public class CreateGame extends JPanel {
 		panel_1.add(textField_6, gbc_textField_6);
 		textField_6.setFont(new Font("Arial", Font.PLAIN, 20));
 		playerTextFields.add(textField_6);
-		
-		// Player 6
-		JTextField textField_7 = new JTextField();
-		textField_7.setEditable(false);
-		GridBagConstraints gbc_textField_7 = new GridBagConstraints();
-		gbc_textField_7.fill = GridBagConstraints.BOTH;
-		gbc_textField_7.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_7.gridx = 0;
-		gbc_textField_7.gridy = 6;
-		panel_1.add(textField_7, gbc_textField_7);
-		textField_7.setFont(new Font("Arial", Font.PLAIN, 20));
-		playerTextFields.add(textField_7);
 		
 		model.SetPlayerTextFields(playerTextFields);
 		

@@ -24,7 +24,7 @@ public class ServerModel {
 		hostGameName = "";
 		accessType = AccessType.Public;
 		password = "";
-		maxPlayers = 6;
+		maxPlayers = 5;
 		this.game = game;
 	}
 

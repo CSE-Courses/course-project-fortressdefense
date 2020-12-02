@@ -3,6 +3,9 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import javax.swing.*;
 
 import code.Socket.*;
@@ -13,8 +16,6 @@ public class attackPhase {
 	Timer timer;
 	boolean discard = false;
 	
-	String[] turnStrings = {"Your Turn", "Player 1 Turn", "Player 2 Turn", "Player 3 Turn", "Player 4 Turn"}; 
-	
 	private boolean card1Clicked = false;
 	private boolean card2Clicked = false;
 	private boolean card3Clicked = false;
@@ -23,8 +24,6 @@ public class attackPhase {
 	private boolean card6Clicked = false;
 	private boolean card7Clicked = false;
 	private boolean card8Clicked = false;
-	
-	private boolean buttonClicked = false;
 
 	private int axeValue = 3;
 	private int battleAxeValue = 8;
@@ -32,19 +31,33 @@ public class attackPhase {
 	private int maceValue = 5;
 	private int stickValue = 1;
 	private int swordValue = 4;
-	private int quakeValue = 8;
-	private int floodValue = 3;
-	private int doorValue = -10;
-	private int gateValue = -14;
 	private Server server;
 	private Client client;
 	private JFrame frame;
 	private JFrame mainFrame;
-
+	private HashMap<String, String> playerData;
+	private String playerName;
+	private int health;
+	private String currentTurn;
+	private int round;
+	
 	public attackPhase(JFrame mainFrame, Server server, Client client) {
 		this.server = server;
 		this.client = client;
 		this.mainFrame = mainFrame;
+		if (this.server != null) {
+			playerData = this.server.getPlayerData();
+			playerName = this.server.getPlayerName();
+			health = this.server.getHealth();
+			currentTurn = this.server.getTurn();
+			round = this.server.getRound();
+		}else if (this.client != null) {
+			playerData = this.client.getPlayerData();
+			playerName = this.client.getName();
+			health = this.client.getHealth();
+			currentTurn = (String)this.client.obtainTurn();
+			round = this.client.getRound();
+		}
 		runAttackGUI();
 	}
 
@@ -120,99 +133,122 @@ public class attackPhase {
 		JButton playerIcon15 = new JButton("");
 		Image pc15 = new ImageIcon(this.getClass().getResource("characters/my_character22.png")).getImage();
 		playerIcon15.setIcon(new ImageIcon(pc15));
-
-		JLabel p2 = new JLabel("PLAYER 2");
-		p2.setForeground(c2);
-		p2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		p2.setHorizontalAlignment(SwingConstants.CENTER);
-
-		JLabel hp2 = new JLabel("Health Points : 10");
-		hp2.setForeground(c2);
-		hp2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		hp2.setHorizontalAlignment(SwingConstants.CENTER);
-
-		JProgressBar hb2 = new JProgressBar();
-		hb2.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
-		hb2.setForeground(new Color(50, 205, 50));
-		hb2.setMaximum(20);
-		hb2.setBackground(Color.DARK_GRAY);
-		hb2.setValue(10);
-
-		JLabel p1 = new JLabel("PLAYER 1");
-		p1.setForeground(c2);
-		p1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		p1.setHorizontalAlignment(SwingConstants.CENTER);
-
-		JLabel hp1 = new JLabel("Health Points : 4");
-		hp1.setForeground(c2);
-		hp1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		hp1.setHorizontalAlignment(SwingConstants.CENTER);
-
+		
+		JLabel p1 = new JLabel();
+		JLabel hp1 = new JLabel();
 		JProgressBar hb1 = new JProgressBar();
-		hb1.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
-		hb1.setForeground(new Color(50, 205, 50));
-		hb1.setMaximum(20);
-		hb1.setBackground(Color.DARK_GRAY);
-		hb1.setValue(4);
-
-		lpanel.add(playerIcon2);
-		lpanel.add(p2);
-		lpanel.add(hp2);
-		lpanel.add(hb2);
-		lpanel.add(playerIcon1);
-		lpanel.add(p1);
-		lpanel.add(hp1);
-		lpanel.add(hb1);
-
-		JLabel p3 = new JLabel("PLAYER 3");
-		p3.setForeground(c2);
-		p3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		p3.setHorizontalAlignment(SwingConstants.CENTER);
-
-		JLabel hp3 = new JLabel("Health Points : 5");
-		hp3.setForeground(c2);
-		hp3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		hp3.setHorizontalAlignment(SwingConstants.CENTER);
-
+		JLabel p2 = new JLabel();
+		JLabel hp2 = new JLabel();
+		JProgressBar hb2 = new JProgressBar();
+		JLabel p3 = new JLabel();
+		JLabel hp3 = new JLabel();
 		JProgressBar hb3 = new JProgressBar();
-		hb3.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
-		hb3.setForeground(new Color(50, 205, 50));
-		hb3.setMaximum(20);
-		hb3.setBackground(Color.DARK_GRAY);
-		hb3.setValue(5);
-
-		JLabel p4 = new JLabel("PLAYER 4");
-		p4.setForeground(c2);
-		p4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		p4.setHorizontalAlignment(SwingConstants.CENTER);
-
-		JLabel hp4 = new JLabel("Health Points : 8");
-		hp4.setForeground(c2);
-		hp4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		hp4.setHorizontalAlignment(SwingConstants.CENTER);
-
+		JLabel p4 = new JLabel();
+		JLabel hp4 = new JLabel();
 		JProgressBar hb4 = new JProgressBar();
-		hb4.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
-		hb4.setForeground(new Color(50, 205, 50));
-		hb4.setMaximum(20);
-		hb4.setBackground(Color.DARK_GRAY);
-		hb4.setValue(8);
+		int i = 1;
+		for (Entry<String, String> p: playerData.entrySet()) {
+			if (!p.getKey().equals(playerName)){
+				if (i == 1) {
+					p1.setText(p.getKey());
+					p1.setForeground(c2);
+					p1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					p1.setHorizontalAlignment(SwingConstants.CENTER);
 
-		rpanel.add(playerIcon3);
-		rpanel.add(p3);
-		rpanel.add(hp3);
-		rpanel.add(hb3);
-		rpanel.add(playerIcon4);
-		rpanel.add(p4);
-		rpanel.add(hp4);
-		rpanel.add(hb4);
+					hp1.setText("Health Points : " + p.getValue());
+					hp1.setForeground(c2);
+					hp1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					hp1.setHorizontalAlignment(SwingConstants.CENTER);
 
+					hb1.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+					hb1.setForeground(new Color(50, 205, 50));
+					hb1.setMaximum(50);
+					hb1.setBackground(Color.DARK_GRAY);
+					hb1.setValue(Integer.parseInt(p.getValue()));
+					
+					lpanel.add(playerIcon1);
+					lpanel.add(p1);
+					lpanel.add(hp1);
+					lpanel.add(hb1);
+					i+=1;
+				}
+				else if (i == 2) {
+					p2.setText(p.getKey());
+					p2.setForeground(c2);
+					p2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					p2.setHorizontalAlignment(SwingConstants.CENTER);
+
+					hp2.setText("Health Points : " + p.getValue());
+					hp2.setForeground(c2);
+					hp2.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					hp2.setHorizontalAlignment(SwingConstants.CENTER);
+
+					hb2.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+					hb2.setForeground(new Color(50, 205, 50));
+					hb2.setMaximum(50);
+					hb2.setBackground(Color.DARK_GRAY);
+					hb2.setValue(Integer.parseInt(p.getValue()));
+					lpanel.add(playerIcon2);
+					lpanel.add(p2);
+					lpanel.add(hp2);
+					lpanel.add(hb2);
+					i+=1;
+				}
+				else if (i == 3) {
+					p3.setText(p.getKey());
+					p3.setForeground(c2);
+					p3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					p3.setHorizontalAlignment(SwingConstants.CENTER);
+
+					hp3.setText("Health Points : " + p.getValue());
+					hp3.setForeground(c2);
+					hp3.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					hp3.setHorizontalAlignment(SwingConstants.CENTER);
+
+					hb3.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+					hb3.setForeground(new Color(50, 205, 50));
+					hb3.setMaximum(50);
+					hb3.setBackground(Color.DARK_GRAY);
+					hb3.setValue(Integer.parseInt(p.getValue()));
+					
+					rpanel.add(playerIcon3);
+					rpanel.add(p3);
+					rpanel.add(hp3);
+					rpanel.add(hb3);
+					i+=1;
+				}
+				else if (i == 4) {
+					p4.setText(p.getKey());
+					p4.setForeground(c2);
+					p4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					p4.setHorizontalAlignment(SwingConstants.CENTER);
+
+					hp4.setText("Health Points : " + p.getValue());
+					hp4.setForeground(c2);
+					hp4.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+					hp4.setHorizontalAlignment(SwingConstants.CENTER);
+
+					hb4.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+					hb4.setForeground(new Color(50, 205, 50));
+					hb4.setMaximum(50);
+					hb4.setBackground(Color.DARK_GRAY);
+					hb4.setValue(Integer.parseInt(p.getValue()));
+
+					rpanel.add(playerIcon4);
+					rpanel.add(p4);
+					rpanel.add(hp4);
+					rpanel.add(hb4);
+					i+=1;
+				}
+			}
+		}
+		
 		JLabel attack = new JLabel("ATTACK PHASE");
 		attack.setForeground(c2);
 		attack.setFont(new Font("Times New Roman", Font.BOLD, 50));
 		attack.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel lblTimer = new JLabel("1");
+		JLabel lblTimer = new JLabel("30");
 		lblTimer.setForeground(c2);
 		lblTimer.setFont(new Font("Times New Roman", Font.BOLD, 75));
 		lblTimer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -222,7 +258,7 @@ public class attackPhase {
 		time.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		time.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel hp = new JLabel("HEALTH POINTS : 15");
+		JLabel hp = new JLabel("HEALTH POINTS : " + health);
 		hp.setForeground(c2);
 		hp.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		hp.setHorizontalAlignment(SwingConstants.CENTER);
@@ -230,12 +266,12 @@ public class attackPhase {
 		JProgressBar hb = new JProgressBar();
 		hb.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
 		hb.setForeground(new Color(50, 205, 50));
-		hb.setMaximum(20);
+		hb.setMaximum(50);
 		hb.setBackground(Color.DARK_GRAY);
-		hb.setValue(15);
+		hb.setValue(health);
 		hb.setBounds(250, 252, 508, 46);
 
-		JLabel turn = new JLabel("Your Turn");
+		JLabel turn = new JLabel("Round: " + round + "/8" + " Turn: " + currentTurn);
 		turn.setForeground(c2);
 		turn.setFont(new Font("Times New Roman", Font.PLAIN, 50));
 		turn.setHorizontalAlignment(SwingConstants.CENTER);
@@ -243,22 +279,22 @@ public class attackPhase {
 		tpanel.add(attack);		
 		
 		timer = new Timer(1000, new ActionListener() {
-			int j = 0;
 			int i = Integer.parseInt(lblTimer.getText());
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (i == -1) {
-					j++;
-					turn.setText(turnStrings[j%5]);
-					i=1;
+				if(i == -1)
+				{
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
-
-				if(buttonClicked == true) {
-					timer.restart();
-					buttonClicked = false;
-				}
 			}
 		});
 		timer.start();
@@ -322,7 +358,7 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card1Clicked = true;
 				}
 			}
@@ -332,7 +368,7 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card2Clicked = true;
 				}
 			}
@@ -342,23 +378,8 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card3Clicked = true;
-					card3.setIcon(null);
-					card3.setVisible(false);
-					card3Clicked = false;
-					int textValue = Integer.parseInt(hp.getText().substring(16));
-					int healthAfterAttack = textValue - quakeValue;
-					String text = "";
-					if(healthAfterAttack <= 0) {
-						text = "Health Points : " + Integer.toString(0);
-					} 
-					else {
-						text = "Health Points : " + Integer.toString(healthAfterAttack);
-					}
-					hp.setText(text);
-					hb.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
 				}
 			}
 		});
@@ -367,23 +388,8 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card4Clicked = true;
-					card4.setIcon(null);
-					card4.setVisible(false);
-					card4Clicked = false;
-					int textValue = Integer.parseInt(hp.getText().substring(16));
-					int healthAfterAttack = textValue - floodValue;
-					String text = "";
-					if(healthAfterAttack <= 0) {
-						text = "Health Points : " + Integer.toString(0);
-					} 
-					else {
-						text = "Health Points : " + Integer.toString(healthAfterAttack);
-					}
-					hp.setText(text);
-					hb.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
 				}
 			}
 		});
@@ -392,14 +398,9 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				/*if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card5Clicked = true;
-				}*/
-				//if(card5.getIcon() == scout)
-				//{
-					card5.setVisible(false);
-					viewScout();
-				//}
+				}
 			}
 		});
 
@@ -407,7 +408,7 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card6Clicked = true;
 				}
 			}
@@ -417,26 +418,8 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card7Clicked = true;
-					card7.setIcon(null);
-					card7.setVisible(false);
-					card7Clicked = false;
-					int textValue = Integer.parseInt(hp.getText().substring(16));
-					int healthAfterAttack = textValue - doorValue;
-					String text = "";
-					if(healthAfterAttack <= 0) {
-						text = "Health Points : " + Integer.toString(0);
-					} 
-					else {
-						text = "Health Points : " + Integer.toString(healthAfterAttack);
-					}
-					hp.setText(text);
-					hb.setValue(healthAfterAttack);
-					System.out.println(textValue);
-					System.out.println(text);
-					System.out.println(healthAfterAttack);
-					turn.setText("Player 1 Turn");
 				}
 			}
 		});
@@ -445,23 +428,8 @@ public class attackPhase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(turn.getText() == "Your Turn") {
+				if(currentTurn.equals(playerName)) {
 					card8Clicked = true;
-					card8.setIcon(null);
-					card8.setVisible(false);
-					card8Clicked = false;
-					int textValue = Integer.parseInt(hp.getText().substring(16));
-					int healthAfterAttack = textValue - gateValue;
-					String text = "";
-					if(healthAfterAttack <= 0) {
-						text = "Health Points : " + Integer.toString(0);
-					} 
-					else {
-						text = "Health Points : " + Integer.toString(healthAfterAttack);
-					}
-					hp.setText(text);
-					hb.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
 				}
 			}
 		});
@@ -1564,7 +1532,7 @@ public class attackPhase {
 	
 	public void viewScout()
 	{
-		mainFrame.getContentPane().add(new scoutCardGUI(mainFrame, server, client, turnStrings).GetPanel());
+		mainFrame.getContentPane().add(new scoutCardGUI(mainFrame, server, client, playerData.keySet().toArray(new String[0])).GetPanel());
 		getPanel().setVisible(false);
 	}
 }

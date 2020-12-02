@@ -706,6 +706,10 @@ public class drawPhase {
 				}
 				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")
 				{
+					if (hand.Size() == 8) {
+						lblSelected.setText("<html> Cannot Draw more than 8 cards </html>");
+						return;
+					}
 					if (gameServer != null) {
 						gameServer.draw(CardType.Attack);
 						hand = gameServer.getModel().getPlayers().get(0).getHand();
@@ -810,6 +814,10 @@ public class drawPhase {
 				}
 				else if(lblSelected.getText() == "<html> Defense Deck selected </html>")
 				{
+					if (hand.Size() == 8) {
+						lblSelected.setText("<html> Cannot Draw more than 8 cards </html>");
+						return;
+					}
 					if (gameServer != null) {
 						gameServer.draw(CardType.Defense);
 						hand = gameServer.getModel().getPlayers().get(0).getHand();

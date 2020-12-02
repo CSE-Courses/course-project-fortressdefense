@@ -198,8 +198,8 @@ public class drawPhaseOtherPlayer {
 		
 		if(gameServer != null)
 		{
-			healthBar.setValue(gameServer.getModel().getPlayers().get(0).points);
-			lblBar.setText("HEALTHPOINTS: " + gameServer.getModel().getPlayers().get(0).points);
+			healthBar.setValue(gameServer.getHealth());
+			lblBar.setText("HEALTHPOINTS: " + gameServer.getHealth());
 		}
 		else if(client != null)
 		{

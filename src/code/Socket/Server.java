@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import javax.swing.JFrame;
@@ -30,6 +31,7 @@ public class Server implements Runnable{
     private int round;
     private attackPhase attackPhase;
     private GamePhase phase;
+    private String serverPlayerName;
 
     private final int serverPort;
 
@@ -38,6 +40,7 @@ public class Server implements Runnable{
         this.model = model;
         this.chat = chat;
         this.mainFrame = mainFrame;
+        this.serverPlayerName = this.model.getPlayers().get(0).PlayerName;
         encryption = new RSA();
     }
 
@@ -86,7 +89,7 @@ public class Server implements Runnable{
                         index += 1;
                         turn = this.getModel().getPlayers().get(index).PlayerName;
                         for(Worker worker : this.getWorkerList()){
-                            String toClientCmd = Command.GetTurn + " " + turn + " " + round + "\n";
+                            String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
                             worker.send(toClientCmd);
                         }
                         
@@ -98,18 +101,34 @@ public class Server implements Runnable{
         					    mainFrame.remove(waitingDraw.GetPanel());
     					    }
     					    mainFrame.repaint();
-    					    waitingDraw = new drawPhaseOtherPlayer(mainFrame, this, null, this.getModel().getPlayers().get(0).getHand());
-    					    mainFrame.add(waitingDraw.GetPanel());
+    					    if (this.getModel().getPlayers().get(0).PlayerName.equals(this.serverPlayerName)) {
+        					    waitingDraw = new drawPhaseOtherPlayer(mainFrame, this, null, this.getModel().getPlayers().get(0).getHand());
+        					    mainFrame.add(waitingDraw.GetPanel());
+    					    }else {
+        					    waitingDraw = new drawPhaseOtherPlayer(mainFrame, this, null, new Hand());
+        					    mainFrame.add(waitingDraw.GetPanel());
+    					    }
+
+                        }else if (phase == GamePhase.Attack) {
+                            attackPhase.getPanel().setVisible(false);
+                            mainFrame.remove(attackPhase.getPanel());
+                            mainFrame.repaint();
+    					    attackPhase = new attackPhase(mainFrame, this, null);
+    					    mainFrame.add(attackPhase.getPanel());
                         }
                     }
                     else {
                     	this.round +=1;
                     	if (round > 8 && phase == GamePhase.Draw) {
-                    		round = 0;
+                    		round = 1;
                     		phase = GamePhase.Attack;
                     		turn = this.model.getPlayers().get(0).PlayerName;
+                    		String playerListAndHealth = "";
+                    		for (Player p : this.getModel().getPlayers()) {
+                    			playerListAndHealth += " " + p.PlayerName + " " + p.points;
+                    		}
                             for(Worker worker : this.getWorkerList()){
-                                String toClientCmd = Command.StartAttackPhase + " " + worker.getHealth() + " " + turn + " " + round + "\n";
+                                String toClientCmd = Command.StartAttackPhase + " " + turn + " " + round + playerListAndHealth + "\n";
                                 worker.send(toClientCmd);
                             }
                     		
@@ -122,10 +141,58 @@ public class Server implements Runnable{
     					    mainFrame.repaint();
     					    attackPhase = new attackPhase(mainFrame, this, null);
     					    mainFrame.add(attackPhase.getPanel());
-                    	} else if (phase == GamePhase.Draw) {
+                    	} 
+                    	else if (round > 8 && phase == GamePhase.Attack){
+                    		round = 1;
+                    		phase = GamePhase.Draw;
+                    		
+                     		// remove players who lost
+                    		for (int i = 0; i < this.model.getPlayers().size(); i++) {
+                    			if (player.points <= 0) {
+                    				this.model.getPlayers().remove(i);
+                    			}
+                    		}
+                    		
+                    		turn = this.model.getPlayers().get(0).PlayerName;
+                            for(Worker worker : this.getWorkerList()){
+                                String toClientCmd = Command.StartDrawPhase + " " + worker.getHealth() + " " + turn + " " + round + "\n";
+                                worker.send(toClientCmd);
+                            }
+                            
+                            attackPhase.getPanel().setVisible(false);
+                            mainFrame.remove(attackPhase.getPanel());
+                            mainFrame.repaint();
+    					    if (turn.equals(this.serverPlayerName)){
+        					    drawPhase = new drawPhase(mainFrame, this, null);
+        					    mainFrame.add(drawPhase.GetPanel());
+    					    }else {
+        					    waitingDraw = new drawPhaseOtherPlayer(mainFrame, this, null, new Hand());
+        					    mainFrame.add(waitingDraw.GetPanel());
+    					    }
+                    	}
+                    	else if (phase == GamePhase.Attack) {
+                    		// remove players who lost
+                    		for (int i = 0; i < this.model.getPlayers().size(); i++) {
+                    			if (this.getModel().getPlayers().get(i).points <= 0) {
+                    				this.model.getPlayers().remove(i);
+                    			}
+                    		}
+                    		
+                           	turn = this.getModel().getPlayers().get(0).PlayerName;
+                            for(Worker worker : this.getWorkerList()){
+                                String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
+                                worker.send(toClientCmd);
+                            }
+                    		attackPhase.getPanel().setVisible(false);
+                            mainFrame.remove(attackPhase.getPanel());
+                            mainFrame.repaint();
+    					    attackPhase = new attackPhase(mainFrame, this, null);
+    					    mainFrame.add(attackPhase.getPanel());
+                    	}
+                    	else if (phase == GamePhase.Draw) {
                         	turn = this.getModel().getPlayers().get(0).PlayerName;
                             for(Worker worker : this.getWorkerList()){
-                                String toClientCmd = Command.GetTurn + " " + turn + " " + round + "\n";
+                                String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
                                 worker.send(toClientCmd);
                             }
                             
@@ -138,8 +205,14 @@ public class Server implements Runnable{
         					    mainFrame.remove(waitingDraw.GetPanel());
     					    }
     					    mainFrame.repaint();
-    					    drawPhase = new drawPhase(mainFrame, this, null);
-    					    mainFrame.add(drawPhase.GetPanel());
+    					    if (turn.equals(this.serverPlayerName)){
+        					    drawPhase = new drawPhase(mainFrame, this, null);
+        					    mainFrame.add(drawPhase.GetPanel());
+    					    }else {
+        					    waitingDraw = new drawPhaseOtherPlayer(mainFrame, this, null, new Hand());
+        					    mainFrame.add(waitingDraw.GetPanel());
+    					    }
+
                     	}
                         
 
@@ -188,7 +261,7 @@ public class Server implements Runnable{
 	}
 	
 	public void message(String msg) {
-		String message = model.getPlayers().get(0).PlayerName + ": " + msg + "\n";
+		String message = this.serverPlayerName + ": " + msg + "\n";
         for(Worker worker : clientList) {
             worker.send(Command.Message.toString() + " " + message);
         }
@@ -246,5 +319,34 @@ public class Server implements Runnable{
 	
 	public int getRound() {
 		return round;
+	}
+	
+	public String getPlayerName() {
+		return this.serverPlayerName;
+	}
+	
+	public int getHealth() {
+		if (this.model.getPlayers().get(0).PlayerName.equals(this.serverPlayerName)) {
+			return this.model.getPlayers().get(0).points;
+		}else {
+			return 0;
+		}
+	}
+	
+	public Hand getHand() {
+		if (this.model.getPlayers().get(0).PlayerName.equals(this.serverPlayerName)) {
+			return this.model.getPlayers().get(0).getHand();
+		}else {
+			return new Hand();
+		}
+	}
+	
+	public HashMap<String, String> getPlayerData() {
+		HashMap<String, String> retVal = new HashMap<String, String>();
+		for (Player p : this.model.getPlayers()) {
+			retVal.put(p.PlayerName, Integer.toString(p.points));
+		}
+		
+		return retVal;
 	}
 }

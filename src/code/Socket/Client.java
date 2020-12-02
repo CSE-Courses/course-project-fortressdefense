@@ -1,6 +1,7 @@
 package code.Socket;
 
 import code.Command;
+import code.GamePhase;
 import code.Hand;
 import code.RSA;
 import code.RSA.PublicKey;
@@ -10,6 +11,9 @@ import gui.Join_Game;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Time;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.swing.JOptionPane;
@@ -29,6 +33,7 @@ public class Client {
     private Hand hand;
     private String currentTurn;
     private int currentRound;
+    private HashMap<String, String> playerData = new HashMap<String, String>();
     
     
     public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
@@ -160,15 +165,6 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	//may be unnecessary
-	public void getTurn(){
-		try {
-			String cmd = Command.GetTurn.toString() + "\n";
-			serverOut.write(cmd.getBytes());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
     
     /**
      * Thread that reads all messages from server
@@ -241,12 +237,28 @@ public class Client {
 							currentTurn = tokens[1];
 		                	currentRound = Integer.parseInt(tokens[2]);
 		                	
-							if(name.equals(tokens[1])) {
-								joinGame.startDrawPhase();
-							}
-							else {
-								joinGame.waitForDrawPhase();
-							}
+		                	Iterator itr = playerData.entrySet().iterator();
+		                	while (itr.hasNext()) {
+		                		Entry entry = (Entry)itr.next();
+		                		if (Integer.parseInt((String)entry.getValue()) <= 0) {
+		                			itr.remove();
+		                		}
+		                	}
+		                	
+		                	switch (GamePhase.valueOf(tokens[3])) {
+			                	case Draw:
+									if(name.equals(tokens[1])) {
+										joinGame.startDrawPhase();
+									}
+									else {
+										joinGame.waitForDrawPhase();
+									}
+			                		break;
+			                	case Attack:
+			                		joinGame.startAttackPhase();
+			                		break;
+		                	}
+	
 							break;
 
 		                case PublicKey:
@@ -305,12 +317,26 @@ public class Client {
 		                	}
 		                	break;
 		                case StartAttackPhase:
+		                	playerData = new HashMap<String, String>();
+		                	for (int i = 3; i < tokens.length; i+=2) {
+		                		playerData.put(tokens[i], tokens[i+1]);
+		                	}
+		                	temp_turn = tokens[1];
+		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[2]);
+							joinGame.startAttackPhase();
+		                	break;
+		                case StartDrawPhase:
 		                	health = Integer.parseInt(tokens[1]);
 		                	temp_turn = tokens[2];
 		                	currentTurn = temp_turn;
 		                	currentRound = Integer.parseInt(tokens[3]);
-							joinGame.startAttackPhase();
-		                	break;
+		                	if (currentTurn.equals(name)) {
+								joinGame.startDrawPhase();
+							}
+							else {
+								joinGame.waitForDrawPhase();
+							}
                     	default:
                     		break;
                     }
@@ -367,5 +393,9 @@ public class Client {
 	
 	public int getRound() {
 		return currentRound;
+	}
+	
+	public HashMap<String, String> getPlayerData() {
+		return playerData;
 	}
 }
