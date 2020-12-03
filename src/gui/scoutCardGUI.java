@@ -68,16 +68,16 @@ public class scoutCardGUI {
 		frmFortressDefense.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmFortressDefense.getContentPane().setLayout(null);
 		
-		JLabel lblDrawPhase = new JLabel("Draw Phase");
+		JLabel lblDrawPhase = new JLabel("SCOUT CARD");
 		lblDrawPhase.setFont(new Font("Stencil", Font.PLAIN, 40));
 		lblDrawPhase.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDrawPhase.setBounds(337, 11, 276, 60);
 		frmFortressDefense.getContentPane().add(lblDrawPhase);
 		
-		JLabel lblScout = new JLabel("SCOUT CARD ACTIVATED");
+		JLabel lblScout = new JLabel("ACTIVATED");
 		lblScout.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblScout.setHorizontalAlignment(SwingConstants.CENTER);
-		lblScout.setBounds(337, 93, 276, 45);
+		lblScout.setBounds(337, 60, 276, 45);
 		frmFortressDefense.getContentPane().add(lblScout);
 		
 		JLabel lblChoose = new JLabel("CHOOSE A PLAYER:");
