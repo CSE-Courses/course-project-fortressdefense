@@ -5,11 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
+import java.util.List;
+import java.util.ArrayList;
 import javax.swing.*;
 
 import code.Socket.*;
 import code.*;
+import code.card_class.DefenseCard;
+import code.card_class.ICardEnum;
 
 public class attackPhase {
 
@@ -25,12 +28,6 @@ public class attackPhase {
 	private boolean card7Clicked = false;
 	private boolean card8Clicked = false;
 
-	private int axeValue = 3;
-	private int battleAxeValue = 8;
-	private int crossbowValue = 10;
-	private int maceValue = 5;
-	private int stickValue = 1;
-	private int swordValue = 4;
 	private Server server;
 	private Client client;
 	private JFrame frame;
@@ -41,6 +38,10 @@ public class attackPhase {
 	private String currentTurn;
 	private int round;
 	
+	public List<JButton>importCards=new ArrayList<JButton>();
+	public List<Integer>importPoints=new ArrayList<Integer>();
+	public List<ICardEnum>importNames=new ArrayList<ICardEnum>();
+
 	public attackPhase(JFrame mainFrame, Server server, Client client) {
 		this.server = server;
 		this.client = client;
@@ -58,6 +59,13 @@ public class attackPhase {
 			currentTurn = (String)this.client.obtainTurn();
 			round = this.client.getRound();
 		}
+		runAttackGUI();
+	}
+
+	public attackPhase(List<JButton>exportCards,List<Integer>exportPoints,List<ICardEnum>exportNames) {
+		importCards=exportCards;
+		importPoints=exportPoints;
+		importNames=exportNames;
 		runAttackGUI();
 	}
 
@@ -81,55 +89,55 @@ public class attackPhase {
 		rpanel.setLayout(new BoxLayout(rpanel, BoxLayout.Y_AXIS));
 		tpanel.setBounds(1400, 0, 500, 1000);
 
-		
+
 		JButton playerIcon = new JButton("");
 		Image pc = new ImageIcon(this.getClass().getResource("characters/my_character3.png")).getImage();
 		playerIcon.setIcon(new ImageIcon(pc));
-		
+
 		JButton playerIcon1 = new JButton("");
 		Image pc1 = new ImageIcon(this.getClass().getResource("characters/my_character17.png")).getImage();
 		playerIcon1.setIcon(new ImageIcon(pc1));
-		
+
 		JButton playerIcon2 = new JButton("");
 		Image pc2 = new ImageIcon(this.getClass().getResource("characters/my_character11.png")).getImage();
 		playerIcon2.setIcon(new ImageIcon(pc2));
-		
+
 		JButton playerIcon3 = new JButton("");
 		Image pc3 = new ImageIcon(this.getClass().getResource("characters/my_character14.png")).getImage();
 		playerIcon3.setIcon(new ImageIcon(pc3));
-		
+
 		JButton playerIcon4 = new JButton("");
 		Image pc4 = new ImageIcon(this.getClass().getResource("characters/my_character20.png")).getImage();
 		playerIcon4.setIcon(new ImageIcon(pc4));
-		
+
 		JButton playerIcon5 = new JButton("");
 		Image pc5 = new ImageIcon(this.getClass().getResource("characters/my_character18.png")).getImage();
 		playerIcon5.setIcon(new ImageIcon(pc5));
-		
+
 		JButton playerIcon6 = new JButton("");
 		Image pc6 = new ImageIcon(this.getClass().getResource("characters/my_character19.png")).getImage();
 		playerIcon6.setIcon(new ImageIcon(pc6));
-		
+
 		JButton playerIcon7 = new JButton("");
 		Image pc7 = new ImageIcon(this.getClass().getResource("characters/my_character12.png")).getImage();
 		playerIcon7.setIcon(new ImageIcon(pc7));
-		
+
 		JButton playerIcon8 = new JButton("");
 		Image pc8 = new ImageIcon(this.getClass().getResource("characters/my_character13.png")).getImage();
 		playerIcon8.setIcon(new ImageIcon(pc8));
-		
+
 		JButton playerIcon11 = new JButton("");
 		Image pc11 = new ImageIcon(this.getClass().getResource("characters/my_character15.png")).getImage();
 		playerIcon11.setIcon(new ImageIcon(pc11));
-		
+
 		JButton playerIcon12 = new JButton("");
 		Image pc12 = new ImageIcon(this.getClass().getResource("characters/my_character16.png")).getImage();
 		playerIcon12.setIcon(new ImageIcon(pc12));
-		
+
 		JButton playerIcon14 = new JButton("");
 		Image pc14 = new ImageIcon(this.getClass().getResource("characters/my_character21.png")).getImage();
 		playerIcon14.setIcon(new ImageIcon(pc14));
-		
+
 		JButton playerIcon15 = new JButton("");
 		Image pc15 = new ImageIcon(this.getClass().getResource("characters/my_character22.png")).getImage();
 		playerIcon15.setIcon(new ImageIcon(pc15));
@@ -154,7 +162,7 @@ public class attackPhase {
 					p1.setForeground(c2);
 					p1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 					p1.setHorizontalAlignment(SwingConstants.CENTER);
-
+					
 					hp1.setText("Health Points : " + p.getValue());
 					hp1.setForeground(c2);
 					hp1.setFont(new Font("Times New Roman", Font.PLAIN, 25));
@@ -275,9 +283,10 @@ public class attackPhase {
 		turn.setForeground(c2);
 		turn.setFont(new Font("Times New Roman", Font.PLAIN, 50));
 		turn.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		tpanel.add(attack);		
-		
+
+		tpanel.add(attack);
+		tpanel.add(Box.createVerticalStrut(20));
+		tpanel.add(Box.createHorizontalStrut(500));
 		timer = new Timer(1000, new ActionListener() {
 			int i = Integer.parseInt(lblTimer.getText());
 			@Override
@@ -298,60 +307,39 @@ public class attackPhase {
 			}
 		});
 		timer.start();
-		
+
 		tpanel.add(lblTimer);
 		tpanel.add(time);
+		tpanel.add(Box.createVerticalStrut(100));
 		tpanel.add(turn);
+		tpanel.add(Box.createVerticalStrut(20));
+		tpanel.add(Box.createHorizontalStrut(500));
 		tpanel.add(playerIcon);
 		tpanel.add(hp);
 		tpanel.add(hb);
 
-		JButton card1 = new JButton("");
-		Image axeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/axe.PNG")).getImage();
-		card1.setIcon(new ImageIcon(axeImg));
-		card1.setBackground(c1);
+		JButton card1 = importCards.get(0);
 		spanel.add(card1);
 
-		JButton card2 = new JButton("");
-		Image crossbow = new ImageIcon(this.getClass().getResource("Images/attackIMG/crossbow.PNG")).getImage();
-		card2.setIcon(new ImageIcon(crossbow));
-		card2.setBackground(c1);
+		JButton card2 = importCards.get(1);
 		spanel.add(card2);
 
-		JButton card3 = new JButton("");
-		Image baxeImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/earthquake.PNG")).getImage();
-		card3.setIcon(new ImageIcon(baxeImg));
-		card3.setBackground(c1);
+		JButton card3 = importCards.get(2);
 		spanel.add(card3);
 
-		JButton card4 = new JButton("");
-		Image mace = new ImageIcon(this.getClass().getResource("Images/damageIMG/flood.PNG")).getImage();
-		card4.setIcon(new ImageIcon(mace));
-		card4.setBackground(c1);
+		JButton card4 = importCards.get(3);
 		spanel.add(card4);
 
-		JButton card5 = new JButton("");
-		Image scout = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.PNG")).getImage();
-		card5.setIcon(new ImageIcon(scout));
-		card5.setBackground(c1);
+		JButton card5 = importCards.get(4);
 		spanel.add(card5);
 
-		JButton card6 = new JButton("");
-		Image sword = new ImageIcon(this.getClass().getResource("Images/attackIMG/sword.PNG")).getImage();
-		card6.setIcon(new ImageIcon(sword));
-		card6.setBackground(c1);
+		JButton card6 = importCards.get(5);
 		spanel.add(card6);
 
-		JButton card7 = new JButton("");
-		Image door = new ImageIcon(this.getClass().getResource("Images/defenseIMG/ironDoor.PNG")).getImage();
-		card7.setIcon(new ImageIcon(door));
-		card7.setBackground(c1);
+		JButton card7 =importCards.get(6);
 		spanel.add(card7);
 
-		JButton card8 = new JButton("");
-		Image gate = new ImageIcon(this.getClass().getResource("Images/defenseIMG/reinforcedGate.PNG")).getImage();
-		card8.setIcon(new ImageIcon(gate));
-		card8.setBackground(c1);
+		JButton card8 = importCards.get(7);
 		spanel.add(card8);
 
 		card1.addActionListener(new ActionListener() {
@@ -360,6 +348,23 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card1Clicked = true;
+                    if(importNames.get(0)== DefenseCard.Stone_Wall||importNames.get(0)== DefenseCard.Iron_Door||importNames.get(0)== DefenseCard.Steel_Chains||importNames.get(0)== DefenseCard.Flood||importNames.get(0)== DefenseCard.Barbed_Wire||importNames.get(0)== DefenseCard.Earthquake||importNames.get(0)== DefenseCard.Reinforced_Gate||importNames.get(0)== DefenseCard.Thunderstorm||importNames.get(0)== DefenseCard.Tornado||importNames.get(0)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(0);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card1.setIcon(null);
+						card1.setVisible(false);
+						card1Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -370,6 +375,23 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card2Clicked = true;
+					if(importNames.get(1)== DefenseCard.Stone_Wall||importNames.get(1)== DefenseCard.Iron_Door||importNames.get(1)== DefenseCard.Steel_Chains||importNames.get(1)== DefenseCard.Flood||importNames.get(1)== DefenseCard.Barbed_Wire||importNames.get(1)== DefenseCard.Earthquake||importNames.get(1)== DefenseCard.Reinforced_Gate||importNames.get(1)== DefenseCard.Thunderstorm||importNames.get(1)== DefenseCard.Tornado||importNames.get(1)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(1);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card2.setIcon(null);
+						card2.setVisible(false);
+						card2Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -380,6 +402,23 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card3Clicked = true;
+					if(importNames.get(2)== DefenseCard.Stone_Wall||importNames.get(2)== DefenseCard.Iron_Door||importNames.get(2)== DefenseCard.Steel_Chains||importNames.get(2)== DefenseCard.Flood||importNames.get(2)== DefenseCard.Barbed_Wire||importNames.get(2)== DefenseCard.Earthquake||importNames.get(2)== DefenseCard.Reinforced_Gate||importNames.get(2)== DefenseCard.Thunderstorm||importNames.get(2)== DefenseCard.Tornado||importNames.get(2)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(2);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card3.setIcon(null);
+						card3.setVisible(false);
+						card3Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -390,6 +429,23 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card4Clicked = true;
+					if(importNames.get(3)== DefenseCard.Stone_Wall||importNames.get(3)== DefenseCard.Iron_Door||importNames.get(3)== DefenseCard.Steel_Chains||importNames.get(3)== DefenseCard.Flood||importNames.get(3)== DefenseCard.Barbed_Wire||importNames.get(3)== DefenseCard.Earthquake||importNames.get(3)== DefenseCard.Reinforced_Gate||importNames.get(3)== DefenseCard.Thunderstorm||importNames.get(3)== DefenseCard.Tornado||importNames.get(3)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(3);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card4.setIcon(null);
+						card4.setVisible(false);
+						card4Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -397,9 +453,25 @@ public class attackPhase {
 		card5.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card5Clicked = true;
+					if(importNames.get(4)== DefenseCard.Stone_Wall||importNames.get(4)== DefenseCard.Iron_Door||importNames.get(4)== DefenseCard.Steel_Chains||importNames.get(4)== DefenseCard.Flood||importNames.get(4)== DefenseCard.Barbed_Wire||importNames.get(4)== DefenseCard.Earthquake||importNames.get(4)== DefenseCard.Reinforced_Gate||importNames.get(4)== DefenseCard.Thunderstorm||importNames.get(4)== DefenseCard.Tornado||importNames.get(4)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(4);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card5.setIcon(null);
+						card5.setVisible(false);
+						card5Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -410,6 +482,23 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card6Clicked = true;
+					if(importNames.get(5)== DefenseCard.Stone_Wall||importNames.get(5)== DefenseCard.Iron_Door||importNames.get(5)== DefenseCard.Steel_Chains||importNames.get(5)== DefenseCard.Flood||importNames.get(5)== DefenseCard.Barbed_Wire||importNames.get(5)== DefenseCard.Earthquake||importNames.get(5)== DefenseCard.Reinforced_Gate||importNames.get(5)== DefenseCard.Thunderstorm||importNames.get(5)== DefenseCard.Tornado||importNames.get(5)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(5);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card6.setIcon(null);
+						card6.setVisible(false);
+						card6Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -420,6 +509,23 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card7Clicked = true;
+					if(importNames.get(6)== DefenseCard.Stone_Wall||importNames.get(6)== DefenseCard.Iron_Door||importNames.get(6)== DefenseCard.Steel_Chains||importNames.get(6)== DefenseCard.Flood||importNames.get(6)== DefenseCard.Barbed_Wire||importNames.get(6)== DefenseCard.Earthquake||importNames.get(6)== DefenseCard.Reinforced_Gate||importNames.get(6)== DefenseCard.Thunderstorm||importNames.get(6)== DefenseCard.Tornado||importNames.get(6)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(6);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card7.setIcon(null);
+						card7.setVisible(false);
+						card7Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -430,6 +536,23 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card8Clicked = true;
+					if(importNames.get(7)== DefenseCard.Stone_Wall||importNames.get(7)== DefenseCard.Iron_Door||importNames.get(7)== DefenseCard.Steel_Chains||importNames.get(7)== DefenseCard.Flood||importNames.get(7)== DefenseCard.Barbed_Wire||importNames.get(7)== DefenseCard.Earthquake||importNames.get(7)== DefenseCard.Reinforced_Gate||importNames.get(7)== DefenseCard.Thunderstorm||importNames.get(7)== DefenseCard.Tornado||importNames.get(7)== DefenseCard.Wooden_Wall){
+						int textValue = Integer.parseInt(hp.getText().substring(16));
+						int healthAfterAttack = textValue - importPoints.get(7);
+						String text = "";
+						if(healthAfterAttack <= 0) {
+							text = "Health Points : " + Integer.toString(0);
+						}
+						else {
+							text = "Health Points : " + Integer.toString(healthAfterAttack);
+						}
+						hp.setText(text);
+						hb.setValue(healthAfterAttack);
+						card8.setIcon(null);
+						card8.setVisible(false);
+						card8Clicked = false;
+						turn.setText("Player 1 Turn");
+					}
 				}
 			}
 		});
@@ -443,18 +566,18 @@ public class attackPhase {
 					card1.setVisible(false);
 					card1Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue;
+					int healthAfterAttack = textValue - importPoints.get(0);
 					String text = "";
 					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
+					}
 					else {
 						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -464,7 +587,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -475,18 +598,18 @@ public class attackPhase {
 					card2.setVisible(false);
 					card2Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - crossbowValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(1);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -496,7 +619,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -507,18 +630,18 @@ public class attackPhase {
 					card3.setVisible(false);
 					card3Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(2);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -528,7 +651,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -539,18 +662,18 @@ public class attackPhase {
 					card4.setVisible(false);
 					card4Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - maceValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(3);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -560,7 +683,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -571,18 +694,18 @@ public class attackPhase {
 					card5.setVisible(false);
 					card5Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - stickValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(4);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -592,7 +715,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -603,18 +726,18 @@ public class attackPhase {
 					card6.setVisible(false);
 					card6Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - swordValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue -importPoints.get(5);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -624,7 +747,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -635,18 +758,18 @@ public class attackPhase {
 					card7.setVisible(false);
 					card7Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(6);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -656,7 +779,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -667,18 +790,18 @@ public class attackPhase {
 					card8.setVisible(false);
 					card8Clicked = false;
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(7);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -688,7 +811,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -706,18 +829,18 @@ public class attackPhase {
 					card1.setVisible(false);
 					card1Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(0);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -727,7 +850,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -738,18 +861,18 @@ public class attackPhase {
 					card2.setVisible(false);
 					card2Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - crossbowValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(1);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -759,7 +882,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -770,18 +893,18 @@ public class attackPhase {
 					card3.setVisible(false);
 					card3Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(2);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -791,7 +914,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -802,18 +925,18 @@ public class attackPhase {
 					card4.setVisible(false);
 					card4Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - maceValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(3);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -823,7 +946,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -834,18 +957,18 @@ public class attackPhase {
 					card5.setVisible(false);
 					card5Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - stickValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(4);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -855,7 +978,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -866,18 +989,18 @@ public class attackPhase {
 					card6.setVisible(false);
 					card6Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - swordValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(5);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -887,7 +1010,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -898,18 +1021,18 @@ public class attackPhase {
 					card7.setVisible(false);
 					card7Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(6);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -919,7 +1042,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -930,18 +1053,18 @@ public class attackPhase {
 					card8.setVisible(false);
 					card8Clicked = false;
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(7);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -951,7 +1074,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -969,18 +1092,18 @@ public class attackPhase {
 					card1.setVisible(false);
 					card1Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(0);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -990,7 +1113,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1001,13 +1124,13 @@ public class attackPhase {
 					card2.setVisible(false);
 					card2Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - crossbowValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(1);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
@@ -1022,7 +1145,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1033,13 +1156,13 @@ public class attackPhase {
 					card3.setVisible(false);
 					card3Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(2);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
@@ -1054,7 +1177,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn"); timer.stop();
@@ -1065,13 +1188,13 @@ public class attackPhase {
 					card4.setVisible(false);
 					card4Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - maceValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(3);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
@@ -1086,7 +1209,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1097,13 +1220,13 @@ public class attackPhase {
 					card5.setVisible(false);
 					card5Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - stickValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(4);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
@@ -1118,7 +1241,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1129,13 +1252,13 @@ public class attackPhase {
 					card6.setVisible(false);
 					card6Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - swordValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(5);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
@@ -1150,7 +1273,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1161,13 +1284,13 @@ public class attackPhase {
 					card7.setVisible(false);
 					card7Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(6);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
@@ -1182,7 +1305,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1193,13 +1316,13 @@ public class attackPhase {
 					card8.setVisible(false);
 					card8Clicked = false;
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(7);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
@@ -1214,7 +1337,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1232,18 +1355,18 @@ public class attackPhase {
 					card1.setVisible(false);
 					card1Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(0);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
 					turn.setText("Player 1 Turn");
-					
+
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1253,7 +1376,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1264,13 +1387,13 @@ public class attackPhase {
 					card2.setVisible(false);
 					card2Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - crossbowValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(1);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
@@ -1285,7 +1408,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1296,13 +1419,13 @@ public class attackPhase {
 					card3.setVisible(false);
 					card3Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(2);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
@@ -1317,7 +1440,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1328,13 +1451,13 @@ public class attackPhase {
 					card4.setVisible(false);
 					card4Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - maceValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(3);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
@@ -1349,7 +1472,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1360,13 +1483,13 @@ public class attackPhase {
 					card5.setVisible(false);
 					card5Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - stickValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(4);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
@@ -1381,7 +1504,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1392,13 +1515,13 @@ public class attackPhase {
 					card6.setVisible(false);
 					card6Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - swordValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(5);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
@@ -1413,7 +1536,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1424,13 +1547,13 @@ public class attackPhase {
 					card7.setVisible(false);
 					card7Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - axeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(6);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
@@ -1445,7 +1568,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1456,13 +1579,13 @@ public class attackPhase {
 					card8.setVisible(false);
 					card8Clicked = false;
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
-					int healthAfterAttack = textValue - battleAxeValue; 
-					String text = ""; 
-					if(healthAfterAttack <= 0) { 
+					int healthAfterAttack = textValue - importPoints.get(7);
+					String text = "";
+					if(healthAfterAttack <= 0) {
 						text = "Health Points : " + Integer.toString(0);
-					} 
-					else { 
-						text = "Health Points : " + Integer.toString(healthAfterAttack); 
+					}
+					else {
+						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
@@ -1477,7 +1600,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-					
+
 					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
 							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
 						showWinner(); timer.stop(); turn.setText("Your Turn");
@@ -1493,31 +1616,31 @@ public class attackPhase {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(0,0,screenSize.width, screenSize.height - 50);
-		frame.setVisible(false);
+		frame.setVisible(true);
 	}
-	
+
 	public void showWinner() {
 		ImageIcon icon = null;
-        java.net.URL imgURL = this.getClass().getResource("Images/winner.jpg");
-        if (imgURL != null) {
-           icon = new ImageIcon(imgURL);
-        }
-        Image image = icon.getImage();
-        Image newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);  
-        icon = new ImageIcon(newimg);
-        
+		java.net.URL imgURL = this.getClass().getResource("Images/winner.jpg");
+		if (imgURL != null) {
+			icon = new ImageIcon(imgURL);
+		}
+		Image image = icon.getImage();
+		Image newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
+		icon = new ImageIcon(newimg);
+
 		JOptionPane optionPane = new JOptionPane("Congrats. You Won!!!", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, icon, new Object[]{}, null);
-		
+
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Winner");
 		dialog.setModal(true);
 		dialog.setContentPane(optionPane);
-		
+
 		Timer timer = new Timer(5000, new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent ae) {
-		        dialog.dispose();
-		    }
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				dialog.dispose();
+			}
 		});
 		timer.setRepeats(false);
 		timer.start();
@@ -1525,14 +1648,15 @@ public class attackPhase {
 		dialog.setSize(500, 500);
 		dialog.setVisible(true);
 	}
-	
+
 	public JPanel getPanel() {
 		return (JPanel) frame.getContentPane();
 	}
-	
+
 	public void viewScout()
 	{
 		mainFrame.getContentPane().add(new scoutCardGUI(mainFrame, server, client, playerData.keySet().toArray(new String[0])).GetPanel());
 		getPanel().setVisible(false);
 	}
+
 }
