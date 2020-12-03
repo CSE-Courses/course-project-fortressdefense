@@ -47,8 +47,6 @@ public class drawPhase {
 	boolean discard = false;
 	JButton curBtn;//tracks the current card button
 	int curBound = 10;//sets the card btn position
-	int numA = 0;//number of attack cards
-	int numD = 0;//number of defense cards
 	int newHealth = 0;//updates healthpoints
 
 	private Card selected;
@@ -57,9 +55,6 @@ public class drawPhase {
 	private Server gameServer; // null is game is not host
 	private Client client; // null if game is host
 
-	public static ArrayList<JButton>exportCards=new ArrayList<JButton>();
-	public static ArrayList<Integer>exportPoints=new ArrayList<Integer>();
-    public static ArrayList<ICardEnum>exportNames=new ArrayList<>();
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -448,8 +443,6 @@ public class drawPhase {
 		curBound = 10;
 		for(int i = 0; i < hand.Size(); i++)
 		{
-			exportNames.add(hand.Select(i).getCard_name());
-
 			if(hand.Select(i).getCard_name() == AttackCard.Axe)
 			{
 				curBtn.setIcon(new ImageIcon(axeImg));
@@ -563,10 +556,7 @@ public class drawPhase {
 		JButton btnAttack = new JButton("");
 		btnAttack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(numA == 4 && numD == 4) {
-					attackPhase ap = new attackPhase(exportCards,exportPoints,exportNames);
-				}
-				if(numA == 4)
+				if(hand.getNumAttack() == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Attack cards </html>");
 					lblSelected.setText("");
@@ -588,10 +578,7 @@ public class drawPhase {
 		JButton btnDefense = new JButton("");
 		btnDefense.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(numA == 4 && numD == 4) {
-					attackPhase ap = new attackPhase(exportCards,exportPoints,exportNames);
-				}
-				if(numD == 4)
+				if(hand.getNumDefense() == 4)
 				{
 					lblMsgBox.setText("<html> You can only draw a maximum of 4 Defense cards </html>");
 					lblSelected.setText("");
@@ -695,15 +682,13 @@ public class drawPhase {
 		JButton btnGo = new JButton("GO!");
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int attackPoints=0;
 				if(lblSelected.getText() == "PASS selected") {
 					tm.stop();
 					if (client != null) {
 						client.switchTurn();
 					}else if (gameServer != null) {
 						gameServer.nextTurn();
-				}
-//					System.exit(0);
+					}
 				}
 				else if(lblSelected.getText() == "<html> Attack Deck selected </html>")
 				{
@@ -711,7 +696,6 @@ public class drawPhase {
 						lblSelected.setText("<html> Cannot Draw more than 8 cards </html>");
 						return;
 					}
-					numA++;
 					if (gameServer != null) {
 						gameServer.draw(CardType.Attack);
 						hand = gameServer.getModel().getPlayers().get(0).getHand();
@@ -737,32 +721,26 @@ public class drawPhase {
 					if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Axe)
 					{
 						curBtn.setIcon(new ImageIcon(axeImg));
-						attackPoints=3;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Battle_Axe)
 					{
 						curBtn.setIcon(new ImageIcon(battleAxeImg));
-						attackPoints=8;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Crossbow)
 					{
 						curBtn.setIcon(new ImageIcon(crossbowImg));
-						attackPoints=10;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Mace)
 					{
 						curBtn.setIcon(new ImageIcon(maceImg));
-						attackPoints=5;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Stick)
 					{
 						curBtn.setIcon(new ImageIcon(stickImg));
-						attackPoints=1;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == AttackCard.Sword)
 					{
 						curBtn.setIcon(new ImageIcon(swordImg));
-						attackPoints=4;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Archer_Tower)
 					{
@@ -778,12 +756,6 @@ public class drawPhase {
 					}
 					curBtn.setBounds(curBound, 22, 119, 176);
 					cardPanel.add(curBtn);
-					exportNames.add(hand.Select(hand.Size()-1).getCard_name());
-
-					// exporting attack cards to attack phase
-					exportCards.add(curBtn);
-					exportPoints.add(attackPoints);
-
 					curBtn.setVisible(true);
 
 					curBound = curBound + 130;
@@ -832,8 +804,7 @@ public class drawPhase {
 						lblSelected.setText("<html> Cannot Draw more than 8 cards </html>");
 						return;
 					}
-					numD++;
-					int defensePoints=0;
+					
 					if (gameServer != null) {
 						gameServer.draw(CardType.Defense);
 						hand = gameServer.getModel().getPlayers().get(0).getHand();
@@ -857,52 +828,42 @@ public class drawPhase {
 					if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Earthquake)
 					{
 						curBtn.setIcon(new ImageIcon(earthquakeImg));
-						defensePoints=8;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Flood)
 					{
 						curBtn.setIcon(new ImageIcon(floodImg));
-						defensePoints=3;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Thunderstorm)
 					{
 						curBtn.setIcon(new ImageIcon(thunderstormImg));
-						defensePoints=4;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Tornado)
 					{
 						curBtn.setIcon(new ImageIcon(tornadoImg));
-						defensePoints=6;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Barbed_Wire)
 					{
 						curBtn.setIcon(new ImageIcon(barbedWireImg));
-						defensePoints=-8;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Iron_Door)
 					{
 						curBtn.setIcon(new ImageIcon(ironDoorImg));
-						defensePoints=-10;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Reinforced_Gate)
 					{
 						curBtn.setIcon(new ImageIcon(reinforcedGateImg));
-						defensePoints=-14;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Steel_Chains)
 					{
 						curBtn.setIcon(new ImageIcon(steelChainsImg));
-						defensePoints=-7;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Stone_Wall)
 					{
 						curBtn.setIcon(new ImageIcon(stoneWallImg));
-						defensePoints=-5;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == DefenseCard.Wooden_Wall)
 					{
 						curBtn.setIcon(new ImageIcon(woodenWallImg));
-						defensePoints=-2;
 					}
 					else if(hand.Select(hand.Size()-1).getCard_name() == SpecialCard.Archer_Tower)
 					{
@@ -919,10 +880,6 @@ public class drawPhase {
 					curBtn.setBounds(curBound, 22, 119, 176);
 					cardPanel.add(curBtn);
 
-					// exporting defense cards to attack phase
-					exportCards.add(curBtn);
-					exportPoints.add(defensePoints);
-					exportNames.add(hand.Select(hand.Size()-1).getCard_name());
 					curBtn.setVisible(true);
 					newHealth = newHealth + hand.Select(hand.Size()-1).getDamage();
 
