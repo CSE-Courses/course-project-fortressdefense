@@ -309,7 +309,7 @@ public class scoutCardsDisplay {
 	
 	public void viewAttack()
 	{
-		mainFrame.getContentPane().add(new attackPhase(mainFrame, gameServer, client).getPanel());
+//		mainFrame.getContentPane().add(new attackPhase(mainFrame, gameServer, client).getPanel());
 		GetPanel().setVisible(false);
 	}
 
