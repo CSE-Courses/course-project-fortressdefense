@@ -21,7 +21,7 @@ public class CreateGameButtonHandler implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 		if (playerName != null) {
-			while (playerName.equals("") || playerName.contains("/")) {
+			while (playerName.equals("") || playerName.contains("/") || playerName.contains(" ")) {
 				JOptionPane.showMessageDialog(main, "Fortress Name cannot be empty or contain /.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 				playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 			}

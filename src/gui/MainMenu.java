@@ -69,7 +69,7 @@ public class MainMenu {
 				try {
 					String playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 					if (playerName != null) {
-						while (playerName.equals("") || playerName.contains("/")) {
+						while (playerName.equals("") || playerName.contains("/") || playerName.contains(" ")) {
 							JOptionPane.showMessageDialog(frame, "Fortress Name cannot be empty or contain /.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 							playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 						}

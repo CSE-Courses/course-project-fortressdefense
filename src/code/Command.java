@@ -15,4 +15,6 @@ public enum Command {
 	SwitchTurn,
 	GetTurn,
 	StartAttackPhase,
+	StartDrawPhase,
+	GameOver,
 }

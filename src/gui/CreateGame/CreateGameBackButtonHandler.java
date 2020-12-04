@@ -24,7 +24,7 @@ public class CreateGameBackButtonHandler implements ActionListener {
 		main.setVisible(true);
 		create.setVisible(false);
 		btnHandler.getUDPServer().close();
-		btnHandler.getTCPServer().close();
+		btnHandler.getTCPServer().close(false);
 		
 		Player host = btnHandler.getModel().getPlayers().get(0);
 		btnHandler.getModel().getPlayers().clear();
