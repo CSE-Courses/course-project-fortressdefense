@@ -23,10 +23,11 @@ public class scoutCardGUI {
 
 	public static JFrame frmFortressDefense;
 	
+	public static String[] turns;//for testing 
+	
 	private JFrame mainFrame;
 	private Server gameServer; // null is game is not host
 	private Client client; // null if game is host
-	
 	private Hand hand;
 	private Player selected;
 	
@@ -37,7 +38,7 @@ public class scoutCardGUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					scoutCardGUI window = new scoutCardGUI(frmFortressDefense, null, null);
+					scoutCardGUI window = new scoutCardGUI(frmFortressDefense, null, null, turns);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,10 +50,11 @@ public class scoutCardGUI {
 	/**
 	 * Create the application.
 	 */
-	public scoutCardGUI(JFrame mainFrame, Server gameServer, Client client) {
+	public scoutCardGUI(JFrame mainFrame, Server gameServer, Client client, String[] turns) {
 		this.mainFrame = mainFrame;
 		this.client = client;
 		this.gameServer = gameServer;
+		this.turns = turns;
 		initialize();
 	}
 
@@ -85,6 +87,7 @@ public class scoutCardGUI {
 		frmFortressDefense.getContentPane().add(lblChoose);
 		
 		JButton btnPlayer1 = new JButton("Player 1");
+		btnPlayer1.setVisible(false);
 		btnPlayer1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//set player selection:
@@ -98,35 +101,64 @@ public class scoutCardGUI {
 		frmFortressDefense.getContentPane().add(btnPlayer1);
 		
 		JButton btnPlayer2 = new JButton("Player 2");
+		btnPlayer2.setVisible(false);
 		btnPlayer2.setFont(new Font("Rockwell", Font.PLAIN, 16));
 		btnPlayer2.setBounds(171, 271, 260, 45);
 		frmFortressDefense.getContentPane().add(btnPlayer2);
 		
 		JButton btnPlayer3 = new JButton("Player 3");
+		btnPlayer3.setVisible(false);
 		btnPlayer3.setFont(new Font("Rockwell", Font.PLAIN, 16));
 		btnPlayer3.setBounds(171, 332, 260, 45);
 		frmFortressDefense.getContentPane().add(btnPlayer3);
 		
 		JButton btnPlayer4 = new JButton("Player 4");
+		btnPlayer4.setVisible(false);
 		btnPlayer4.setFont(new Font("Rockwell", Font.PLAIN, 16));
 		btnPlayer4.setBounds(171, 396, 260, 45);
 		frmFortressDefense.getContentPane().add(btnPlayer4);
 		
 		JButton btnPlayer5 = new JButton("Player 5");
+		btnPlayer5.setVisible(false);
 		btnPlayer5.setFont(new Font("Rockwell", Font.PLAIN, 16));
 		btnPlayer5.setBounds(171, 460, 260, 45);
 		frmFortressDefense.getContentPane().add(btnPlayer5);
 		
 		//initialize all player buttons:
+				JButton curBtn = btnPlayer1;
+		for(int i = 1; i < turns.length; i++)
+		{
+					//curBtn.setText(gameServer.getModel().getPlayers().get(i).PlayerName);
+					curBtn.setText(turns[i]);
+					curBtn.setVisible(true);
+					if(i == 1)
+					{
+						curBtn = btnPlayer2;
+					}
+					else if(i == 2)
+					{
+						curBtn = btnPlayer3;
+					}
+					else if(i == 3)
+					{
+						curBtn = btnPlayer4;
+					}
+					else if(i == 4)
+					{
+						curBtn = btnPlayer5;
+					}
+		}
+		
 		/*
-		JButton curBtn = btnPlayer1;
-		for(int i = 0; i < gameServer.getModel().getPlayers().size(); i++)
+		//initialize all player buttons:
+		for(int i = 1; i < turns.length; i++)
 		{
 			if(client != null)
 			{
 				if(client.getName() != gameServer.getModel().getPlayers().get(i).PlayerName)
 				{
-					curBtn.setText(gameServer.getModel().getPlayers().get(i).PlayerName);
+					//curBtn.setText(gameServer.getModel().getPlayers().get(i).PlayerName);
+					curBtn.setText(turns[i]);
 					curBtn.setVisible(true);
 				}
 			}

@@ -113,7 +113,7 @@ public class drawPhaseOtherPlayer {
 				if (client != null) {
 					client.leave();
 				}else if (gameServer != null) {
-					gameServer.close();
+					gameServer.close(false);
 				}
 
 				System.exit(0);
@@ -198,8 +198,8 @@ public class drawPhaseOtherPlayer {
 		
 		if(gameServer != null)
 		{
-			healthBar.setValue(gameServer.getModel().getPlayers().get(0).points);
-			lblBar.setText("HEALTHPOINTS: " + gameServer.getModel().getPlayers().get(0).points);
+			healthBar.setValue(gameServer.getHealth());
+			lblBar.setText("HEALTHPOINTS: " + gameServer.getHealth());
 		}
 		else if(client != null)
 		{

@@ -44,7 +44,7 @@ public class EndServerButtonHandler implements ActionListener {
 		this.choice.setEnabled(true);
 		
 		startHandler.getUDPServer().close();
-		startHandler.getTCPServer().close();
+		startHandler.getTCPServer().close(false);
 		
 		Player host = startHandler.getModel().getPlayers().get(0);
 		startHandler.getModel().getPlayers().clear();

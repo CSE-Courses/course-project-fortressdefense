@@ -52,6 +52,7 @@ public class Join_Game implements ActionListener {
     String chat_log = "";
     /**Exist*/
     JButton back;
+    private ChatBox chatBox;
 
     private HashMap<String, room_info> gl = new HashMap<>();
     private String RoomName = " ";
@@ -294,6 +295,9 @@ public class Join_Game implements ActionListener {
 		    	if (client != null) {
 			    	client.leave();
 			    	client.close();
+			    	if (chatBox != null) {
+			    		chatBox.dispose();
+			    	}
 		    	}
 		    }
 		});
@@ -526,9 +530,13 @@ public class Join_Game implements ActionListener {
     private drawPhase startDraw;
 
     private drawPhaseOtherPlayer waitForDraw;
-
+    private attackPhase attackPhase;
+    
 	public void startDrawPhase() {
 		// TODO Auto-generated method stub
+		if (chatBox == null) {
+			chatBox = new ChatBox(null, this.client);
+		}
 		panel.setVisible(false);
 		if(waitForDraw != null){
 		    this.mainFrame.remove(waitForDraw.GetPanel());
@@ -538,6 +546,11 @@ public class Join_Game implements ActionListener {
             this.mainFrame.remove(startDraw.GetPanel());
             this.mainFrame.repaint();
         }
+        if (attackPhase != null) {
+            this.mainFrame.remove(attackPhase.getPanel());
+            this.mainFrame.repaint();
+        }
+        
 		startDraw = null;
         startDraw = new drawPhase(this.mainFrame, null, this.client);
 		this.mainFrame.add(startDraw.GetPanel());
@@ -545,6 +558,9 @@ public class Join_Game implements ActionListener {
 
 	public void waitForDrawPhase(){
         // TODO Auto-generated method stub
+		if (chatBox == null) {
+			chatBox = new ChatBox(null, this.client);
+		}
         panel.setVisible(false);
         if(startDraw != null) {
             this.mainFrame.remove(startDraw.GetPanel());
@@ -554,6 +570,11 @@ public class Join_Game implements ActionListener {
             this.mainFrame.remove(waitForDraw.GetPanel());
             this.mainFrame.repaint();
         }
+        if (attackPhase != null) {
+            this.mainFrame.remove(attackPhase.getPanel());
+            this.mainFrame.repaint();
+        }
+        
         waitForDraw = null;
         waitForDraw = new drawPhaseOtherPlayer(this.mainFrame, null, this.client, this.client.getHand());
         this.mainFrame.add(waitForDraw.GetPanel());
@@ -605,7 +626,22 @@ public class Join_Game implements ActionListener {
             this.mainFrame.remove(waitForDraw.GetPanel());
             this.mainFrame.repaint();
         }
-        this.mainFrame.add(new attackPhase(this.mainFrame, null, this.client).getPanel());
+        if (attackPhase != null) {
+            this.mainFrame.remove(attackPhase.getPanel());
+            this.mainFrame.repaint();
+        }
+        
+        attackPhase = null;
+        attackPhase = new attackPhase(this.mainFrame, null, this.client);
+        this.mainFrame.add(attackPhase.getPanel());
 		
+	}
+
+	public void winner(String winner, String name) {
+		// TODO Auto-generated method stub\
+        if (attackPhase != null) {
+    		attackPhase.showWinner(winner, name);
+    		
+        }
 	}
 }
