@@ -52,6 +52,7 @@ public class Join_Game implements ActionListener {
     String chat_log = "";
     /**Exist*/
     JButton back;
+    private ChatBox chatBox;
 
     private HashMap<String, room_info> gl = new HashMap<>();
     private String RoomName = " ";
@@ -294,6 +295,9 @@ public class Join_Game implements ActionListener {
 		    	if (client != null) {
 			    	client.leave();
 			    	client.close();
+			    	if (chatBox != null) {
+			    		chatBox.dispose();
+			    	}
 		    	}
 		    }
 		});
@@ -530,6 +534,9 @@ public class Join_Game implements ActionListener {
     
 	public void startDrawPhase() {
 		// TODO Auto-generated method stub
+		if (chatBox == null) {
+			chatBox = new ChatBox(null, this.client);
+		}
 		panel.setVisible(false);
 		if(waitForDraw != null){
 		    this.mainFrame.remove(waitForDraw.GetPanel());
@@ -551,6 +558,9 @@ public class Join_Game implements ActionListener {
 
 	public void waitForDrawPhase(){
         // TODO Auto-generated method stub
+		if (chatBox == null) {
+			chatBox = new ChatBox(null, this.client);
+		}
         panel.setVisible(false);
         if(startDraw != null) {
             this.mainFrame.remove(startDraw.GetPanel());
