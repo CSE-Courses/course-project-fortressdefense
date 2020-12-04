@@ -2,6 +2,7 @@ package code.Socket;
 
 import code.*;
 import code.card_class.CardType;
+import gui.ChatBox;
 import gui.attackPhase;
 import gui.drawPhase;
 import gui.drawPhaseOtherPlayer;
@@ -34,6 +35,7 @@ public class Server implements Runnable{
     private GamePhase phase;
     private String serverPlayerName;
     private JPanel mainPanel;
+    private ChatBox chatBox;
 
     private final int serverPort;
 
@@ -298,6 +300,10 @@ public class Server implements Runnable{
         	shutdown();
         	chat.setText("");
 			serverSocket.close();
+			if (chatBox == null) {
+				chatBox.dispose();
+			}
+			
 			if (sendToMain) {
 	            mainPanel.setVisible(true);
 	    		mainFrame.getContentPane().removeAll();
@@ -328,6 +334,7 @@ public class Server implements Runnable{
 	    //#97 turn for draw, start draw phase, set turn to first player in client list
 		round = 1;
 		phase = GamePhase.Draw;
+		chatBox = new ChatBox(this, null);
 	    turn = this.getModel().getPlayers().get(0).PlayerName;
 	    for(Worker worker : clientList) {
 	        //Start draw phase, client[0]'s turn
