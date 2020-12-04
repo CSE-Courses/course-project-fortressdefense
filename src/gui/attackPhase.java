@@ -2112,17 +2112,17 @@ public class attackPhase {
 			icon = new ImageIcon(imgURL);
 		}
 		Image image = icon.getImage();
-		Image newimg = image.getScaledInstance(100, 50,  java.awt.Image.SCALE_SMOOTH);
+		Image newimg = image.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
 
 		if (winner.equals(myName)) {
-			JOptionPane.showOptionDialog(this.getPanel(), "Congrats. You Won!!!", "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icon, new Object[0], null);
+			JOptionPane.showMessageDialog(this.getPanel(), "Congrats. You Won!!!", "Game Over", JOptionPane.PLAIN_MESSAGE, icon);
 		}
 		else if(winner.equals("")){
-			JOptionPane.showOptionDialog(this.getPanel(), "Draw.", "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[0], null);
+			JOptionPane.showMessageDialog(this.getPanel(), "Draw.", "Game Over", JOptionPane.PLAIN_MESSAGE);
 		}
 		else {
-			JOptionPane.showOptionDialog(this.getPanel(), "You Lost.", "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[0], null);
+			JOptionPane.showMessageDialog(this.getPanel(), "You Lost.", "Game Over", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 
