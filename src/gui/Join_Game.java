@@ -626,4 +626,12 @@ public class Join_Game implements ActionListener {
         this.mainFrame.add(attackPhase.getPanel());
 		
 	}
+
+	public void winner(String winner, String name) {
+		// TODO Auto-generated method stub\
+        if (attackPhase != null) {
+    		attackPhase.showWinner(winner, name);
+    		
+        }
+	}
 }

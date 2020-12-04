@@ -113,7 +113,7 @@ public class drawPhaseOtherPlayer {
 				if (client != null) {
 					client.leave();
 				}else if (gameServer != null) {
-					gameServer.close();
+					gameServer.close(false);
 				}
 
 				System.exit(0);

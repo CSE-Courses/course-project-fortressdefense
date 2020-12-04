@@ -110,7 +110,7 @@ public class drawPhase {
 				if (client != null) {
 					client.leave();
 				}else if (gameServer != null) {
-					gameServer.close();
+					gameServer.close(false);
 				}
 
 				System.exit(0);

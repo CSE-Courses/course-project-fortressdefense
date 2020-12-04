@@ -502,9 +502,18 @@ public class attackPhase {
 						card1.setIcon(null);
 						card1.setVisible(false);
 						card1Clicked = false;
-						hand.Remove(hand.Select(0));
+		
 						// send to server
-						// then update turn
+						
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -532,9 +541,17 @@ public class attackPhase {
 						card2.setVisible(false);
 						card2Clicked = false;
 
-						hand.Remove(hand.Select(1));
 						// send to server
-						// then update turn
+						
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -563,9 +580,17 @@ public class attackPhase {
 						card3.setVisible(false);
 						card3Clicked = false;
 
-						hand.Remove(hand.Select(2));
 						// send to server
-						// then update turn
+						
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -593,11 +618,18 @@ public class attackPhase {
 						card4.setIcon(null);
 						card4.setVisible(false);
 						card4Clicked = false;
-						
+
+						// send to server
 
 						hand.Remove(hand.Select(3));
-						// send to server
-						// then update turn
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -625,9 +657,17 @@ public class attackPhase {
 						card5.setVisible(false);
 						card5Clicked = false;
 
-						hand.Remove(hand.Select(4));
 						// send to server
-						// then update turn
+						
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -656,9 +696,17 @@ public class attackPhase {
 						card6.setVisible(false);
 						card6Clicked = false;
 
-						hand.Remove(hand.Select(5));
 						// send to server
-						// then update turn
+						
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -687,9 +735,17 @@ public class attackPhase {
 						card7.setVisible(false);
 						card7Clicked = false;
 
-						hand.Remove(hand.Select(6));
 						// send to server
-						// then update turn
+						
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -718,9 +774,17 @@ public class attackPhase {
 						card8.setVisible(false);
 						card8Clicked = false;
 
-						hand.Remove(hand.Select(7));
 						// send to server
-						// then update turn
+						
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						if (currentTurn.equals(playerName)) {
+							if (client != null) {
+								client.switchTurn();
+							}else if (server != null) {
+								server.nextTurn();
+							}
+						}
 					}
 				}
 			}
@@ -745,8 +809,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
-
+					
+					// send to server
+					
+					hand.Remove(hand.Select(0));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
+					
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -756,11 +832,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -777,8 +849,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
-
+					
+					// send to server
+					
+					hand.Remove(hand.Select(1));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
+					
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -788,11 +872,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -809,8 +889,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(2));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -819,12 +911,7 @@ public class attackPhase {
 					}
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
-					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					}*/
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -841,8 +928,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(3));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -852,11 +951,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -873,8 +968,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
-
+					
+					// send to server
+					
+					hand.Remove(hand.Select(4));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
+					
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -884,11 +991,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -905,8 +1008,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(5));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -916,11 +1031,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -937,8 +1048,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(6));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -948,11 +1071,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -969,8 +1088,20 @@ public class attackPhase {
 					}
 					hp1.setText(text);
 					hb1.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
-
+					
+					// send to server
+					
+					hand.Remove(hand.Select(7));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
+					
+					/*
 					if(hb1.getValue()>=10) {
 						playerIcon1.setIcon(new ImageIcon(pc1));
 					}
@@ -980,11 +1111,7 @@ public class attackPhase {
 					else if(hb1.getValue()<5) {
 						playerIcon1.setIcon(new ImageIcon(pc6));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 			}
 		});
@@ -1008,8 +1135,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(0));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1019,11 +1158,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -1040,8 +1175,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(1));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1051,11 +1198,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -1072,8 +1215,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
-
+					
+					// send to server
+					
+					hand.Remove(hand.Select(2));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
+					
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1083,11 +1238,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -1104,8 +1255,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(3));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1115,11 +1278,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -1136,8 +1295,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(4));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1147,11 +1318,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -1168,8 +1335,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(5));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1179,11 +1358,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -1200,8 +1375,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(6));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1211,11 +1398,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -1232,8 +1415,20 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(7));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
 					}
@@ -1243,11 +1438,7 @@ public class attackPhase {
 					else if(hb2.getValue()<5) {
 						playerIcon2.setIcon(new ImageIcon(pc8));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 			}
 		});
@@ -1271,8 +1462,20 @@ public class attackPhase {
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(0));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1282,11 +1485,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -1303,8 +1502,20 @@ public class attackPhase {
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(1));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1314,11 +1525,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -1335,8 +1542,20 @@ public class attackPhase {
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
 
+					// send to server
+					
+					hand.Remove(hand.Select(2));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
+
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1346,11 +1565,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn"); timer.stop();
-					}
+					*/
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -1367,8 +1582,20 @@ public class attackPhase {
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(3));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1378,11 +1605,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -1398,9 +1621,19 @@ public class attackPhase {
 						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
-					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					hb3.setValue(healthAfterAttack);					// send to server
+					
+					hand.Remove(hand.Select(4));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1410,11 +1643,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -1431,8 +1660,20 @@ public class attackPhase {
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(5));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1442,11 +1683,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -1463,8 +1700,20 @@ public class attackPhase {
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(6));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1474,11 +1723,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -1495,8 +1740,20 @@ public class attackPhase {
 					}
 					hp3.setText(text);
 					hb3.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(7));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb3.getValue()>=10) {
 						playerIcon3.setIcon(new ImageIcon(pc3));
 					}
@@ -1506,11 +1763,7 @@ public class attackPhase {
 					else if(hb3.getValue()<5) {
 						playerIcon3.setIcon(new ImageIcon(pc12));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 			}
 		});
@@ -1534,8 +1787,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(0));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1545,11 +1810,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card2Clicked == true) {
 					card2.setIcon(null);
@@ -1566,8 +1827,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(1));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1577,11 +1850,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card3Clicked == true) {
 					card3.setIcon(null);
@@ -1598,8 +1867,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(2));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1609,11 +1890,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card4Clicked == true) {
 					card4.setIcon(null);
@@ -1630,8 +1907,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(3));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1641,11 +1930,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card5Clicked == true) {
 					card5.setIcon(null);
@@ -1662,8 +1947,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(4));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1673,11 +1970,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card6Clicked == true) {
 					card6.setIcon(null);
@@ -1694,8 +1987,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(5));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1705,11 +2010,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card7Clicked == true) {
 					card7.setIcon(null);
@@ -1726,8 +2027,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(6));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1737,11 +2050,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 				else if(card8Clicked == true) {
 					card8.setIcon(null);
@@ -1758,8 +2067,20 @@ public class attackPhase {
 					}
 					hp4.setText(text);
 					hb4.setValue(healthAfterAttack);
-					turn.setText("Player 1 Turn");
+					
+					// send to server
+					
+					hand.Remove(hand.Select(7));
+					timer.stop();
+					if (currentTurn.equals(playerName)) {
+						if (client != null) {
+							client.switchTurn();
+						}else if (server != null) {
+							server.nextTurn();
+						}
+					}
 
+					/*
 					if(hb4.getValue()>=10) {
 						playerIcon4.setIcon(new ImageIcon(pc4));
 					}
@@ -1769,11 +2090,7 @@ public class attackPhase {
 					else if(hb4.getValue()<5) {
 						playerIcon4.setIcon(new ImageIcon(pc15));
 					}
-
-					if(hp1.getText().equals("Health Points : 0") && hp2.getText().equals("Health Points : 0")
-							&& hp3.getText().equals("Health Points : 0") && hp4.getText().equals("Health Points : 0")) {
-						showWinner(); timer.stop(); turn.setText("Your Turn");
-					}
+					*/
 				}
 			}
 		});
@@ -1788,34 +2105,25 @@ public class attackPhase {
 		frame.setVisible(false);
 	}
 
-	public void showWinner() {
+	public void showWinner(String winner, String myName) {
 		ImageIcon icon = null;
 		java.net.URL imgURL = this.getClass().getResource("Images/winner.jpg");
 		if (imgURL != null) {
 			icon = new ImageIcon(imgURL);
 		}
 		Image image = icon.getImage();
-		Image newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
+		Image newimg = image.getScaledInstance(100, 50,  java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
 
-		JOptionPane optionPane = new JOptionPane("Congrats. You Won!!!", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, icon, new Object[]{}, null);
-
-		JDialog dialog = new JDialog();
-		dialog.setTitle("Winner");
-		dialog.setModal(true);
-		dialog.setContentPane(optionPane);
-
-		Timer timer = new Timer(5000, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				dialog.dispose();
-			}
-		});
-		timer.setRepeats(false);
-		timer.start();
-
-		dialog.setSize(500, 500);
-		dialog.setVisible(true);
+		if (winner.equals(myName)) {
+			JOptionPane.showOptionDialog(this.getPanel(), "Congrats. You Won!!!", "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icon, new Object[0], null);
+		}
+		else if(winner.equals("")){
+			JOptionPane.showOptionDialog(this.getPanel(), "Draw.", "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[0], null);
+		}
+		else {
+			JOptionPane.showOptionDialog(this.getPanel(), "You Lost.", "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[0], null);
+		}
 	}
 
 	public JPanel getPanel() {

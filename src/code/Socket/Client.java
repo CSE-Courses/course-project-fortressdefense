@@ -337,6 +337,15 @@ public class Client {
 							else {
 								joinGame.waitForDrawPhase();
 							}
+		                	break;
+		                case GameOver:
+		                	if (tokens.length == 1) {
+		                		// draw
+		                		joinGame.winner("", name);
+		                	}else {
+		                		joinGame.winner(tokens[1], name);
+		                	}
+		                	break;
                     	default:
                     		break;
                     }

@@ -220,7 +220,7 @@ public class CreateGame extends JPanel {
 		gbc_btnEndServer.gridy = 7;
 		panel.add(btnEndServer, gbc_btnEndServer);
 		StartServerButtonHandler startHandler = new StartServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, 
-				textField_1, choice, executor, tcpServer, this, textArea, mainFrame);
+				textField_1, choice, executor, tcpServer, this, textArea, mainFrame, mainPanel);
 		btnEndServer.addActionListener(new EndServerButtonHandler(model, btnStartSever, btnEndServer, textField, spinner, textField_1, choice, startHandler));
 		btnStartSever.addActionListener(startHandler);
 		
@@ -228,7 +228,7 @@ public class CreateGame extends JPanel {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		    	if (startHandler.getTCPServer() != null) {
-			    	startHandler.getTCPServer().close();
+			    	startHandler.getTCPServer().close(false);
 		    	}
 		    }
 		});
