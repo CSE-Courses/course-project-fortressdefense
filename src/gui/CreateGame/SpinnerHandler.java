@@ -22,7 +22,7 @@ public class SpinnerHandler implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
         JSpinner spinner = (JSpinner) e.getSource();
 		serverModel.SetMaxPlayers((Integer) spinner.getValue());
-		for (int i = serverModel.GetMaxPlayers(); i < 7; i++) {
+		for (int i = serverModel.GetMaxPlayers(); i < 6; i++) {
 			if (i > serverModel.GetMaxPlayers()) {
 				playerPanel.getComponent(i - 1).setVisible(false);
 			}else {
