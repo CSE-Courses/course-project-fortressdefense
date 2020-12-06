@@ -33,6 +33,7 @@ public class Client {
     private Hand hand;
     private String currentTurn;
     private int currentRound;
+    private Hand oppHand; 
     private HashMap<String, String> playerData = new HashMap<String, String>();
     
     
@@ -165,6 +166,19 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
+	public void play(UUID id, String oppPlayer){
+    	try {
+			String cmd = Command.UseAttack.toString() + " " + id.toString() + " " + oppPlayer + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//	public void playOpponent(UUID id) {
+//		
+//	}
     
     /**
      * Thread that reads all messages from server
@@ -346,6 +360,24 @@ public class Client {
 		                		joinGame.winner(tokens[1], name);
 		                	}
 		                	break;
+		                case UseAttack:
+		                	health = Integer.parseInt(tokens[1]);
+		                	break;
+		                case Scout:
+		                	for (int i = 1; i < tokens.length; i+=3) {
+		                		ICardEnum type;
+		                		try {
+		                			type = AttackCard.valueOf(tokens[i]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+			                			type = DefenseCard.valueOf(tokens[i]);
+			                		} catch (IllegalArgumentException e1) {
+			                			type = SpecialCard.valueOf(tokens[i]);
+			                		}
+		                		}
+		                		oppHand.Add(new Card(type, CardType.valueOf(tokens[i+1]), Integer.parseInt(tokens[i+2])));
+		                	}
+		                	break;
                     	default:
                     		break;
                     }
@@ -406,5 +438,13 @@ public class Client {
 	
 	public HashMap<String, String> getPlayerData() {
 		return playerData;
+	}
+
+	public Hand getOppHand() {
+		return oppHand;
+	}
+
+	public void setOppHand(Hand oppHand) {
+		this.oppHand = oppHand;
 	}
 }

@@ -109,4 +109,12 @@ public class Hand implements Serializable {
 	public void incNumDefense() {
 		numDefenseDraw += 1;
 	}
+
+	public ArrayList<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(ArrayList<Card> cards) {
+		this.cards = cards;
+	}
 }
