@@ -170,7 +170,7 @@ public class Worker extends Thread{
     		switch (card.getType()) {
 				case Attack:
 					player.useAttackCard(card, worker.getPlayer());
-					if(worker.getPlayer().getHasArcherTower()) {
+					if(worker.getPlayer().getHasArcherTower() > 0) {
 						String message = Command.UseAttack.toString() + " " + this.getPlayer().points + "\n";
 						this.send(message);
 					}
