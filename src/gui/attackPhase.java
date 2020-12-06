@@ -12,6 +12,7 @@ import javax.swing.*;
 import code.Socket.*;
 import code.*;
 import code.card_class.AttackCard;
+import code.card_class.Card;
 import code.card_class.CardType;
 import code.card_class.DefenseCard;
 import code.card_class.SpecialCard;
@@ -40,6 +41,7 @@ public class attackPhase {
 	private String currentTurn;
 	private int round;
 	private Hand hand;
+	private Card selected;
 
 	public attackPhase(JFrame mainFrame, Server server, Client client) {
 		this.server = server;
@@ -487,7 +489,8 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card1Clicked = true;
-					if(hand.Select(0).getType() == CardType.Defense){
+					selected = hand.Select(0);
+					if(selected.getType() == CardType.Defense){
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(0).getDamage();
 						String text = "";
@@ -504,7 +507,11 @@ public class attackPhase {
 						card1Clicked = false;
 		
 						// send to server
-						
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
 						hand.Remove(hand.Select(0));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -542,7 +549,11 @@ public class attackPhase {
 						card2Clicked = false;
 
 						// send to server
-						
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
 						hand.Remove(hand.Select(1));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -581,7 +592,11 @@ public class attackPhase {
 						card3Clicked = false;
 
 						// send to server
-						
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
 						hand.Remove(hand.Select(2));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -620,7 +635,11 @@ public class attackPhase {
 						card4Clicked = false;
 
 						// send to server
-
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
 						hand.Remove(hand.Select(3));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -658,7 +677,11 @@ public class attackPhase {
 						card5Clicked = false;
 
 						// send to server
-						
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
 						hand.Remove(hand.Select(4));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -697,7 +720,12 @@ public class attackPhase {
 						card6Clicked = false;
 
 						// send to server
-						
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
+					
 						hand.Remove(hand.Select(5));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -736,7 +764,11 @@ public class attackPhase {
 						card7Clicked = false;
 
 						// send to server
-						
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
 						hand.Remove(hand.Select(6));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -775,7 +807,11 @@ public class attackPhase {
 						card8Clicked = false;
 
 						// send to server
-						
+						if (client != null) {
+							client.play(selected.getID(), playerName);
+						}else if (server != null) {
+							server.play(selected.getID(), playerName);
+						}
 						hand.Remove(hand.Select(7));
 						timer.stop();
 						if (currentTurn.equals(playerName)) {
@@ -811,7 +847,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -851,7 +891,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -891,7 +935,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -930,7 +978,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -970,7 +1022,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1010,7 +1066,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1050,7 +1110,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1090,7 +1154,11 @@ public class attackPhase {
 					hb1.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p1.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p1.getText());
+					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1137,7 +1205,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1177,7 +1249,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1217,7 +1293,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1257,7 +1337,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1297,7 +1381,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1337,7 +1425,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1377,7 +1469,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1417,7 +1513,11 @@ public class attackPhase {
 					hb2.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p2.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p2.getText());
+					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1464,7 +1564,11 @@ public class attackPhase {
 					hb3.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1504,7 +1608,11 @@ public class attackPhase {
 					hb3.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1544,7 +1652,11 @@ public class attackPhase {
 					hb3.setValue(healthAfterAttack);
 
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1584,7 +1696,11 @@ public class attackPhase {
 					hb3.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1621,8 +1737,14 @@ public class attackPhase {
 						text = "Health Points : " + Integer.toString(healthAfterAttack);
 					}
 					hp3.setText(text);
-					hb3.setValue(healthAfterAttack);					// send to server
+					hb3.setValue(healthAfterAttack);					
 					
+					// send to server
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1662,7 +1784,11 @@ public class attackPhase {
 					hb3.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1702,7 +1828,11 @@ public class attackPhase {
 					hb3.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1742,7 +1872,11 @@ public class attackPhase {
 					hb3.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p3.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p3.getText());
+					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1789,7 +1923,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1829,7 +1967,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1869,7 +2011,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1909,7 +2055,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1949,7 +2099,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1989,7 +2143,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2029,7 +2187,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2069,7 +2231,11 @@ public class attackPhase {
 					hb4.setValue(healthAfterAttack);
 					
 					// send to server
-					
+					if (client != null) {
+						client.play(selected.getID(), p4.getText());
+					}else if (server != null) {
+						server.play(selected.getID(), p4.getText());
+					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
