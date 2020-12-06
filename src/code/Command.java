@@ -17,4 +17,6 @@ public enum Command {
 	StartAttackPhase,
 	StartDrawPhase,
 	GameOver,
+	UseAttack,
+	Scout,
 }
