@@ -29,6 +29,9 @@ public class attackPhase {
 	private boolean card6Clicked = false;
 	private boolean card7Clicked = false;
 	private boolean card8Clicked = false;
+	
+	private boolean scout = false;
+	private boolean trade = false;
 
 	private Server server;
 	private Client client;
@@ -40,6 +43,8 @@ public class attackPhase {
 	private String currentTurn;
 	private int round;
 	private Hand hand;
+	
+	private Hand scoutTradeHand;
 
 	public attackPhase(JFrame mainFrame, Server server, Client client) {
 		this.server = server;
@@ -515,6 +520,14 @@ public class attackPhase {
 							}
 						}
 					}
+					else if(hand.Select(0).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
+					}
 				}
 			}
 		});
@@ -552,6 +565,14 @@ public class attackPhase {
 								server.nextTurn();
 							}
 						}
+					}
+					else if(hand.Select(1).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
 					}
 				}
 			}
@@ -592,6 +613,14 @@ public class attackPhase {
 							}
 						}
 					}
+					else if(hand.Select(2).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
+					}
 				}
 			}
 		});
@@ -631,6 +660,14 @@ public class attackPhase {
 							}
 						}
 					}
+					else if(hand.Select(3).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
+					}
 				}
 			}
 		});
@@ -668,6 +705,14 @@ public class attackPhase {
 								server.nextTurn();
 							}
 						}
+					}
+					else if(hand.Select(4).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
 					}
 				}
 			}
@@ -708,6 +753,14 @@ public class attackPhase {
 							}
 						}
 					}
+					else if(hand.Select(5).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
+					}
 				}
 			}
 		});
@@ -746,6 +799,14 @@ public class attackPhase {
 								server.nextTurn();
 							}
 						}
+					}
+					else if(hand.Select(6).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
 					}
 				}
 			}
@@ -786,6 +847,14 @@ public class attackPhase {
 							}
 						}
 					}
+					else if(hand.Select(7).getCard_name() == SpecialCard.Scout)
+					{
+						scout = true;
+					}
+					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
+					{
+						trade = true;
+					}
 				}
 			}
 		});
@@ -798,6 +867,35 @@ public class attackPhase {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					
+					if(scout)
+					{
+						scout = false;
+						if(server != null)
+						{
+							//scoutTradeHand = server.play
+							for(int j = 0; j < server.getModel().getPlayers().size(); i++)
+							{
+								if(server.getModel().getPlayers().get(j).PlayerName == p1.getName())
+								{
+									scoutTradeHand = server.getModel().getPlayers().get(j).getHand();
+									viewScout();
+								}
+							}
+						}
+						else
+						{
+							
+							for(int j = 0; j < client.getPlayerData().keySet().toArray(new String[0]).length; i++)
+							{
+								if(client.getPlayerData().keySet().toArray(new String[0])[j] == p1.getName())
+								{
+									scoutTradeHand = client.
+								}
+							}
+						}
+					}
+					
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue + hand.Select(0).getDamage();
 					String text = "";
@@ -2126,13 +2224,26 @@ public class attackPhase {
 		}
 	}
 
+	public String getPlayerName()
+	{
+		return playerName;
+	}
+	
 	public JPanel getPanel() {
 		return (JPanel) frame.getContentPane();
 	}
 
 	public void viewScout()
 	{
-		mainFrame.getContentPane().add(new scoutCardGUI(mainFrame, server, client, playerData.keySet().toArray(new String[0])).GetPanel());
+		mainFrame.getContentPane().add(new scoutCardsDisplay(mainFrame, server, client,
+				playerData.keySet().toArray(new String[0])).GetPanel(), getPlayerName());
+		getPanel().setVisible(false);
+	}
+	
+	public void viewTrade()
+	{
+		mainFrame.getContentPane().add(new tradeCard(mainFrame, server, client,
+				playerData.keySet().toArray(new String[0])).GetPanel(), getPlayerName());
 		getPanel().setVisible(false);
 	}
 
