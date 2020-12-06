@@ -881,14 +881,6 @@ public class drawPhase {
 					cardPanel.add(curBtn);
 
 					curBtn.setVisible(true);
-					newHealth = newHealth + hand.Select(hand.Size()-1).getDamage();
-
-					//updates the health bar based on card picked up
-					healthBar.setValue(newHealth);
-
-					//updates the healthpoints
-					lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-					//}
 
 					curBound = curBound + 130;
 
