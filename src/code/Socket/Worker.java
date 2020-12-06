@@ -120,13 +120,13 @@ public class Worker extends Thread{
 				case Attack:
 					player.getHand().Draw(server.getModel().getGame().AttackDeck);
 					Card card = player.getHand().Select(player.getHand().Size() - 1);
-					String message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+					String message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + " " + card.getID() + "\n";
 					this.send(message);
 					break;
 				case Defense:
 					player.getHand().Draw(server.getModel().getGame().DefenseDeck);
 					card = player.getHand().Select(player.getHand().Size() - 1);
-					message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+					message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + " " + card.getID() + "\n";
 					this.send(message);
 					break;
 				default:
@@ -167,6 +167,7 @@ public class Worker extends Thread{
     	if (tokens.length > 1) {
     		Card card = findCard(tokens);
     		Worker worker = findWorker(tokens);
+    		player.getHand().Remove(card);
     		switch (card.getType()) {
 				case Attack:
 					player.useAttackCard(card, worker.getPlayer());

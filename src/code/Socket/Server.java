@@ -430,6 +430,7 @@ public class Server implements Runnable{
 	
 	public void play(UUID id, String token) {
 		Card card = findCard(id);
+		model.getPlayers().get(0).getHand().Remove(card);
 		Worker worker = findWorker(token);
 		switch (card.getType()) {
 			case Attack:
