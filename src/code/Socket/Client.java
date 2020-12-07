@@ -348,6 +348,9 @@ public class Client {
 		                case StartAttackPhase:
 		                	playerData = new HashMap<String, String>();
 		                	for (int i = 3; i < tokens.length; i+=2) {
+		                		if (tokens[i].equals(this.name)) {
+		                			health = Integer.parseInt(tokens[i+1]);
+		                		}
 		                		playerData.put(tokens[i], tokens[i+1]);
 		                	}
 		                	temp_turn = tokens[1];
@@ -360,6 +363,7 @@ public class Client {
 		                	temp_turn = tokens[2];
 		                	currentTurn = temp_turn;
 		                	currentRound = Integer.parseInt(tokens[3]);
+		                	hand.EndDrawPhase();
 		                	if (currentTurn.equals(name)) {
 								joinGame.startDrawPhase();
 							}
@@ -461,5 +465,9 @@ public class Client {
 
 	public void setOppHand(Hand oppHand) {
 		this.oppHand = oppHand;
+	}
+	
+	public Join_Game getJoinGame() {
+		return this.joinGame;
 	}
 }

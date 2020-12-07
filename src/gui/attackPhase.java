@@ -483,7 +483,7 @@ public class attackPhase {
 				if(currentTurn.equals(playerName)) {
 					card1Clicked = true;
 					selected = hand.Select(0);
-					if(selected.getType() == CardType.Defense){
+					if(selected.getType() == CardType.Defense || hand.Select(0).getCard_name() == SpecialCard.Archer_Tower){
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(0).getDamage();
 						String text = "";
@@ -525,7 +525,7 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card2Clicked = true;
-					if(hand.Select(1).getType() == CardType.Defense){
+					if(hand.Select(1).getType() == CardType.Defense || hand.Select(1).getCard_name() == SpecialCard.Archer_Tower){
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(1).getDamage();
 						String text = "";
@@ -567,7 +567,7 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card3Clicked = true;
-					if(hand.Select(2).getType() == CardType.Defense)
+					if(hand.Select(2).getType() == CardType.Defense || hand.Select(2).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(2).getDamage();
@@ -610,7 +610,7 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card4Clicked = true;
-					if(hand.Select(3).getType() == CardType.Defense)
+					if(hand.Select(3).getType() == CardType.Defense || hand.Select(3).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(3).getDamage();
@@ -652,7 +652,7 @@ public class attackPhase {
 			public void actionPerformed(ActionEvent e) {
 				if(currentTurn.equals(playerName)) {
 					card5Clicked = true;
-					if(hand.Select(4).getType() == CardType.Defense)
+					if(hand.Select(4).getType() == CardType.Defense || hand.Select(4).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(4).getDamage();
@@ -695,7 +695,7 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card6Clicked = true;
-					if(hand.Select(5).getType() == CardType.Defense)
+					if(hand.Select(5).getType() == CardType.Defense || hand.Select(5).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(5).getDamage();
@@ -739,7 +739,7 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card7Clicked = true;
-					if(hand.Select(6).getType() == CardType.Defense)
+					if(hand.Select(6).getType() == CardType.Defense || hand.Select(6).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(6).getDamage();
@@ -782,7 +782,7 @@ public class attackPhase {
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card8Clicked = true;
-					if(hand.Select(7).getType() == CardType.Defense)
+					if(hand.Select(7).getType() == CardType.Defense || hand.Select(7).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(7).getDamage();

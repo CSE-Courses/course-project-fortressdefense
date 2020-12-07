@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
 import javax.swing.JLabel;
@@ -108,7 +109,7 @@ public class drawPhase {
 			public void actionPerformed(ActionEvent e) {
 
 				if (client != null) {
-					client.leave();
+					client.getJoinGame().getBackButton().doClick();
 				}else if (gameServer != null) {
 					gameServer.close(false);
 				}
