@@ -10,6 +10,8 @@ import code.card_class.SpecialCard;
 
 import java.awt.*;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -45,6 +47,7 @@ import javax.swing.Timer;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import java.awt.ComponentOrientation;
+import java.io.IOException;
 import javax.swing.JPanel;
 
 /**
@@ -110,6 +113,14 @@ public class drawPhaseOtherPlayer {
 		JButton btnExit = new JButton("EXIT GAME");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler closed = new FX_Handler();
+				//add FX
+				try {
+					closed.misc_fx("button");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+					ex.printStackTrace();
+				}
+
 				if (client != null) {
 					client.getJoinGame().getBackButton().doClick();
 				}else if (gameServer != null) {
