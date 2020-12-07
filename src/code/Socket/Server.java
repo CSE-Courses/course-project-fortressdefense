@@ -1,12 +1,15 @@
 package code.Socket;
 
 import code.*;
+import code.card_class.Card;
 import code.card_class.CardType;
+import code.card_class.SpecialCard;
 import gui.ChatBox;
 import gui.attackPhase;
 import gui.drawPhase;
 import gui.drawPhaseOtherPlayer;
 
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -36,8 +39,13 @@ public class Server implements Runnable{
     private String serverPlayerName;
     private JPanel mainPanel;
     private ChatBox chatBox;
+    private Hand oppHand;
 
-    private final int serverPort;
+    public Hand getOppHand() {
+		return oppHand;
+	}
+
+	private final int serverPort;
 
     public Server(int serverPort, ServerModel model, JTextArea chat, JFrame mainFrame, JPanel mainPanel) {
         this.serverPort = serverPort;
@@ -93,9 +101,20 @@ public class Server implements Runnable{
                     if(index + 1 < this.getModel().getPlayers().size()){
                         index += 1;
                         turn = this.getModel().getPlayers().get(index).PlayerName;
-                        for(Worker worker : this.getWorkerList()){
-                            String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
-                            worker.send(toClientCmd);
+                        if (phase == GamePhase.Draw) {
+                            for(Worker worker : this.getWorkerList()){
+                                String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
+                                worker.send(toClientCmd);
+                            }
+                        }else {
+                    		String playerListAndHealth = "";
+                    		for (Player p : this.getModel().getPlayers()) {
+                    			playerListAndHealth += " " + p.PlayerName + " " + p.points;
+                    		}
+                            for(Worker worker : this.getWorkerList()){
+                                String toClientCmd = Command.StartAttackPhase + " " + turn + " " + round + playerListAndHealth + "\n";
+                                worker.send(toClientCmd);
+                            }
                         }
                         
                         if (phase == GamePhase.Draw) {
@@ -153,7 +172,7 @@ public class Server implements Runnable{
                     		
                      		// remove players who lost
                     		for (int i = 0; i < this.model.getPlayers().size(); i++) {
-                    			if (player.points <= 0) {
+                    			if (this.getModel().getPlayers().get(i).points <= 0) {
                     				this.model.getPlayers().remove(i);
                     			}
                     		}
@@ -179,7 +198,9 @@ public class Server implements Runnable{
                     		}
                     		else {
                         		turn = this.model.getPlayers().get(0).PlayerName;
+                        		this.getModel().getPlayers().get(0).getHand().EndDrawPhase();
                                 for(Worker worker : this.getWorkerList()){
+                                	worker.getPlayer().getHand().EndDrawPhase();
                                     String toClientCmd = Command.StartDrawPhase + " " + worker.getHealth() + " " + turn + " " + round + "\n";
                                     worker.send(toClientCmd);
                                 }
@@ -230,8 +251,12 @@ public class Server implements Runnable{
                 	            this.mainFrame.repaint();
                            		this.close(true);
                     		}else {
+                    			String playerListAndHealth = "";
+                        		for (Player p : this.getModel().getPlayers()) {
+                        			playerListAndHealth += " " + p.PlayerName + " " + p.points;
+                        		}
                                 for(Worker worker : this.getWorkerList()){
-                                    String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
+                                    String toClientCmd = Command.StartAttackPhase + " " + turn + " " + round + playerListAndHealth + "\n";
                                     worker.send(toClientCmd);
                                 }
                         		attackPhase.getPanel().setVisible(false);
@@ -300,8 +325,8 @@ public class Server implements Runnable{
         	shutdown();
         	chat.setText("");
 			serverSocket.close();
-			if (chatBox == null) {
-				chatBox.dispose();
+			if (chatBox != null) {
+	    		chatBox.dispatchEvent(new WindowEvent(chatBox, WindowEvent.WINDOW_CLOSING));
 			}
 			
 			if (sendToMain) {
@@ -410,5 +435,58 @@ public class Server implements Runnable{
 		}
 		
 		return retVal;
+	}
+
+	private Card findCard(UUID id) {
+		for (int i = 0; i < model.getPlayers().get(0).getHand().Size(); i++) {
+			if (model.getPlayers().get(0).getHand().Select(i).getID().equals(id)){
+				return model.getPlayers().get(0).getHand().Select(i);
+			}
+		}
+		return null;
+    }
+	
+	public void play(UUID id, String token) {
+		Card card = findCard(id);
+		Worker worker = findWorker(token);
+		switch (card.getType()) {
+			case Attack:
+				model.getPlayers().get(0).useAttackCard(card, worker.getPlayer());
+				String message = Command.UseAttack.toString() + " " + worker.getPlayer().points + "\n";
+				worker.send(message);
+				break;
+			case Defense:
+				model.getPlayers().get(0).useDefenseCard(card);
+				break;
+			case Special:
+				switch((SpecialCard) card.getCard_name()) {
+					case Archer_Tower:
+						model.getPlayers().get(0).useArcherTower();
+						break;
+//					case Trade:
+//						player.useTrade(card, wantedCard, oppoPlayer);
+//						message = Command.UseAttack.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+//						this.send(message);
+//						break;
+					case Scout:
+						oppHand = model.getPlayers().get(0).useScout(worker.getPlayer());
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+	
+	}
+}
+
+	private Worker findWorker(String token) {
+		for (int i = 0; i < this.getWorkerList().size(); i++) {
+			if (this.getWorkerList().get(i).getUsername().equals(token)){
+				return this.getWorkerList().get(i);
+			}
+		}
+    	return null;
 	}
 }

@@ -33,6 +33,7 @@ public class Client {
     private Hand hand;
     private String currentTurn;
     private int currentRound;
+    private Hand oppHand; 
     private HashMap<String, String> playerData = new HashMap<String, String>();
     
     
@@ -165,6 +166,31 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
+	public void play(UUID id, String oppPlayer){
+    	try {
+			String cmd = Command.UseAttack.toString() + " " + id.toString() + " " + oppPlayer + "\n";
+			serverOut.write(cmd.getBytes());
+			
+			// Kludge update player data for UI
+			if (!oppPlayer.equals(name)) {
+				int dmg = 0;
+				for (Card card : this.getHand().getCards()) {
+					if (card.getID().equals(id)) {
+						dmg = card.getDamage();
+					}
+				}
+				
+				playerData.replace(oppPlayer, Integer.toString(Integer.parseInt(playerData.get(oppPlayer)) - dmg));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//	public void playOpponent(UUID id) {
+//		
+//	}
     
     /**
      * Thread that reads all messages from server
@@ -302,7 +328,7 @@ public class Client {
 		                	}
 		                	break;
 		                case Draw:
-		                	if (tokens.length > 3) {
+		                	if (tokens.length > 4) {
 		                		ICardEnum type;
 		                		try {
 		                			type = AttackCard.valueOf(tokens[1]);
@@ -313,12 +339,18 @@ public class Client {
 			                			type = SpecialCard.valueOf(tokens[1]);
 			                		}
 		                		}
-		                		hand.Add(new Card(type, CardType.valueOf(tokens[2]), Integer.parseInt(tokens[3])));
+		                		
+		                		Card card = new Card(type, CardType.valueOf(tokens[2]), Integer.parseInt(tokens[3]));
+		                		card.setID(UUID.fromString(tokens[4]));
+		                		hand.Add(card);
 		                	}
 		                	break;
 		                case StartAttackPhase:
 		                	playerData = new HashMap<String, String>();
 		                	for (int i = 3; i < tokens.length; i+=2) {
+		                		if (tokens[i].equals(this.name)) {
+		                			health = Integer.parseInt(tokens[i+1]);
+		                		}
 		                		playerData.put(tokens[i], tokens[i+1]);
 		                	}
 		                	temp_turn = tokens[1];
@@ -331,6 +363,7 @@ public class Client {
 		                	temp_turn = tokens[2];
 		                	currentTurn = temp_turn;
 		                	currentRound = Integer.parseInt(tokens[3]);
+		                	hand.EndDrawPhase();
 		                	if (currentTurn.equals(name)) {
 								joinGame.startDrawPhase();
 							}
@@ -344,6 +377,24 @@ public class Client {
 		                		joinGame.winner("", name);
 		                	}else {
 		                		joinGame.winner(tokens[1], name);
+		                	}
+		                	break;
+		                case UseAttack:
+		                	health = Integer.parseInt(tokens[1]);
+		                	break;
+		                case Scout:
+		                	for (int i = 1; i < tokens.length; i+=3) {
+		                		ICardEnum type;
+		                		try {
+		                			type = AttackCard.valueOf(tokens[i]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+			                			type = DefenseCard.valueOf(tokens[i]);
+			                		} catch (IllegalArgumentException e1) {
+			                			type = SpecialCard.valueOf(tokens[i]);
+			                		}
+		                		}
+		                		oppHand.Add(new Card(type, CardType.valueOf(tokens[i+1]), Integer.parseInt(tokens[i+2])));
 		                	}
 		                	break;
                     	default:
@@ -406,5 +457,17 @@ public class Client {
 	
 	public HashMap<String, String> getPlayerData() {
 		return playerData;
+	}
+
+	public Hand getOppHand() {
+		return oppHand;
+	}
+
+	public void setOppHand(Hand oppHand) {
+		this.oppHand = oppHand;
+	}
+	
+	public Join_Game getJoinGame() {
+		return this.joinGame;
 	}
 }
