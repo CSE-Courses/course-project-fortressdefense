@@ -3,19 +3,25 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.List;
 import java.util.ArrayList;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 import code.Socket.*;
 import code.*;
+
 import code.card_class.AttackCard;
 import code.card_class.Card;
 import code.card_class.CardType;
 import code.card_class.DefenseCard;
 import code.card_class.SpecialCard;
+import code.card_class.*;
+
 
 public class attackPhase {
 
@@ -287,6 +293,16 @@ public class attackPhase {
 			int i = Integer.parseInt(lblTimer.getText());
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+//				FX_Handler turn = new FX_Handler();
+//				if(i >= 0 && i < 10) {
+//					try {
+//						turn.misc_fx("turn");
+//					} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+//						ex.printStackTrace();
+//					}
+//				}
+
 				if(i == -1)
 				{
 					timer.stop();
@@ -475,18 +491,43 @@ public class attackPhase {
 				curBtn = card8;
 			}
 		}
-		
+
 		card1.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card1Clicked = true;
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(0).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					selected = hand.Select(0);
 					if(selected.getType() == CardType.Defense || hand.Select(0).getCard_name() == SpecialCard.Archer_Tower){
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(0).getDamage();
 						String text = "";
+						//add FX
+						if(hand.Select(0).getDamage() < 0){
+							try {
+								play.misc_fx("get_hit");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+						else {
+							try {
+								play.misc_fx("healing");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						if(healthAfterAttack <= 0) {
 							text = "Health Points : " + Integer.toString(0);
 						}
@@ -522,14 +563,37 @@ public class attackPhase {
 		card2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card2Clicked = true;
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(1).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					if(hand.Select(1).getType() == CardType.Defense || hand.Select(1).getCard_name() == SpecialCard.Archer_Tower){
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(1).getDamage();
 						String text = "";
 						if(healthAfterAttack <= 0) {
+							//add FX
+							if(hand.Select(1).getDamage() < 0){
+								try {
+									play.misc_fx("get_hit");
+								} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+									ex.printStackTrace();
+								}
+							}
+							else {
+								try {
+									play.misc_fx("healing");
+								} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+									ex.printStackTrace();
+								}
+							}
 							text = "Health Points : " + Integer.toString(0);
 						}
 						else {
@@ -564,14 +628,38 @@ public class attackPhase {
 		card3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card3Clicked = true;
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(2).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					if(hand.Select(2).getType() == CardType.Defense || hand.Select(2).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(2).getDamage();
 						String text = "";
+						//add FX
+						if(hand.Select(2).getDamage() < 0){
+							try {
+								play.misc_fx("get_hit");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+						else {
+							try {
+								play.misc_fx("healing");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						if(healthAfterAttack <= 0) {
 							text = "Health Points : " + Integer.toString(0);
 						}
@@ -607,14 +695,38 @@ public class attackPhase {
 		card4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card4Clicked = true;
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(3).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					if(hand.Select(3).getType() == CardType.Defense || hand.Select(3).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(3).getDamage();
 						String text = "";
+						//add FX
+						if(hand.Select(3).getDamage() < 0){
+							try {
+								play.misc_fx("get_hit");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+						else {
+							try {
+								play.misc_fx("healing");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						if(healthAfterAttack <= 0) {
 							text = "Health Points : " + Integer.toString(0);
 						}
@@ -650,13 +762,37 @@ public class attackPhase {
 		card5.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				if(currentTurn.equals(playerName)) {
 					card5Clicked = true;
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(4).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					if(hand.Select(4).getType() == CardType.Defense || hand.Select(4).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(4).getDamage();
 						String text = "";
+						//add FX
+						if(hand.Select(4).getDamage() < 0){
+							try {
+								play.misc_fx("get_hit");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+						else {
+							try {
+								play.misc_fx("healing");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						if(healthAfterAttack <= 0) {
 							text = "Health Points : " + Integer.toString(0);
 						}
@@ -692,14 +828,38 @@ public class attackPhase {
 		card6.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card6Clicked = true;
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(5).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					if(hand.Select(5).getType() == CardType.Defense || hand.Select(5).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(5).getDamage();
 						String text = "";
+						//add FX
+						if(hand.Select(5).getDamage() < 0){
+							try {
+								play.misc_fx("get_hit");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+						else {
+							try {
+								play.misc_fx("healing");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						if(healthAfterAttack <= 0) {
 							text = "Health Points : " + Integer.toString(0);
 						}
@@ -736,14 +896,38 @@ public class attackPhase {
 		card7.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card7Clicked = true;
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(6).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					if(hand.Select(6).getType() == CardType.Defense || hand.Select(6).getCard_name() == SpecialCard.Archer_Tower)
 					{
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(6).getDamage();
 						String text = "";
+						//add FX
+						if(hand.Select(6).getDamage() < 0){
+							try {
+								play.misc_fx("get_hit");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+						else {
+							try {
+								play.misc_fx("healing");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						if(healthAfterAttack <= 0) {
 							text = "Health Points : " + Integer.toString(0);
 						}
@@ -779,14 +963,36 @@ public class attackPhase {
 		card8.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(currentTurn.equals(playerName)) {
 					card8Clicked = true;
-					if(hand.Select(7).getType() == CardType.Defense || hand.Select(7).getCard_name() == SpecialCard.Archer_Tower)
-					{
+					//add FX
+					try {
+						play.selected_card_fx(hand.Select(7).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+					if(hand.Select(7).getType() == CardType.Defense || hand.Select(7).getCard_name() == SpecialCard.Archer_Tower){
 						int textValue = Integer.parseInt(hp.getText().substring(16));
 						int healthAfterAttack = textValue + hand.Select(7).getDamage();
 						String text = "";
+						//add FX
+						if(hand.Select(7).getDamage() < 0){
+							try {
+								play.misc_fx("get_hit");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+						else {
+							try {
+								play.misc_fx("healing");
+							} catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						if(healthAfterAttack <= 0) {
 							text = "Health Points : " + Integer.toString(0);
 						}
@@ -822,11 +1028,19 @@ public class attackPhase {
 		playerIcon1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(card1Clicked == true) {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(0).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(0).getDamage();
 					String text = "";
@@ -871,6 +1085,13 @@ public class attackPhase {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(1).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(1).getDamage();
 					String text = "";
@@ -915,6 +1136,13 @@ public class attackPhase {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(2).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(2).getDamage();
 					String text = "";
@@ -958,6 +1186,13 @@ public class attackPhase {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(3).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(3).getDamage();
 					String text = "";
@@ -1002,6 +1237,13 @@ public class attackPhase {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(4).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(4).getDamage();
 					String text = "";
@@ -1046,6 +1288,13 @@ public class attackPhase {
 					card6.setIcon(null);
 					card6.setVisible(false);
 					card6Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(5).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(5).getDamage();
 					String text = "";
@@ -1090,6 +1339,13 @@ public class attackPhase {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(6).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(6).getDamage();
 					String text = "";
@@ -1134,6 +1390,13 @@ public class attackPhase {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(7).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(7).getDamage();
 					String text = "";
@@ -1180,11 +1443,19 @@ public class attackPhase {
 		playerIcon2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(card1Clicked == true) {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(0).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(0).getDamage();
 					String text = "";
@@ -1196,7 +1467,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(0).getID(), p2.getText());
@@ -1229,6 +1500,13 @@ public class attackPhase {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(1).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(1).getDamage();
 					String text = "";
@@ -1240,7 +1518,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(1).getID(), p2.getText());
@@ -1273,6 +1551,12 @@ public class attackPhase {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(2).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(2).getDamage();
 					String text = "";
@@ -1284,7 +1568,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(2).getID(), p2.getText());
@@ -1300,7 +1584,7 @@ public class attackPhase {
 							server.nextTurn();
 						}
 					}
-					
+
 					/*
 					if(hb2.getValue()>=10) {
 						playerIcon2.setIcon(new ImageIcon(pc2));
@@ -1317,6 +1601,12 @@ public class attackPhase {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(3).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(3).getDamage();
 					String text = "";
@@ -1328,7 +1618,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(3).getID(), p2.getText());
@@ -1361,6 +1651,12 @@ public class attackPhase {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(4).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(4).getDamage();
 					String text = "";
@@ -1372,7 +1668,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(4).getID(), p2.getText());
@@ -1405,6 +1701,12 @@ public class attackPhase {
 					card6.setIcon(null);
 					card6.setVisible(false);
 					card6Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(5).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(5).getDamage();
 					String text = "";
@@ -1416,7 +1718,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(5).getID(), p2.getText());
@@ -1449,6 +1751,12 @@ public class attackPhase {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(6).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(6).getDamage();
 					String text = "";
@@ -1460,7 +1768,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(6).getID(), p2.getText());
@@ -1493,6 +1801,12 @@ public class attackPhase {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(7).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp2.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(7).getDamage();
 					String text = "";
@@ -1504,7 +1818,7 @@ public class attackPhase {
 					}
 					hp2.setText(text);
 					hb2.setValue(healthAfterAttack);
-					
+
 					// send to server
 					if (client != null) {
 						client.play(hand.Select(7).getID(), p2.getText());
@@ -1539,11 +1853,18 @@ public class attackPhase {
 		playerIcon3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(card1Clicked == true) {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(0).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(0).getDamage();
 					String text = "";
@@ -1588,6 +1909,12 @@ public class attackPhase {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(1).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(1).getDamage();
 					String text = "";
@@ -1632,6 +1959,13 @@ public class attackPhase {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(2).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(2).getDamage();
 					String text = "";
@@ -1676,6 +2010,13 @@ public class attackPhase {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(3).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(3).getDamage();
 					String text = "";
@@ -1720,6 +2061,13 @@ public class attackPhase {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(4).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
+
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(4).getDamage();
 					String text = "";
@@ -1808,6 +2156,12 @@ public class attackPhase {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(6).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(6).getDamage();
 					String text = "";
@@ -1852,6 +2206,12 @@ public class attackPhase {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(7).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp3.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(7).getDamage();
 					String text = "";
@@ -1898,11 +2258,18 @@ public class attackPhase {
 		playerIcon4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler play = new FX_Handler();
 				// TODO Auto-generated method stub
 				if(card1Clicked == true) {
 					card1.setIcon(null);
 					card1.setVisible(false);
 					card1Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(0).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(0).getDamage();
 					String text = "";
@@ -1947,6 +2314,12 @@ public class attackPhase {
 					card2.setIcon(null);
 					card2.setVisible(false);
 					card2Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(1).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(1).getDamage();
 					String text = "";
@@ -1991,6 +2364,12 @@ public class attackPhase {
 					card3.setIcon(null);
 					card3.setVisible(false);
 					card3Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(2).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(2).getDamage();
 					String text = "";
@@ -2035,6 +2414,12 @@ public class attackPhase {
 					card4.setIcon(null);
 					card4.setVisible(false);
 					card4Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(3).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(3).getDamage();
 					String text = "";
@@ -2079,6 +2464,12 @@ public class attackPhase {
 					card5.setIcon(null);
 					card5.setVisible(false);
 					card5Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(4).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(4).getDamage();
 					String text = "";
@@ -2123,6 +2514,12 @@ public class attackPhase {
 					card6.setIcon(null);
 					card6.setVisible(false);
 					card6Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(5).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(5).getDamage();
 					String text = "";
@@ -2167,6 +2564,12 @@ public class attackPhase {
 					card7.setIcon(null);
 					card7.setVisible(false);
 					card7Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(6).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(6).getDamage();
 					String text = "";
@@ -2211,6 +2614,12 @@ public class attackPhase {
 					card8.setIcon(null);
 					card8.setVisible(false);
 					card8Clicked = false;
+					//add FX
+					try {
+						play.use_card_fx(hand.Select(7).getCard_name().toString());
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+						ex.printStackTrace();
+					}
 					int textValue = Integer.parseInt(hp4.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(7).getDamage();
 					String text = "";
@@ -2265,6 +2674,7 @@ public class attackPhase {
 	}
 
 	public void showWinner(String winner, String myName) {
+		FX_Handler result = new FX_Handler();
 		ImageIcon icon = null;
 		java.net.URL imgURL = this.getClass().getResource("Images/winner.jpg");
 		if (imgURL != null) {
@@ -2275,12 +2685,30 @@ public class attackPhase {
 		icon = new ImageIcon(newimg);
 
 		if (winner.equals(myName)) {
+			//add FX
+			try {
+				result.misc_fx("win");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+				ex.printStackTrace();
+			}
 			JOptionPane.showMessageDialog(this.getPanel(), "Congrats. You Won!!!", "Game Over", JOptionPane.PLAIN_MESSAGE, icon);
 		}
 		else if(winner.equals("")){
+			//add FX
+			try {
+				result.use_card_fx("Sword");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+				ex.printStackTrace();
+			}
 			JOptionPane.showMessageDialog(this.getPanel(), "Draw.", "Game Over", JOptionPane.PLAIN_MESSAGE);
 		}
 		else {
+			//add FX
+			try {
+				result.misc_fx("loss");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+				ex.printStackTrace();
+			}
 			JOptionPane.showMessageDialog(this.getPanel(), "You Lost.", "Game Over", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
