@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,6 +18,8 @@ import javax.swing.Timer;
 import code.Socket.Client;
 import code.Socket.Server;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class tradeCardDisplay {
@@ -26,6 +29,8 @@ public class tradeCardDisplay {
 	private JFrame mainFrame;
 	private static Server gameServer; // null is game is not host
 	private static Client client; // null if game is host
+	
+	private static Icon theCard;
 	
 	Timer tm;
 	int i = 15;
@@ -37,7 +42,7 @@ public class tradeCardDisplay {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					tradeCardDisplay window = new tradeCardDisplay(frmFortressDefense, gameServer, client);
+					tradeCardDisplay window = new tradeCardDisplay(frmFortressDefense, gameServer, client, theCard);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,10 +54,11 @@ public class tradeCardDisplay {
 	/**
 	 * Create the application.
 	 */
-	public tradeCardDisplay(JFrame mainFrame, Server gameServer, Client client) {
+	public tradeCardDisplay(JFrame mainFrame, Server gameServer, Client client, Icon theCard) {
 		this.mainFrame = mainFrame;
 		this.gameServer = gameServer;
 		this.client = client;
+		this.theCard = theCard;
 		initialize();
 	}
 
@@ -79,6 +85,36 @@ public class tradeCardDisplay {
 		JButton btnCard = new JButton("");
 		btnCard.setBounds(250, 182, 161, 227);
 		frmFortressDefense.getContentPane().add(btnCard);
+		
+		//Initialize Attack card images
+		Image axeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/axe.PNG")).getImage();
+		Image battleAxeImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/battleAxe.PNG")).getImage();
+		Image crossbowImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/crossbow.PNG")).getImage();
+		Image maceImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/mace.PNG")).getImage();
+		Image stickImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/stick.PNG")).getImage();
+		Image swordImg = new ImageIcon(this.getClass().getResource("Images/attackIMG/sword.PNG")).getImage();
+
+		//Initialize Defense card images
+		Image barbedWireImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/barbedWire.PNG")).getImage();
+		Image ironDoorImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/ironDoor.PNG")).getImage();
+		Image reinforcedGateImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/reinforcedGate.PNG")).getImage();
+		Image steelChainsImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/steelChains.PNG")).getImage();
+		Image stoneWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/stoneWall.PNG")).getImage();
+		Image woodenWallImg = new ImageIcon(this.getClass().getResource("Images/defenseIMG/woodenWall.PNG")).getImage();
+
+		//Initialize Damage card images
+		Image earthquakeImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/earthquake.PNG")).getImage();
+		Image floodImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/flood.PNG")).getImage();
+		Image thunderstormImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/thunderstorm.PNG")).getImage();
+		Image tornadoImg = new ImageIcon(this.getClass().getResource("Images/damageIMG/tornado.PNG")).getImage();
+
+		//Initialize Special card images
+		Image archerTowerImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/archerTower.PNG")).getImage();
+		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.PNG")).getImage();
+		Image tradeImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/trade.PNG")).getImage();
+
+		
+		btnCard.setIcon(theCard);
 		
 		JLabel lblTimer = new JLabel("15");
 		lblTimer.setFont(new Font("Rockwell", Font.PLAIN, 30));

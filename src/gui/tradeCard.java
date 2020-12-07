@@ -22,6 +22,7 @@ import code.card_class.AttackCard;
 import code.card_class.DefenseCard;
 import code.card_class.SpecialCard;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -40,6 +41,8 @@ public class tradeCard {
 	private static String playerName;
 	
 	private int cardIndex;
+	
+	private Icon chosenCard;
 
 	/**
 	 * Launch the application.
@@ -80,6 +83,7 @@ public class tradeCard {
 		this.mainFrame = mainFrame;
 		this.client = client;
 		this.gameServer = gameServer;
+		this.playerName = playerName;
 		initialize();
 	}
 
@@ -134,6 +138,17 @@ public class tradeCard {
 		btnGO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call trade func with index as arg
+				if(gameServer != null)
+				{
+					gameServer.trade(cardIndex, playerName);
+					//pass an image to display
+					viewTradeCard();
+				}
+				else
+				{
+					client.trade(cardIndex, playerName);
+					viewTradeCard();
+				}
 			}
 		});
 		btnGO.setFont(new Font("Tw Cen MT Condensed Extra Bold", Font.PLAIN, 50));
@@ -145,10 +160,7 @@ public class tradeCard {
 		btnCard1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 0;
-				if(gameServer != null)
-				{
-					gameServer.trade(cardIndex, playerName);
-				}
+				chosenCard = btnCard1.getIcon();
 			}
 		});
 		btnCard1.setVisible(false);
@@ -159,6 +171,7 @@ public class tradeCard {
 		btnCard2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 1;
+				chosenCard = btnCard2.getIcon();
 			}
 		});
 		btnCard2.setVisible(false);
@@ -169,6 +182,7 @@ public class tradeCard {
 		btnCard3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 2;
+				chosenCard = btnCard3.getIcon();
 			}
 		});
 		btnCard3.setVisible(false);
@@ -179,6 +193,7 @@ public class tradeCard {
 		btnCard4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 3;
+				chosenCard = btnCard4.getIcon();
 			}
 		});
 		btnCard4.setVisible(false);
@@ -189,6 +204,7 @@ public class tradeCard {
 		btnCard5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 4;
+				chosenCard = btnCard5.getIcon();
 			}
 		});
 		btnCard5.setVisible(false);
@@ -199,6 +215,7 @@ public class tradeCard {
 		btnCard6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 5;
+				chosenCard = btnCard6.getIcon();
 			}
 		});
 		btnCard6.setVisible(false);
@@ -209,6 +226,7 @@ public class tradeCard {
 		btnCard7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 6;
+				chosenCard = btnCard7.getIcon();
 			}
 		});
 		btnCard7.setVisible(false);
@@ -219,6 +237,7 @@ public class tradeCard {
 		btnCard8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 7;
+				chosenCard = btnCard8.getIcon();
 			}
 		});
 		btnCard8.setVisible(false);
@@ -463,9 +482,15 @@ public class tradeCard {
 			}
 		}
 		
-		
-		
 	}
+	
+	public void viewTradeCard()
+	{
+		mainFrame.getContentPane().add(new tradeCardDisplay(mainFrame, gameServer, client, chosenCard).GetPanel());
+		GetPanel().setVisible(false);
+		//possibly just remove the panel
+	}
+	
 	public JPanel GetPanel() {
 		return (JPanel) frmFortressDefense.getContentPane();
 	}

@@ -111,7 +111,7 @@ public class drawPhaseOtherPlayer {
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (client != null) {
-					client.leave();
+					client.getJoinGame().getBackButton().doClick();
 				}else if (gameServer != null) {
 					gameServer.close(false);
 				}
