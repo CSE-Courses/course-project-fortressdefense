@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.awt.Cursor;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -46,7 +48,7 @@ public class tradeCard {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					tradeCard window = new tradeCard(frmFortressDefense, null, null, players, playerName);
+					tradeCard window = new tradeCard(frmFortressDefense, null, null, playerName);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,12 +60,26 @@ public class tradeCard {
 	/**
 	 * Create the application.
 	 */
-	public tradeCard(JFrame mainFrame, Server gameServer, Client client, String[] players, String playerName) {
+	public tradeCard(JFrame mainFrame, Server gameServer, Client client, String playerName) {
+		if(gameServer != null)
+		{
+			this.hand = gameServer.getHand();
+		}
+		else
+		{
+			try {
+				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			mainFrame.setCursor(Cursor.getDefaultCursor());
+			this.hand = client.getHand();
+		}
 		this.mainFrame = mainFrame;
 		this.client = client;
 		this.gameServer = gameServer;
-		this.playerName = playerName;
-		this.players = players;
 		initialize();
 	}
 
@@ -129,6 +145,10 @@ public class tradeCard {
 		btnCard1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardIndex = 0;
+				if(gameServer != null)
+				{
+					gameServer.trade(cardIndex, playerName);
+				}
 			}
 		});
 		btnCard1.setVisible(false);

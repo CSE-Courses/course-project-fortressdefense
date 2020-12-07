@@ -39,8 +39,8 @@ public class scoutCardsDisplay {
 	int i = 30;
 	
 	private JFrame mainFrame;
-	private static Server gameServer; // null is game is not host
-	private static Client client; // null if game is host
+	private Server gameServer; // null is game is not host
+	private Client client; // null if game is host
 	private static Hand hand;
 	/**
 	 * Launch the application.
@@ -49,7 +49,7 @@ public class scoutCardsDisplay {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					scoutCardsDisplay window = new scoutCardsDisplay(frmFortressDefense, gameServer, client, hand);
+					scoutCardsDisplay window = new scoutCardsDisplay(frmFortressDefense, null, null);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,11 +61,26 @@ public class scoutCardsDisplay {
 	/**
 	 * Create the application.
 	 */
-	public scoutCardsDisplay(JFrame mainFrame, Server gameServer, Client client, Hand hand) {
+	public scoutCardsDisplay(JFrame mainFrame, Server gameServer, Client client) {
+		if(gameServer != null)
+		{
+			this.hand = gameServer.getOppHand();
+		}
+		else
+		{
+			try {
+				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			mainFrame.setCursor(Cursor.getDefaultCursor());
+			this.hand = client.getOppHand();
+		}
 		this.mainFrame = mainFrame;
 		this.client = client;
 		this.gameServer = gameServer;
-		this.hand = hand;
 		initialize();
 	}
 
@@ -187,7 +202,6 @@ public class scoutCardsDisplay {
 		
 		//initialize players hand:
 		JButton curBtn = btnCard1;
-		//int curBound = 10;
 		for(int i = 0; i < hand.Size(); i++)
 		{
 			if(hand.Select(i).getCard_name() == AttackCard.Axe)
@@ -266,10 +280,8 @@ public class scoutCardsDisplay {
 			{
 				curBtn.setIcon(new ImageIcon(woodenWallImg));
 			}
-			//curBtn.setBounds(curBound, 22, 119, 176);
 			curBtn.setVisible(true);
 			
-			//curBound = curBound + 130;
 			if(curBtn == btnCard1)
 			{
 				curBtn = btnCard2;

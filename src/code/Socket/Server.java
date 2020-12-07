@@ -1,7 +1,9 @@
 package code.Socket;
 
 import code.*;
+import code.card_class.Card;
 import code.card_class.CardType;
+import code.card_class.SpecialCard;
 import gui.ChatBox;
 import gui.attackPhase;
 import gui.drawPhase;
@@ -13,6 +15,7 @@ import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.swing.JFrame;
@@ -36,8 +39,13 @@ public class Server implements Runnable{
     private String serverPlayerName;
     private JPanel mainPanel;
     private ChatBox chatBox;
+    private Hand oppHand;
 
-    private final int serverPort;
+    public Hand getOppHand() {
+		return oppHand;
+	}
+
+	private final int serverPort;
 
     public Server(int serverPort, ServerModel model, JTextArea chat, JFrame mainFrame, JPanel mainPanel) {
         this.serverPort = serverPort;
@@ -410,5 +418,67 @@ public class Server implements Runnable{
 		}
 		
 		return retVal;
+	}
+
+	private Card findCard(UUID id) {
+		for (int i = 0; i < model.getPlayers().get(0).getHand().Size(); i++) {
+			if (model.getPlayers().get(0).getHand().Select(i).getID().equals(id)){
+				return model.getPlayers().get(0).getHand().Select(i);
+			}
+		}
+		return null;
+    }
+	
+	public void play(UUID id, String token) {
+		Card card = findCard(id);
+		Worker worker = findWorker(token);
+		switch (card.getType()) {
+			case Attack:
+				model.getPlayers().get(0).useAttackCard(card, worker.getPlayer());
+				String message = Command.UseAttack.toString() + " " + worker.getPlayer().points + "\n";
+				worker.send(message);
+				break;
+			case Defense:
+				model.getPlayers().get(0).useDefenseCard(card);
+				break;
+			case Special:
+				switch((SpecialCard) card.getCard_name()) {
+					case Archer_Tower:
+						model.getPlayers().get(0).useArcherTower();
+						break;
+					case Scout:
+						oppHand = model.getPlayers().get(0).useScout(worker.getPlayer());
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+	
+	}
+}
+	
+	public void trade(int i, String oppName)
+	{
+		Worker randWork = findWorker(oppName);
+		Random rand = new Random();
+		Card selectedCard = model.getPlayers().get(0).getHand().Select(i);
+		model.getPlayers().get(0).useTrade(
+				selectedCard, randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size())), 
+				randWork.getPlayer());
+		String msg = Command.Trade.toString() + " " + selectedCard.getCard_name() + " " + 
+				selectedCard.getDamage() + " " + selectedCard.getType() + " " +
+				selectedCard.getID() + "\n";
+		randWork.send(msg);
+	}
+	
+	private Worker findWorker(String token) {
+		for (int i = 0; i < this.getWorkerList().size(); i++) {
+			if (this.getWorkerList().get(i).getName().equals(token)){
+				return this.getWorkerList().get(i);
+			}
+		}
+    	return null;
 	}
 }

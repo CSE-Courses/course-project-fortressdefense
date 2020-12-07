@@ -9,12 +9,14 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import code.*;
 import code.RSA.PublicKey;
 import code.card_class.Card;
 import code.card_class.CardType;
+import code.card_class.SpecialCard;
 
 public class Worker extends Thread{
 	private final Socket clientSocket;
@@ -89,6 +91,12 @@ public class Worker extends Thread{
                     case GetTurn:
                         handelGetTurn();
                         break;
+                    case UseAttack:
+                    	handleAttack(tokens);
+                    	break;
+                    case Trade:
+                    	handleTrade(tokens);
+                    	break;
                 	default:
                 		break;
                 }
@@ -108,6 +116,20 @@ public class Worker extends Thread{
         thisTurn = server.getTurn();
         String toClientCmd = Command.GetTurn + " " + thisTurn + "\n";
         send(toClientCmd);
+    }
+    
+    private void handleTrade(String[] tokens)
+    {
+    	Worker randWork = findWorker(tokens);
+		Random rand = new Random();
+		Card selectedCard = player.getHand().Select(Integer.parseInt(tokens[1]));
+		player.useTrade(
+				selectedCard, randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size())), 
+				randWork.getPlayer());
+		String msg = Command.Trade.toString() + " " + selectedCard.getCard_name() + " " + 
+				selectedCard.getDamage() + " " + selectedCard.getType() + " " +
+				selectedCard.getID() + "\n";
+		randWork.send(msg);
     }
     
     private void handleDraw(String[] tokens) {
@@ -140,6 +162,75 @@ public class Worker extends Thread{
 			}
 		}
     }
+    
+    private Card findCard(String[] tokens) {
+    	for (int i = 0; i < player.getHand().Size(); i++) {
+			if (player.getHand().Select(i).getID().equals(UUID.fromString(tokens[1]))){
+				return player.getHand().Select(i);
+			}
+		}
+    	return null;
+    }
+    
+    private Worker findWorker(String[] tokens) {
+    	for (int i = 0; i < server.getWorkerList().size(); i++) {
+			if (server.getWorkerList().get(i).getName().equals(tokens[2])){
+				return server.getWorkerList().get(i);
+			}
+		}
+    	return null;
+	}
+    
+    private void handleAttack(String[] tokens) {
+    	if (tokens.length > 1) {
+    		Card card = findCard(tokens);
+    		Worker worker = findWorker(tokens);
+    		switch (card.getType()) {
+				case Attack:
+					player.useAttackCard(card, worker.getPlayer());
+					if(worker.getPlayer().getHasArcherTower()) {
+						String message = Command.UseAttack.toString() + " " + this.getPlayer().points + "\n";
+						this.send(message);
+					}
+					String message = Command.UseAttack.toString() + " " + worker.getPlayer().points + "\n";
+					worker.send(message);
+					break;
+				case Defense:
+					player.useDefenseCard(card);
+					break;
+				case Special:
+					switch((SpecialCard) card.getCard_name()) {
+						case Archer_Tower:
+							player.useArcherTower();
+							break;
+						case Scout:
+							Hand oppHand = player.useScout(worker.getPlayer());
+							message = Command.Scout.toString();
+							for(Card oppCard : oppHand.getCards()) {
+								message += " " + oppCard.getCard_name().toString() + " " + oppCard.getType() + " " + oppCard.getDamage();
+							}
+							message += "\n";
+							this.send(message);
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+    		}
+    	}
+    	for (int i = 0; i < player.getHand().Size(); i++) {
+			if (player.getHand().Select(i).getID().equals(UUID.fromString(tokens[1]))){
+				player.getHand().Remove(player.getHand().Select(i));
+				break;
+			}
+		}
+    }
+
+	public Player getPlayer() {
+		return player;
+	}
 
 	private void handleKey() {
 		PublicKey key = server.getRSA().getPublicKey();
