@@ -5,7 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
+
+import code.FX_Handler;
 
 import code.Game;
 import gui.CreateGame.CreateGame;
@@ -67,14 +71,18 @@ public class MainMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
+					FX_Handler button = new FX_Handler();
+					try {
+						button.misc_fx("button");
+					} catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+						System.out.println("FX file not found or wrong file name");
+					}
 					String playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 					if (playerName != null) {
 						while (playerName.equals("") || playerName.contains("/") || playerName.contains(" ")) {
 							JOptionPane.showMessageDialog(frame, "Fortress Name cannot be empty or contain /.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 							playerName = (String)JOptionPane.showInputDialog(frame, "Enter Fortress Name: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 						}
-						
-
 						frame.add(new Join_Game(playerName, panel, frame).getPanel());
 						panel.setVisible(false);
 					}
@@ -95,6 +103,12 @@ public class MainMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				FX_Handler button = new FX_Handler();
+				try {
+					button.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+					System.out.println("FX file not found or wrong file name");
+				}
 				rulesScreen();
 			}
 	    });
