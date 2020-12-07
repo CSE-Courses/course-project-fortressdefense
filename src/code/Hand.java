@@ -39,7 +39,7 @@ public class Hand implements Serializable {
 	}
 	
 	public Card Play(int index) {
-		if (Size() == 0 || index < 0 || index > Size()) {
+		if (Size() == 0 || index < 0 || index >= Size()) {
 			return null;
 		}
 		
@@ -47,7 +47,7 @@ public class Hand implements Serializable {
 	}
 	
 	public Card Select(int index) {
-		if (Size() == 0 || index < 0 || index > Size()) {
+		if (Size() == 0 || index < 0 || index >= Size()) {
 			return null;
 		}
 		

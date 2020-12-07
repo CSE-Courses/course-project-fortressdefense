@@ -482,12 +482,13 @@ public class Server implements Runnable{
 		Worker randWork = findWorker(oppName);
 		Random rand = new Random();
 		Card selectedCard = model.getPlayers().get(0).getHand().Select(i);
+		Card otherCard = randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size()));
 		model.getPlayers().get(0).useTrade(
-				selectedCard, randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size())), 
+				selectedCard, otherCard, 
 				randWork.getPlayer());
 		String msg = Command.Trade.toString() + " " + selectedCard.getCard_name() + " " + 
 				selectedCard.getDamage() + " " + selectedCard.getType() + " " +
-				selectedCard.getID() + "\n";
+				selectedCard.getID() + " " + otherCard.getCard_name().toString() + "\n";
 		randWork.send(msg);
 	}
 	

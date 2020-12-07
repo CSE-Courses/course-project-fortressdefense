@@ -123,13 +123,23 @@ public class Worker extends Thread{
     	Worker randWork = findWorker(tokens);
 		Random rand = new Random();
 		Card selectedCard = player.getHand().Select(Integer.parseInt(tokens[1]));
-		player.useTrade(
-				selectedCard, randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size())), 
-				randWork.getPlayer());
-		String msg = Command.Trade.toString() + " " + selectedCard.getCard_name() + " " + 
-				selectedCard.getDamage() + " " + selectedCard.getType() + " " +
-				selectedCard.getID() + "\n";
-		randWork.send(msg);
+		Card otherCard;
+		if (randWork == null && tokens[2].equals(this.server.getPlayerName())) {
+			otherCard = server.getModel().getPlayers().get(0).getHand().Select(rand.nextInt(server.getModel().getPlayers().get(0).getHand().Size()));
+			player.useTrade(
+					selectedCard, otherCard, 
+					server.getModel().getPlayers().get(0));
+		}else {
+			otherCard = randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size()));
+			player.useTrade(
+					selectedCard, otherCard, 
+					randWork.getPlayer());
+			String msg = Command.Trade.toString() + " " + selectedCard.getCard_name() + " " + 
+					selectedCard.getDamage() + " " + selectedCard.getType() + " " +
+					selectedCard.getID() + " " + otherCard.getCard_name().toString() + "\n";
+			randWork.send(msg);
+		}
+
     }
     
     private void handleDraw(String[] tokens) {

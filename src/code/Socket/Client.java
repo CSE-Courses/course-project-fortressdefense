@@ -355,7 +355,7 @@ public class Client {
 		                	}
 		                	break;
 		                case Trade:
-		                	if (tokens.length > 4) {
+		                	if (tokens.length > 5) {
 		                		ICardEnum type;
 		                		try {
 		                			type = AttackCard.valueOf(tokens[1]);
@@ -369,6 +369,21 @@ public class Client {
 		                		Card newCard = new Card(type, CardType.valueOf(tokens[3]), Integer.parseInt(tokens[2]));
 		                		newCard.setID(UUID.fromString(tokens[4]));
 		                		hand.Add(newCard);
+		                   		ICardEnum name;
+		                 		try {
+		                 			name = AttackCard.valueOf(tokens[5]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+		                       			name = DefenseCard.valueOf(tokens[5]);
+			                		} catch (IllegalArgumentException e1) {
+			                			name = SpecialCard.valueOf(tokens[5]);
+			                		}
+		                		}
+		                		for (int i = 0; i < hand.Size(); i++) {
+		                			if (hand.getCards().get(i).getCard_name().equals(name)) {
+		                				hand.Remove(hand.getCards().get(i));
+		                			}
+		                		}
 		                	}
 		                	break;
 		                case StartAttackPhase:
