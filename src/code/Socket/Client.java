@@ -409,6 +409,7 @@ public class Client {
 		                	health = Integer.parseInt(tokens[1]);
 		                	break;
 		                case Scout:
+		                	oppHand = new Hand();
 		                	for (int i = 1; i < tokens.length; i+=3) {
 		                		ICardEnum type;
 		                		try {
