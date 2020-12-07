@@ -52,6 +52,7 @@ public class FX_Handler {
             entry("button", "src\\gui\\FX\\button.wav"),
             entry("discard_card", "src\\gui\\FX\\discard_card.wav"),
             entry("healing", "src\\gui\\FX\\healing.wav"),
+            entry("draw_card", "src\\gui\\FX\\draw_card.wav"),
             entry("get_hit", "src\\gui\\FX\\get_hit.wav"),
             entry("loss", "src\\gui\\FX\\loss.wav"),
             entry("win", "src\\gui\\FX\\win.wav"),
