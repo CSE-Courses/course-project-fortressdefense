@@ -64,22 +64,6 @@ public class tradeCard {
 	 * Create the application.
 	 */
 	public tradeCard(JFrame mainFrame, Server gameServer, Client client, String playerName) {
-		if(gameServer != null)
-		{
-			this.hand = gameServer.getHand();
-		}
-		else
-		{
-			try {
-				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			mainFrame.setCursor(Cursor.getDefaultCursor());
-			this.hand = client.getHand();
-		}
 		this.mainFrame = mainFrame;
 		this.client = client;
 		this.gameServer = gameServer;
@@ -147,6 +131,14 @@ public class tradeCard {
 				else
 				{
 					client.trade(cardIndex, playerName);
+					try {
+						mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					mainFrame.setCursor(Cursor.getDefaultCursor());
 					viewTradeCard();
 				}
 			}
@@ -486,9 +478,10 @@ public class tradeCard {
 	
 	public void viewTradeCard()
 	{
-		mainFrame.getContentPane().add(new tradeCardDisplay(mainFrame, gameServer, client, chosenCard).GetPanel());
+		mainFrame.setCursor(Cursor.getDefaultCursor());
+		mainFrame.getContentPane().add(new tradeCardDisplay(mainFrame, gameServer, client).GetPanel());
 		GetPanel().setVisible(false);
-		//possibly just remove the panel
+		mainFrame.remove(this.GetPanel());
 	}
 	
 	public JPanel GetPanel() {

@@ -17,6 +17,10 @@ import javax.swing.Timer;
 
 import code.Socket.Client;
 import code.Socket.Server;
+import code.card_class.AttackCard;
+import code.card_class.Card;
+import code.card_class.DefenseCard;
+import code.card_class.SpecialCard;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -30,7 +34,7 @@ public class tradeCardDisplay {
 	private static Server gameServer; // null is game is not host
 	private static Client client; // null if game is host
 	
-	private static Icon theCard;
+	private static Card theCard;
 	
 	Timer tm;
 	int i = 15;
@@ -42,7 +46,7 @@ public class tradeCardDisplay {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					tradeCardDisplay window = new tradeCardDisplay(frmFortressDefense, gameServer, client, theCard);
+					tradeCardDisplay window = new tradeCardDisplay(frmFortressDefense, gameServer, client);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,11 +58,15 @@ public class tradeCardDisplay {
 	/**
 	 * Create the application.
 	 */
-	public tradeCardDisplay(JFrame mainFrame, Server gameServer, Client client, Icon theCard) {
+	public tradeCardDisplay(JFrame mainFrame, Server gameServer, Client client) {
 		this.mainFrame = mainFrame;
 		this.gameServer = gameServer;
 		this.client = client;
-		this.theCard = theCard;
+		if (this.gameServer != null) {
+			this.theCard = gameServer.getHand().getCards().get(gameServer.getHand().Size() - 1);
+		}else if (client != null){
+			this.theCard = client.getHand().getCards().get(client.getHand().Size() - 1);
+		}
 		initialize();
 	}
 
@@ -113,8 +121,82 @@ public class tradeCardDisplay {
 		Image scoutImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/scout.PNG")).getImage();
 		Image tradeImg = new ImageIcon(this.getClass().getResource("Images/specialIMG/trade.PNG")).getImage();
 
-		
-		btnCard.setIcon(theCard);
+		if(theCard.getCard_name() == AttackCard.Axe)
+		{
+			btnCard.setIcon(new ImageIcon(axeImg));
+		}
+		else if(theCard.getCard_name() == AttackCard.Battle_Axe)
+		{
+			btnCard.setIcon(new ImageIcon(battleAxeImg));
+		}
+		else if(theCard.getCard_name() == AttackCard.Crossbow)
+		{
+			btnCard.setIcon(new ImageIcon(crossbowImg));
+		}
+		else if(theCard.getCard_name() == AttackCard.Mace)
+		{
+			btnCard.setIcon(new ImageIcon(maceImg));
+		}
+		else if(theCard.getCard_name() == AttackCard.Stick)
+		{
+			btnCard.setIcon(new ImageIcon(stickImg));
+		}
+		else if(theCard.getCard_name() == AttackCard.Sword)
+		{
+			btnCard.setIcon(new ImageIcon(swordImg));
+		}
+		else if(theCard.getCard_name() == SpecialCard.Archer_Tower)
+		{
+			btnCard.setIcon(new ImageIcon(archerTowerImg));
+		}
+		else if(theCard.getCard_name() == SpecialCard.Scout)
+		{
+			btnCard.setIcon(new ImageIcon(scoutImg));
+		}
+		else if(theCard.getCard_name() == SpecialCard.Trade)
+		{
+			btnCard.setIcon(new ImageIcon(tradeImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Earthquake)
+		{
+			btnCard.setIcon(new ImageIcon(earthquakeImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Flood)
+		{
+			btnCard.setIcon(new ImageIcon(floodImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Thunderstorm)
+		{
+			btnCard.setIcon(new ImageIcon(thunderstormImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Tornado)
+		{
+			btnCard.setIcon(new ImageIcon(tornadoImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Barbed_Wire)
+		{
+			btnCard.setIcon(new ImageIcon(barbedWireImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Iron_Door)
+		{
+			btnCard.setIcon(new ImageIcon(ironDoorImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Reinforced_Gate)
+		{
+			btnCard.setIcon(new ImageIcon(reinforcedGateImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Steel_Chains)
+		{
+			btnCard.setIcon(new ImageIcon(steelChainsImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Stone_Wall)
+		{
+			btnCard.setIcon(new ImageIcon(stoneWallImg));
+		}
+		else if(theCard.getCard_name() == DefenseCard.Wooden_Wall)
+		{
+			btnCard.setIcon(new ImageIcon(woodenWallImg));
+		}
 		
 		JLabel lblTimer = new JLabel("15");
 		lblTimer.setFont(new Font("Rockwell", Font.PLAIN, 30));

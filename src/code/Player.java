@@ -40,8 +40,14 @@ public class Player implements Serializable {
         if(card.getType() == CardType.Attack){
         	if (p.getHasArcherTower() > 0) {
         		this.points -= 1 * p.getHasArcherTower();
+        		if (this.points < 0) {
+        			this.points = 0;
+        		}
         	}
             p.points-=card.getDamage();
+     		if (p.points < 0) {
+    			p.points = 0;
+    		}
         }
     }
 
