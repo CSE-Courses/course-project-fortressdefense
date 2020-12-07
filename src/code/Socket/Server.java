@@ -9,6 +9,7 @@ import gui.attackPhase;
 import gui.drawPhase;
 import gui.drawPhaseOtherPlayer;
 
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -100,9 +101,20 @@ public class Server implements Runnable{
                     if(index + 1 < this.getModel().getPlayers().size()){
                         index += 1;
                         turn = this.getModel().getPlayers().get(index).PlayerName;
-                        for(Worker worker : this.getWorkerList()){
-                            String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
-                            worker.send(toClientCmd);
+                        if (phase == GamePhase.Draw) {
+                            for(Worker worker : this.getWorkerList()){
+                                String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
+                                worker.send(toClientCmd);
+                            }
+                        }else {
+                    		String playerListAndHealth = "";
+                    		for (Player p : this.getModel().getPlayers()) {
+                    			playerListAndHealth += " " + p.PlayerName + " " + p.points;
+                    		}
+                            for(Worker worker : this.getWorkerList()){
+                                String toClientCmd = Command.StartAttackPhase + " " + turn + " " + round + playerListAndHealth + "\n";
+                                worker.send(toClientCmd);
+                            }
                         }
                         
                         if (phase == GamePhase.Draw) {
@@ -160,7 +172,7 @@ public class Server implements Runnable{
                     		
                      		// remove players who lost
                     		for (int i = 0; i < this.model.getPlayers().size(); i++) {
-                    			if (player.points <= 0) {
+                    			if (this.getModel().getPlayers().get(i).points <= 0) {
                     				this.model.getPlayers().remove(i);
                     			}
                     		}
@@ -186,7 +198,9 @@ public class Server implements Runnable{
                     		}
                     		else {
                         		turn = this.model.getPlayers().get(0).PlayerName;
+                        		this.getModel().getPlayers().get(0).getHand().EndDrawPhase();
                                 for(Worker worker : this.getWorkerList()){
+                                	worker.getPlayer().getHand().EndDrawPhase();
                                     String toClientCmd = Command.StartDrawPhase + " " + worker.getHealth() + " " + turn + " " + round + "\n";
                                     worker.send(toClientCmd);
                                 }
@@ -237,8 +251,12 @@ public class Server implements Runnable{
                 	            this.mainFrame.repaint();
                            		this.close(true);
                     		}else {
+                    			String playerListAndHealth = "";
+                        		for (Player p : this.getModel().getPlayers()) {
+                        			playerListAndHealth += " " + p.PlayerName + " " + p.points;
+                        		}
                                 for(Worker worker : this.getWorkerList()){
-                                    String toClientCmd = Command.GetTurn + " " + turn + " " + round + " " + phase + "\n";
+                                    String toClientCmd = Command.StartAttackPhase + " " + turn + " " + round + playerListAndHealth + "\n";
                                     worker.send(toClientCmd);
                                 }
                         		attackPhase.getPanel().setVisible(false);
@@ -307,8 +325,8 @@ public class Server implements Runnable{
         	shutdown();
         	chat.setText("");
 			serverSocket.close();
-			if (chatBox == null) {
-				chatBox.dispose();
+			if (chatBox != null) {
+	    		chatBox.dispatchEvent(new WindowEvent(chatBox, WindowEvent.WINDOW_CLOSING));
 			}
 			
 			if (sendToMain) {
@@ -465,7 +483,7 @@ public class Server implements Runnable{
 
 	private Worker findWorker(String token) {
 		for (int i = 0; i < this.getWorkerList().size(); i++) {
-			if (this.getWorkerList().get(i).getName().equals(token)){
+			if (this.getWorkerList().get(i).getUsername().equals(token)){
 				return this.getWorkerList().get(i);
 			}
 		}

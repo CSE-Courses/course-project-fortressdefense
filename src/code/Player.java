@@ -17,7 +17,7 @@ public class Player implements Serializable {
 	
     private Hand hand;
     
-    private boolean hasArcherTower;
+    private int hasArcherTower;
     
     public int points;
     
@@ -27,19 +27,19 @@ public class Player implements Serializable {
         this.PlayerName = playerName;
         points = 10;
         hand = new Hand();
-        hasArcherTower = false;
+        hasArcherTower = 0;
     }
     
     public Player() {
         points = 10;
         hand = new Hand();
-        hasArcherTower = false;
+        hasArcherTower = 0;
     }
 
     public void useAttackCard(Card card,Player p){
         if(card.getType() == CardType.Attack){
-        	if (p.getHasArcherTower()) {
-        		this.points -= 1;
+        	if (p.getHasArcherTower() > 0) {
+        		this.points -= 1 * p.getHasArcherTower();
         	}
             p.points-=card.getDamage();
         }
@@ -56,7 +56,7 @@ public class Player implements Serializable {
     }
     
     public void useArcherTower(){
-    	hasArcherTower = true;
+    	hasArcherTower+=1;
     }
     
     public void useTrade(Card p1Card, Card p2Card, Player p2){
@@ -70,7 +70,7 @@ public class Player implements Serializable {
     	return hand;
     }
     
-    public boolean getHasArcherTower() {
+    public int getHasArcherTower() {
     	return hasArcherTower;
     }
     

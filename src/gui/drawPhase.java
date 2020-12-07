@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
 import javax.swing.JLabel;
@@ -108,7 +109,7 @@ public class drawPhase {
 			public void actionPerformed(ActionEvent e) {
 
 				if (client != null) {
-					client.leave();
+					client.getJoinGame().getBackButton().doClick();
 				}else if (gameServer != null) {
 					gameServer.close(false);
 				}
@@ -704,7 +705,7 @@ public class drawPhase {
 						client.draw(CardType.Attack);
 						try {
 							mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-							Thread.sleep(1000);
+							Thread.sleep(1500);
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -812,11 +813,13 @@ public class drawPhase {
 					else if (client != null) {
 						client.draw(CardType.Defense);
 						try {
-							Thread.sleep(1000);
+							mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+							Thread.sleep(1500);
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						mainFrame.setCursor(Cursor.getDefaultCursor());
 						hand = client.getHand();
 					}
 
@@ -881,14 +884,6 @@ public class drawPhase {
 					cardPanel.add(curBtn);
 
 					curBtn.setVisible(true);
-					newHealth = newHealth + hand.Select(hand.Size()-1).getDamage();
-
-					//updates the health bar based on card picked up
-					healthBar.setValue(newHealth);
-
-					//updates the healthpoints
-					lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-					//}
 
 					curBound = curBound + 130;
 
@@ -947,122 +942,46 @@ public class drawPhase {
 					{
 						lblCard1.setVisible(false);
 						btnCard1.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(0).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(0).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(0).getDamage();
-
-							//updates the health bar based on card discarded
-							healthBar.setValue(newHealth);
-
-							//updates the healthpoints
-							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
 					}
 					else if(lblCard2.isVisible())
 					{
 						lblCard2.setVisible(false);
 						btnCard2.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(1).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(1).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(1).getDamage();
-
-							//updates the health bar based on card discarded
-							healthBar.setValue(newHealth);
-
-							//updates the healthpoints
-							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
 					}
 					else if(lblCard3.isVisible())
 					{
 						lblCard3.setVisible(false);
 						btnCard3.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(2).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(2).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(2).getDamage();
-
-							//updates the health bar based on card discarded
-							healthBar.setValue(newHealth);
-
-							//updates the healthpoints
-							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
 					}
 					else if(lblCard4.isVisible())
 					{
 						lblCard4.setVisible(false);
 						btnCard4.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(3).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(3).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(3).getDamage();
-
-							//updates the health bar based on card discarded
-							healthBar.setValue(newHealth);
-
-							//updates the healthpoints
-							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
 					}
 					else if(lblCard5.isVisible())
 					{
 						lblCard5.setVisible(false);
 						btnCard5.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(4).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(4).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(4).getDamage();
-
-							//updates the health bar based on card discarded
-							healthBar.setValue(newHealth);
-
-							//updates the healthpoints
-							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
 					}
 					else if(lblCard6.isVisible())
 					{
 						lblCard6.setVisible(false);
 						btnCard6.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(5).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(5).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(5).getDamage();
-
-							//updates the health bar based on card discarded
-							healthBar.setValue(newHealth);
-
-							//updates the healthpoints
-							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
 					}
 					else if(lblCard7.isVisible())
 					{
 						lblCard7.setVisible(false);
 						btnCard7.setVisible(false);
-						JOptionPane.showMessageDialog(null, "<html> The " + hand.Select(6).getCard_name() + " card has been discarded </html>");
-						if(hand.Select(6).getType() == CardType.Defense)
-						{
-							newHealth = newHealth - hand.Select(6).getDamage();
-
-							//updates the health bar based on card discarded
-							healthBar.setValue(newHealth);
-
-							//updates the healthpoints
-							lblBar.setText("HEALTHPOINTS: " + Integer.toString(newHealth));
-						}
-
-						tm.stop();
-						if (client != null) {
-							client.switchTurn();
-						}else if (gameServer != null) {
-							gameServer.nextTurn();
-						}
 
 					}
+					
+					tm.stop();
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+					}
+
 				}
 				lblSelected.setText("");
 				lblMsgBox.setText("");

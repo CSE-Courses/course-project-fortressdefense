@@ -69,7 +69,7 @@ public class DefenseDeck implements IDeck,java.io.Serializable {
 	@Override
 	public Card Draw() {
 		if (Size() == 0) {
-			return null;
+			Initialize();
 		}
 		return stack.pop();
 	}
