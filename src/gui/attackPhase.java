@@ -1073,6 +1073,8 @@ public class attackPhase {
 						otherPlayer = p1.getText();
 						hand.Remove(hand.Select(0));
 						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
@@ -1135,6 +1137,10 @@ public class attackPhase {
 					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
@@ -1197,6 +1203,10 @@ public class attackPhase {
 					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
@@ -1258,6 +1268,10 @@ public class attackPhase {
 					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
@@ -1320,6 +1334,10 @@ public class attackPhase {
 					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
@@ -1382,6 +1400,10 @@ public class attackPhase {
 					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
@@ -1444,6 +1466,10 @@ public class attackPhase {
 					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
@@ -1506,6 +1532,10 @@ public class attackPhase {
 					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
@@ -1576,6 +1606,10 @@ public class attackPhase {
 					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
@@ -1638,6 +1672,10 @@ public class attackPhase {
 					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
@@ -1699,6 +1737,10 @@ public class attackPhase {
 					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
@@ -1760,6 +1802,10 @@ public class attackPhase {
 					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
@@ -1821,6 +1867,10 @@ public class attackPhase {
 					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
@@ -1882,6 +1932,10 @@ public class attackPhase {
 					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
@@ -1943,6 +1997,10 @@ public class attackPhase {
 					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
@@ -2004,6 +2062,10 @@ public class attackPhase {
 					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p2.getText();
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
@@ -2073,6 +2135,10 @@ public class attackPhase {
 					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
@@ -2134,6 +2200,10 @@ public class attackPhase {
 					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
@@ -2196,6 +2266,10 @@ public class attackPhase {
 					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
@@ -2258,6 +2332,10 @@ public class attackPhase {
 					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
@@ -2320,6 +2398,10 @@ public class attackPhase {
 					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
@@ -2375,6 +2457,10 @@ public class attackPhase {
 					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
@@ -2436,6 +2522,10 @@ public class attackPhase {
 					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
@@ -2497,6 +2587,10 @@ public class attackPhase {
 					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p3.getText();
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
@@ -2566,6 +2660,10 @@ public class attackPhase {
 					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
@@ -2627,6 +2725,10 @@ public class attackPhase {
 					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
@@ -2688,6 +2790,10 @@ public class attackPhase {
 					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
@@ -2749,6 +2855,10 @@ public class attackPhase {
 					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
@@ -2810,6 +2920,10 @@ public class attackPhase {
 					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
@@ -2871,7 +2985,10 @@ public class attackPhase {
 					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(5));
+						timer.stop();
 						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
@@ -2933,6 +3050,10 @@ public class attackPhase {
 					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
 					{
 						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewTrade();
+						return;
 					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
