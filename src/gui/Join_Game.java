@@ -296,7 +296,7 @@ public class Join_Game implements ActionListener {
 			    	client.leave();
 			    	client.close();
 			    	if (chatBox != null) {
-			    		chatBox.dispose();
+			    		chatBox.dispatchEvent(new WindowEvent(chatBox, WindowEvent.WINDOW_CLOSING));
 			    	}
 		    	}
 		    }
@@ -506,6 +506,9 @@ public class Join_Game implements ActionListener {
                 chat.setText("");
                 client.leave();
                 client.close();
+		    	if (chatBox != null) {
+		    		chatBox.dispatchEvent(new WindowEvent(chatBox, WindowEvent.WINDOW_CLOSING));
+		    	}
                 RoomName = " ";
             }
             

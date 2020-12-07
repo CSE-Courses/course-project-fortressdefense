@@ -15,6 +15,7 @@ import code.*;
 import code.RSA.PublicKey;
 import code.card_class.Card;
 import code.card_class.CardType;
+import code.card_class.SpecialCard;
 
 public class Worker extends Thread{
 	private final Socket clientSocket;
@@ -89,6 +90,9 @@ public class Worker extends Thread{
                     case GetTurn:
                         handelGetTurn();
                         break;
+                    case UseAttack:
+                    	handleAttack(tokens);
+                    	break;
                 	default:
                 		break;
                 }
@@ -116,13 +120,13 @@ public class Worker extends Thread{
 				case Attack:
 					player.getHand().Draw(server.getModel().getGame().AttackDeck);
 					Card card = player.getHand().Select(player.getHand().Size() - 1);
-					String message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+					String message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + " " + card.getID() + "\n";
 					this.send(message);
 					break;
 				case Defense:
 					player.getHand().Draw(server.getModel().getGame().DefenseDeck);
 					card = player.getHand().Select(player.getHand().Size() - 1);
-					message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+					message = Command.Draw.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + " " + card.getID() + "\n";
 					this.send(message);
 					break;
 				default:
@@ -140,6 +144,115 @@ public class Worker extends Thread{
 			}
 		}
     }
+    
+    private Card findCard(String[] tokens) {
+    	for (int i = 0; i < player.getHand().Size(); i++) {
+			if (player.getHand().Select(i).getID().equals(UUID.fromString(tokens[1]))){
+				return player.getHand().Select(i);
+			}
+		}
+    	return null;
+    }
+    
+    private Worker findWorker(String[] tokens) {
+    	for (int i = 0; i < server.getWorkerList().size(); i++) {
+			if (server.getWorkerList().get(i).getUsername().equals(tokens[2])){
+				return server.getWorkerList().get(i);
+			}
+		}
+    	return null;
+	}
+    
+    private void handleAttack(String[] tokens) {
+    	if (tokens.length > 1) {
+    		Card card = findCard(tokens);
+    		Worker worker = findWorker(tokens);
+    		player.getHand().Remove(card);
+    		if (worker == null && tokens[2].equals(server.getPlayerName())) {
+        		switch (card.getType()) {
+    				case Attack:
+    					player.useAttackCard(card, server.getModel().getPlayers().get(0));
+       					if(server.getModel().getPlayers().get(0).getHasArcherTower() > 0) {
+    						String message = Command.UseAttack.toString() + " " + this.getPlayer().points + "\n";
+    						this.send(message);
+    					}
+    					break;
+    				case Defense:
+    					player.useDefenseCard(card);
+    					break;
+    				case Special:
+    					switch((SpecialCard) card.getCard_name()) {
+    						case Archer_Tower:
+    							player.useArcherTower();
+    							break;
+//    						case Trade:
+//    							player.useTrade(card, wantedCard, oppoPlayer);
+//    							message = Command.UseAttack.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+//    							this.send(message);
+//    							break;
+    						case Scout:
+    							Hand oppHand = player.useScout(server.getModel().getPlayers().get(0));
+    							String message = Command.Scout.toString();
+    							for(Card oppCard : oppHand.getCards()) {
+    								message += " " + oppCard.getCard_name().toString() + " " + oppCard.getType() + " " + oppCard.getDamage();
+    							}
+    							message += "\n";
+    							this.send(message);
+    							break;
+    						default:
+    							break;
+    					}
+    					break;
+    				default:
+    					break;
+        		}
+    		}else {
+        		switch (card.getType()) {
+    				case Attack:
+    					player.useAttackCard(card, worker.getPlayer());
+    					if(worker.getPlayer().getHasArcherTower() > 0) {
+    						String message = Command.UseAttack.toString() + " " + this.getPlayer().points + "\n";
+    						this.send(message);
+    					}
+    					String message = Command.UseAttack.toString() + " " + worker.getPlayer().points + "\n";
+    					worker.send(message);
+    					break;
+    				case Defense:
+    					player.useDefenseCard(card);
+    					break;
+    				case Special:
+    					switch((SpecialCard) card.getCard_name()) {
+    						case Archer_Tower:
+    							player.useArcherTower();
+    							break;
+//    						case Trade:
+//    							player.useTrade(card, wantedCard, oppoPlayer);
+//    							message = Command.UseAttack.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
+//    							this.send(message);
+//    							break;
+    						case Scout:
+    							Hand oppHand = player.useScout(worker.getPlayer());
+    							message = Command.Scout.toString();
+    							for(Card oppCard : oppHand.getCards()) {
+    								message += " " + oppCard.getCard_name().toString() + " " + oppCard.getType() + " " + oppCard.getDamage();
+    							}
+    							message += "\n";
+    							this.send(message);
+    							break;
+    						default:
+    							break;
+    					}
+    					break;
+    				default:
+    					break;
+        		}
+    		}
+    	}
+    }
+
+	public Player getPlayer() {
+		return player;
+	}
 
 	private void handleKey() {
 		PublicKey key = server.getRSA().getPublicKey();
