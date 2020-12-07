@@ -39,7 +39,7 @@ public class Hand implements Serializable {
 	}
 	
 	public Card Play(int index) {
-		if (Size() == 0 || index < 0 || index > Size()) {
+		if (Size() == 0 || index < 0 || index >= Size()) {
 			return null;
 		}
 		
@@ -47,7 +47,7 @@ public class Hand implements Serializable {
 	}
 	
 	public Card Select(int index) {
-		if (Size() == 0 || index < 0 || index > Size()) {
+		if (Size() == 0 || index < 0 || index >= Size()) {
 			return null;
 		}
 		
@@ -92,5 +92,29 @@ public class Hand implements Serializable {
 	 */
 	public void Remove(Card card) {
 		cards.remove(card);
+	}
+	
+	public int getNumAttack() {
+		return numAttackDraw;
+	}
+	
+	public int getNumDefense() {
+		return numDefenseDraw;
+	}
+	
+	public void incNumAttack() {
+		numAttackDraw += 1;
+	}
+	
+	public void incNumDefense() {
+		numDefenseDraw += 1;
+	}
+
+	public ArrayList<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(ArrayList<Card> cards) {
+		this.cards = cards;
 	}
 }

@@ -10,6 +10,8 @@ import code.card_class.SpecialCard;
 
 import java.awt.*;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -45,11 +47,12 @@ import javax.swing.Timer;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import java.awt.ComponentOrientation;
+import java.io.IOException;
 import javax.swing.JPanel;
 
-/*
+/**
  * Creates the Draw Phase GUI window during another player's turn
- * @author Alec Willette
+ * @author Alec Willette, Haohua Feng(#97 turn command)
  * 11/1/2020
  * */
 
@@ -67,6 +70,8 @@ public class drawPhaseOtherPlayer {
 	private Client client;
 	private Server gameServer;
 	private Hand hand;
+	private String turn;
+	private JFrame mainFrame;
 	
 	public JPanel GetPanel() {
 		return (JPanel) frame.getContentPane();
@@ -76,7 +81,7 @@ public class drawPhaseOtherPlayer {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					drawPhaseOtherPlayer window = new drawPhaseOtherPlayer(null, null, null);
+					drawPhaseOtherPlayer window = new drawPhaseOtherPlayer(null, null, null, null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -88,11 +93,11 @@ public class drawPhaseOtherPlayer {
 	/**
 	 * Create the application.
 	 */
-	public drawPhaseOtherPlayer(Server server, Client client, Hand theHand) {
+	public drawPhaseOtherPlayer(JFrame mainFrame, Server server, Client client, Hand theHand) {
 		this.gameServer = server;
 		this.client = client;
 		this.hand = theHand;
-		System.out.println(hand.Size());
+		this.mainFrame = mainFrame;
 		initialize();
 	}
 
@@ -108,6 +113,20 @@ public class drawPhaseOtherPlayer {
 		JButton btnExit = new JButton("EXIT GAME");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				FX_Handler closed = new FX_Handler();
+				//add FX
+				try {
+					closed.misc_fx("button");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+					ex.printStackTrace();
+				}
+
+				if (client != null) {
+					client.getJoinGame().getBackButton().doClick();
+				}else if (gameServer != null) {
+					gameServer.close(false);
+				}
+
 				System.exit(0);
 			}
 		});
@@ -141,7 +160,7 @@ public class drawPhaseOtherPlayer {
 				if(i == -1)
 				{
 					tm.stop();
-					System.exit(0);
+					//System.exit(0);
 				}
 				lblTimer.setText(Integer.toString(i));
 				i--;
@@ -190,8 +209,8 @@ public class drawPhaseOtherPlayer {
 		
 		if(gameServer != null)
 		{
-			healthBar.setValue(gameServer.getModel().getPlayers().get(0).points);
-			lblBar.setText("HEALTHPOINTS: " + gameServer.getModel().getPlayers().get(0).points);
+			healthBar.setValue(gameServer.getHealth());
+			lblBar.setText("HEALTHPOINTS: " + gameServer.getHealth());
 		}
 		else if(client != null)
 		{
@@ -207,7 +226,12 @@ public class drawPhaseOtherPlayer {
 		lblMsgBox.setBounds(10, 105, 216, 139);
 		frame.getContentPane().add(lblMsgBox);
 		
-		JLabel lblRoundNum = new JLabel("ROUND 5/8");
+		JLabel lblRoundNum = null;
+		if (client != null) {
+			lblRoundNum = new JLabel("ROUND " + client.getRound() + "/8");
+		}else if (gameServer != null) {
+			lblRoundNum = new JLabel("ROUND " + gameServer.getRound() + "/8");
+		}
 		lblRoundNum.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 30));
 		lblRoundNum.setBounds(20, 255, 195, 90);
 		frame.getContentPane().add(lblRoundNum);
@@ -219,9 +243,9 @@ public class drawPhaseOtherPlayer {
 		JLabel lblName;
 		// Kludge: server should send turn name
 		if (client != null) {
-			lblName = new JLabel(client.getName() + "'s Turn");
+			lblName = new JLabel(client.obtainTurn() + "'s Turn");
 		}else if (gameServer != null) {
-			lblName = new JLabel(gameServer.getModel().getPlayers().get(0).PlayerName + "'s Turn");
+			lblName = new JLabel(gameServer.getTurn() + "'s Turn");
 		}else {
 			lblName = new JLabel("<Dynamic>'s Turn");
 		}

@@ -2,10 +2,14 @@ package gui.CreateGame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
+import code.FX_Handler;
 import code.GameConstants;
 import code.Player;
 import code.ServerModel;
@@ -27,9 +31,11 @@ public class StartServerButtonHandler implements ActionListener {
 	private Server server;
 	private JPanel panel;
 	private JTextArea chat;
+	private JFrame mainFrame;
+	private JPanel mainPanel;
 	
 	public StartServerButtonHandler(ServerModel model, JButton startButton, JButton endButton,JTextField textField, JSpinner spinner, 
-			JTextField textField_1, JComboBox<String> choice, Executor executor, Executor tcpServer, JPanel panel, JTextArea chatBox) {
+			JTextField textField_1, JComboBox<String> choice, Executor executor, Executor tcpServer, JPanel panel, JTextArea chatBox, JFrame mainFrame, JPanel mainPanel) {
 		serverModel = model;
 		start = startButton;
 		end = endButton;
@@ -41,10 +47,19 @@ public class StartServerButtonHandler implements ActionListener {
 		this.tcpServer = tcpServer;
 		this.panel = panel;
 		this.chat = chatBox;
+		this.mainFrame = mainFrame;
+		this.mainPanel = mainPanel;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//add FX
+		FX_Handler button = new FX_Handler();
+		try {
+			button.misc_fx("button");
+		} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+			ex.printStackTrace();
+		}
 		if (name.getText().contains("/") || password.getText().contains("/")){
 			JOptionPane.showMessageDialog(panel, "Cannot use / in the game name or in password", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 		}
@@ -58,7 +73,7 @@ public class StartServerButtonHandler implements ActionListener {
 			password.setEditable(false);
 			this.choice.setEnabled(false);
 			
-			server = new Server(GameConstants.tcpPort, serverModel, chat);
+			server = new Server(GameConstants.tcpPort, serverModel, chat, mainFrame, mainPanel);
 			tcpServer.execute(server);	
 			
 			// Server Broadcast

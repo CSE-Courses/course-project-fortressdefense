@@ -1,11 +1,10 @@
 package gui;
-import code.AccessType;
-import code.GameConstants;
-import code.Hand;
-import code.room_info;
+import code.*;
 import code.Socket.Client;
 import code.Socket.FindGame;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -24,7 +23,7 @@ import java.util.List;
  * lobby_data : get games info form server
  * player_status : According to which game you joined, get player status in that room.(ready / waiting)
  *
- * Haohua Feng(Eddie)
+ * @author Haohua Feng(Eddie)
  * */
 
 public class Join_Game implements ActionListener {
@@ -52,6 +51,7 @@ public class Join_Game implements ActionListener {
     String chat_log = "";
     /**Exist*/
     JButton back;
+    private ChatBox chatBox;
 
     private HashMap<String, room_info> gl = new HashMap<>();
     private String RoomName = " ";
@@ -61,33 +61,34 @@ public class Join_Game implements ActionListener {
     private JPanel mainPanel;
     private Join_Game joinGame; // used for passing into button handler;
     private JFrame mainFrame;
+    private FX_Handler play_FX = new FX_Handler();
     
     //for test
-    public void room_test() {
-        room_info r1 = new room_info();
-        r1.create("Eddie", 6, "Test_room_1");
-        r1.join("Maria");
-        r1.join("Wendy");
-        room_info r2 = new room_info();
-        r2.create("Micheal", 8, "Test_room_2");
-        r2.join("Tommy");
-        room_info r3 = new room_info();
-        r3.create("Tom", 4, "Test_room_3");
-        gl.put(r1.room_name, r1);
-        gl.put(r2.room_name, r2);
-        gl.put(r3.room_name, r3);
-
-        room_info r4 = new room_info();
-        r4.create("some_guy", 2, "Full_Room");
-        r4.join("Another_guy");
-        gl.put(r4.room_name,r4);
-
-        room_info r5 = new room_info();
-        r5.create("p1", 2, "Playing");
-        r5.join("p2");
-        r5.room_status = "Ongoing";
-        gl.put(r5.room_name,r5);
-    }
+//    public void room_test() {
+//        room_info r1 = new room_info();
+//        r1.create("Eddie", 6, "Test_room_1");
+//        r1.join("Maria");
+//        r1.join("Wendy");
+//        room_info r2 = new room_info();
+//        r2.create("Micheal", 8, "Test_room_2");
+//        r2.join("Tommy");
+//        room_info r3 = new room_info();
+//        r3.create("Tom", 4, "Test_room_3");
+//        gl.put(r1.room_name, r1);
+//        gl.put(r2.room_name, r2);
+//        gl.put(r3.room_name, r3);
+//
+//        room_info r4 = new room_info();
+//        r4.create("some_guy", 2, "Full_Room");
+//        r4.join("Another_guy");
+//        gl.put(r4.room_name,r4);
+//
+//        room_info r5 = new room_info();
+//        r5.create("p1", 2, "Playing");
+//        r5.join("p2");
+//        r5.room_status = "Ongoing";
+//        gl.put(r5.room_name,r5);
+//    }
 
     public void get_room_detail(String room_name){
         room_detail_T.removeAllElements();
@@ -140,6 +141,11 @@ public class Join_Game implements ActionListener {
         game_list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                try {
+                    play_FX.misc_fx("button");
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                    ex.printStackTrace();
+                }
                 String detail = (String) game_list.getSelectedValue();
                 String rn = "";
                 for(int i = 0; i < 20; i++){
@@ -168,7 +174,6 @@ public class Join_Game implements ActionListener {
                     if (gl.get(rn).limit > gl.get(rn).current_size() && gl.get(rn).room_status.equals("Waiting")){
            
             			if (gl.get(rn).getType() == AccessType.Private) {
-
                             client = new Client(gl.get(rn).getAddress(), GameConstants.tcpPort, joinGame, chat, My_Name);
                             if (client.connect()) {
                             	client.getPublicKey(rn);
@@ -284,6 +289,7 @@ public class Join_Game implements ActionListener {
         ccb.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent arg0) {
+
                 // TODO Auto-generated method stub
                 chooseCharacter();
             }
@@ -295,6 +301,9 @@ public class Join_Game implements ActionListener {
 		    	if (client != null) {
 			    	client.leave();
 			    	client.close();
+			    	if (chatBox != null) {
+			    		chatBox.dispatchEvent(new WindowEvent(chatBox, WindowEvent.WINDOW_CLOSING));
+			    	}
 		    	}
 		    }
 		});
@@ -379,9 +388,8 @@ public class Join_Game implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        Join_Game joinGame = new Join_Game("Haohua Feng", null, null);
+        Join_Game joinGame = new Join_Game("TestSubject", null, null);
         joinGame.frame.setVisible(true);
-        
     }
 
     public void refresh(){
@@ -414,6 +422,12 @@ public class Join_Game implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //add FX
+        try {
+            play_FX.misc_fx("button");
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
 
         if (e.getSource().equals(refresh_button)){
             refresh();
@@ -504,11 +518,17 @@ public class Join_Game implements ActionListener {
                 chat.setText("");
                 client.leave();
                 client.close();
+		    	if (chatBox != null) {
+		    		chatBox.dispatchEvent(new WindowEvent(chatBox, WindowEvent.WINDOW_CLOSING));
+		    	}
                 RoomName = " ";
             }
             
     		mainPanel.setVisible(true);
+
     		panel.setVisible(false);
+    		mainFrame.getContentPane().removeAll();
+    		mainFrame.getContentPane().add(mainPanel);
         }
         //frame.repaint();
     }
@@ -521,11 +541,60 @@ public class Join_Game implements ActionListener {
     	return back;
     }
 
-	public void startDrawPhase() {
+    //#97 Switch between two GUI
+    private drawPhase startDraw;
+
+    private drawPhaseOtherPlayer waitForDraw;
+    private attackPhase attackPhase;
+    
+	public void startDrawPhase() throws IOException {
 		// TODO Auto-generated method stub
+		if (chatBox == null) {
+			chatBox = new ChatBox(null, this.client);
+		}
 		panel.setVisible(false);
-		this.mainFrame.add(new drawPhaseOtherPlayer(null, this.client, new Hand()).GetPanel());
+		if(waitForDraw != null){
+		    this.mainFrame.remove(waitForDraw.GetPanel());
+		    this.mainFrame.repaint();
+		}
+        if(startDraw != null) {
+            this.mainFrame.remove(startDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if (attackPhase != null) {
+            this.mainFrame.remove(attackPhase.getPanel());
+            this.mainFrame.repaint();
+        }
+        
+		startDraw = null;
+        startDraw = new drawPhase(this.mainFrame, null, this.client);
+		this.mainFrame.add(startDraw.GetPanel());
 	}
+
+	public void waitForDrawPhase() throws IOException {
+
+        // TODO Auto-generated method stub
+		if (chatBox == null) {
+			chatBox = new ChatBox(null, this.client);
+		}
+        panel.setVisible(false);
+        if(startDraw != null) {
+            this.mainFrame.remove(startDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if(waitForDraw != null){
+            this.mainFrame.remove(waitForDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if (attackPhase != null) {
+            this.mainFrame.remove(attackPhase.getPanel());
+            this.mainFrame.repaint();
+        }
+        
+        waitForDraw = null;
+        waitForDraw = new drawPhaseOtherPlayer(this.mainFrame, null, this.client, this.client.getHand());
+        this.mainFrame.add(waitForDraw.GetPanel());
+    }
 	
 	public String getName() {
 		return My_Name;
@@ -560,5 +629,34 @@ public class Join_Game implements ActionListener {
 	public void setRoomName(String roomName2) {
 		// TODO Auto-generated method stub
 		RoomName = roomName2;
+	}
+
+	public void startAttackPhase() {
+        // TODO Auto-generated method stub
+        panel.setVisible(false);
+        if(startDraw != null) {
+            this.mainFrame.remove(startDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if(waitForDraw != null){
+            this.mainFrame.remove(waitForDraw.GetPanel());
+            this.mainFrame.repaint();
+        }
+        if (attackPhase != null) {
+            this.mainFrame.remove(attackPhase.getPanel());
+            this.mainFrame.repaint();
+        }
+        
+        attackPhase = null;
+        attackPhase = new attackPhase(this.mainFrame, null, this.client);
+        this.mainFrame.add(attackPhase.getPanel());
+		
+	}
+
+	public void winner(String winner, String name) {
+		// TODO Auto-generated method stub\
+        if (attackPhase != null) {
+    		attackPhase.showWinner(winner, name);
+        }
 	}
 }

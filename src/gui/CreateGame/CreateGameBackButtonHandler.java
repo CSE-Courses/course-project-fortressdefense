@@ -2,9 +2,12 @@ package gui.CreateGame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.IOException;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
+import code.FX_Handler;
 import code.Player;
 
 public class CreateGameBackButtonHandler implements ActionListener {
@@ -24,7 +27,7 @@ public class CreateGameBackButtonHandler implements ActionListener {
 		main.setVisible(true);
 		create.setVisible(false);
 		btnHandler.getUDPServer().close();
-		btnHandler.getTCPServer().close();
+		btnHandler.getTCPServer().close(false);
 		
 		Player host = btnHandler.getModel().getPlayers().get(0);
 		btnHandler.getModel().getPlayers().clear();

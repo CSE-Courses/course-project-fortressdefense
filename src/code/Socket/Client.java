@@ -1,22 +1,22 @@
 package code.Socket;
 
 import code.Command;
-import code.Player;
+import code.GamePhase;
+import code.Hand;
 import code.RSA;
 import code.RSA.PublicKey;
+import code.card_class.*;
 import gui.Join_Game;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.net.Socket;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.UUID;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class Client {
@@ -29,8 +29,12 @@ public class Client {
     private BufferedReader bufferedIn;
     private Join_Game joinGame;
     private JTextArea chat;
-    private PublicKey serverKey;
     private String roomName;
+    private Hand hand;
+    private String currentTurn;
+    private int currentRound;
+    private Hand oppHand; 
+    private HashMap<String, String> playerData = new HashMap<String, String>();
     
     
     public Client(String serverName, int serverPort, Join_Game joinGame, JTextArea chat, String name) {
@@ -39,6 +43,7 @@ public class Client {
         this.joinGame = joinGame;
         this.chat = chat;
         this.name = name;
+        this.hand = new Hand();
     }
     
     /**
@@ -128,6 +133,74 @@ public class Client {
 		}
     }
     
+    public void draw(CardType type) {
+    	try {
+    		String cmd = Command.Draw.toString() + " " + type.toString() + "\n";
+    		serverOut.write(cmd.getBytes());
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void dicard(UUID id) {
+    	try {
+    		String cmd = Command.Discard.toString() + " " + id.toString() + "\n";
+    		serverOut.write(cmd.getBytes());
+    		for (int i = 0; i < hand.Size(); i++) {
+    			if (hand.Select(i).getID().equals(id)){
+    				hand.Remove(hand.Select(i));
+    				break;
+    			}
+    		}
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+
+    //#97 switch turn
+	public void switchTurn(){
+    	try {
+			String cmd = Command.SwitchTurn.toString() + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void play(UUID id, String oppPlayer){
+    	try {
+			String cmd = Command.UseAttack.toString() + " " + id.toString() + " " + oppPlayer + "\n";
+			serverOut.write(cmd.getBytes());
+			
+			// Kludge update player data for UI
+			if (!oppPlayer.equals(name)) {
+				int dmg = 0;
+				for (Card card : this.getHand().getCards()) {
+					if (card.getID().equals(id)) {
+						dmg = card.getDamage();
+					}
+				}
+				
+				playerData.replace(oppPlayer, Integer.toString(Integer.parseInt(playerData.get(oppPlayer)) - dmg));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void trade(int index, String oppPlayer){
+    	try {
+			String cmd = Command.Trade.toString() + " " + index + " " + oppPlayer + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//	public void playOpponent(UUID id) {
+//		
+//	}
+    
     /**
      * Thread that reads all messages from server
      * @author Hoahua Feng, Andrew Jank
@@ -155,7 +228,6 @@ public class Client {
                 if (tokens != null && tokens.length > 0) {
                     switch(Command.valueOf(tokens[0])) {
 		                case Shutdown:
-		                	// Kludge, should just set it to main frame, dont know how to check with form is visible when in draw/attack phase
 		                	JOptionPane.showMessageDialog(joinGame.getPanel(), "Connection to server lost!", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
 		                	joinGame.getBackButton().doClick();
 		                	break;
@@ -169,7 +241,6 @@ public class Client {
 		                	}else {
 		                		joinGame.getRoom().my_status(String.join(" ", tokens).replaceAll(tokens[0], "").trim(), 'r');
 		                	}
-	
 		                	joinGame.refresh_room_detail();
 		                	break;
 		                case Join:
@@ -184,10 +255,47 @@ public class Client {
 		                	chat.setText(chat.getText() + new Time(System.currentTimeMillis()) + "\n" + 
 				                	String.join(" ", tokens).replaceAll(tokens[0], "").trim() + "\n\n");
 		                	break;
+
 		                case Start:
 		                	health = Integer.parseInt(tokens[1]);
-		                	joinGame.startDrawPhase();
+		                	String temp_turn = tokens[2];
+		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[3]);
+							if(temp_turn.equals(name)){
+								joinGame.startDrawPhase();
+							}
+							else {
+								joinGame.waitForDrawPhase();
+							}
 		                	break;
+						case GetTurn:
+							currentTurn = tokens[1];
+		                	currentRound = Integer.parseInt(tokens[2]);
+		                	
+		                	Iterator itr = playerData.entrySet().iterator();
+		                	while (itr.hasNext()) {
+		                		Entry entry = (Entry)itr.next();
+		                		if (Integer.parseInt((String)entry.getValue()) <= 0) {
+		                			itr.remove();
+		                		}
+		                	}
+		                	
+		                	switch (GamePhase.valueOf(tokens[3])) {
+			                	case Draw:
+									if(name.equals(tokens[1])) {
+										joinGame.startDrawPhase();
+									}
+									else {
+										joinGame.waitForDrawPhase();
+									}
+			                		break;
+			                	case Attack:
+			                		joinGame.startAttackPhase();
+			                		break;
+		                	}
+	
+							break;
+
 		                case PublicKey:
 		                	String password = (String)JOptionPane.showInputDialog(null, "Enter Password: ", "Fortress Defense", JOptionPane.PLAIN_MESSAGE);
 		                	String keyN = String.join(" ", tokens).replaceAll(tokens[0], "").replaceAll(tokens[1], "").substring(2);
@@ -226,6 +334,109 @@ public class Client {
 		                		
 		                	}else {
 		                		JOptionPane.showMessageDialog(null, "Invalid password.", "Fortress Defense", JOptionPane.ERROR_MESSAGE);
+		                	}
+		                	break;
+		                case Draw:
+		                	if (tokens.length > 4) {
+		                		ICardEnum type;
+		                		try {
+		                			type = AttackCard.valueOf(tokens[1]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+			                			type = DefenseCard.valueOf(tokens[1]);
+			                		} catch (IllegalArgumentException e1) {
+			                			type = SpecialCard.valueOf(tokens[1]);
+			                		}
+		                		}
+		                		
+		                		Card card = new Card(type, CardType.valueOf(tokens[2]), Integer.parseInt(tokens[3]));
+		                		card.setID(UUID.fromString(tokens[4]));
+		                		hand.Add(card);
+		                	}
+		                	break;
+		                case Trade:
+		                	if (tokens.length > 5) {
+		                		ICardEnum type;
+		                		try {
+		                			type = AttackCard.valueOf(tokens[1]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+			                			type = DefenseCard.valueOf(tokens[1]);
+			                		} catch (IllegalArgumentException e1) {
+			                			type = SpecialCard.valueOf(tokens[1]);
+			                		}
+		                		}
+		                		Card newCard = new Card(type, CardType.valueOf(tokens[3]), Integer.parseInt(tokens[2]));
+		                		newCard.setID(UUID.fromString(tokens[4]));
+		                		hand.Add(newCard);
+		                   		ICardEnum name;
+		                 		try {
+		                 			name = AttackCard.valueOf(tokens[5]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+		                       			name = DefenseCard.valueOf(tokens[5]);
+			                		} catch (IllegalArgumentException e1) {
+			                			name = SpecialCard.valueOf(tokens[5]);
+			                		}
+		                		}
+		                		for (int i = 0; i < hand.Size(); i++) {
+		                			if (hand.getCards().get(i).getCard_name().equals(name)) {
+		                				hand.Remove(hand.getCards().get(i));
+		                			}
+		                		}
+		                	}
+		                	break;
+		                case StartAttackPhase:
+		                	playerData = new HashMap<String, String>();
+		                	for (int i = 3; i < tokens.length; i+=2) {
+		                		if (tokens[i].equals(this.name)) {
+		                			health = Integer.parseInt(tokens[i+1]);
+		                		}
+		                		playerData.put(tokens[i], tokens[i+1]);
+		                	}
+		                	temp_turn = tokens[1];
+		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[2]);
+							joinGame.startAttackPhase();
+		                	break;
+		                case StartDrawPhase:
+		                	health = Integer.parseInt(tokens[1]);
+		                	temp_turn = tokens[2];
+		                	currentTurn = temp_turn;
+		                	currentRound = Integer.parseInt(tokens[3]);
+		                	hand.EndDrawPhase();
+		                	if (currentTurn.equals(name)) {
+								joinGame.startDrawPhase();
+							}
+							else {
+								joinGame.waitForDrawPhase();
+							}
+		                	break;
+		                case GameOver:
+		                	if (tokens.length == 1) {
+		                		// draw
+		                		joinGame.winner("", name);
+		                	}else {
+		                		joinGame.winner(tokens[1], name);
+		                	}
+		                	break;
+		                case UseAttack:
+		                	health = Integer.parseInt(tokens[1]);
+		                	break;
+		                case Scout:
+		                	oppHand = new Hand();
+		                	for (int i = 1; i < tokens.length; i+=3) {
+		                		ICardEnum type;
+		                		try {
+		                			type = AttackCard.valueOf(tokens[i]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+			                			type = DefenseCard.valueOf(tokens[i]);
+			                		} catch (IllegalArgumentException e1) {
+			                			type = SpecialCard.valueOf(tokens[i]);
+			                		}
+		                		}
+		                		oppHand.Add(new Card(type, CardType.valueOf(tokens[i+1]), Integer.parseInt(tokens[i+2])));
 		                	}
 		                	break;
                     	default:
@@ -271,104 +482,34 @@ public class Client {
 		}
 	}
     
+	public Hand getHand() {
+		return hand;
+	}
 
-    /*
-    public static void main(String[] args) throws Exception {
-        while(player_name.equals("")) {
-            System.out.println("Demo\nEnter Your Name");
-            player_name = reader.readLine();
-            if(player_name.length() == 0){
-                System.out.println("[Client] *Error: Name cannot be Empty");
-            }
-        }
-        Player player = new Player(player_name);
-        System.out.println("[Client] Initiated Player: " + player_name);
+	public Object obtainTurn(){
+    	if(currentTurn != null){
+    		return currentTurn;
+		}
+		return null;
+	}
+	
+	public int getRound() {
+		return currentRound;
+	}
+	
+	public HashMap<String, String> getPlayerData() {
+		return playerData;
+	}
 
-        System.out.println("Enter port");
-        Scanner s = new Scanner(System.in);
-        int port = s.nextInt();
-        System.out.println("Enter Host Address");
-        //"172.20.5.78"
-        String host_address = reader.readLine();
+	public Hand getOppHand() {
+		return oppHand;
+	}
 
-        Socket server = new Socket(host_address, port);
-        System.out.println("[Client] Connected to Server" + server.getInetAddress() + ": " + port);
-
-        join_server(server, player);
-
-        try(server){
-            boolean ongoing = true;
-            while (ongoing){
-                if(Data.getTurn().equals(player_name)){
-                    System.out.println("[Client] It is your turn. What do you want to do?"+
-                            "\n\t \t 1.attack\t2.defense(Heal your self)\t3.pass");
-                    int selection = s.nextInt();
-                    if(selection == 1) {
-                        System.out.println("\t \t Who do you want to attack?");
-                        String attack_name = reader.readLine();
-                        System.out.println("\t \t By how much?");
-                        int damage = s.nextInt();
-                        for(Player value: Data.getPlayer_list()){
-                            if(value.PlayerName.equals(attack_name)){
-                                value.points -= damage;
-                                break;
-                            }
-                        }
-                        Data.write_message(player_name + " deals " + damage + " damage to " + attack_name);
-                    }
-                    else if(selection == 2) {
-                        System.out.println("\t \t By how much?");
-                        int damage = s.nextInt();
-                        for(Player value: Data.getPlayer_list()) {
-                            if (value.PlayerName.equals(player_name)) {
-                                value.points += damage;
-                                break;
-                            }
-                        }
-                        Data.write_message(player_name + " recover " + damage + " HP");
-                    }
-                    else{
-                        System.out.println("\t \t Pass");
-                        Data.write_message(player_name + " passed turn");
-                    }
-                    command = "push";
-                }
-                else {
-                    System.out.println("[Client] Waiting for input from server");
-                    command_from_server = new InputStreamReader(server.getInputStream());
-                    server_command = new BufferedReader(command_from_server);
-                    command = server_command.readLine();
-                    System.out.println("[Server] Auto Receive from Server");
-                    System.out.println("[Client] Input = " + command);
-                }
-
-                switch (command) {
-                    case "pull": {
-                        receive_from_server(server);
-                        break;
-                    }
-                    case "push": {
-                        if (!Data.getTurn().equals(player_name)) {
-                            System.out.println("[Server] It is Player " + Data.getTurn() + "'s Turn \n\t \t Not Your Turn Yet");
-                        } else {
-                            Data.next_turn();
-                            send_to_server(server);
-                        }
-                        break;
-                    }
-                    case "quit": {
-                        Data.del_player(player);
-                        Data.write_message("Player " + player_name + " quited");
-                        ongoing = false;
-                    }
-                    default:
-                }
-                command = null;
-            }
-            server.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    */
+	public void setOppHand(Hand oppHand) {
+		this.oppHand = oppHand;
+	}
+	
+	public Join_Game getJoinGame() {
+		return this.joinGame;
+	}
 }
