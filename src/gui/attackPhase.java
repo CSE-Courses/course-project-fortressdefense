@@ -47,7 +47,10 @@ public class attackPhase {
 	private String currentTurn;
 	private int round;
 	private Hand hand;
+
 	private Card selected;
+	
+	private String otherPlayer;
 
 	public attackPhase(JFrame mainFrame, Server server, Client client) {
 		this.server = server;
@@ -1040,7 +1043,6 @@ public class attackPhase {
 					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
 						ex.printStackTrace();
 					}
-
 					int textValue = Integer.parseInt(hp1.getText().substring(16));
 					int healthAfterAttack = textValue - hand.Select(0).getDamage();
 					String text = "";
@@ -1058,6 +1060,19 @@ public class attackPhase {
 						client.play(hand.Select(0).getID(), p1.getText());
 					}else if (server != null) {
 						server.play(hand.Select(0).getID(), p1.getText());
+					}
+					if(hand.Select(0).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
+						hand.Remove(hand.Select(0));
+						timer.stop();
 					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
@@ -1110,6 +1125,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(1).getID(), p1.getText());
 					}
+					if(hand.Select(1).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
+					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1161,6 +1187,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(2).getID(), p1.getText());
 					}
+					if(hand.Select(2).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
+					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1210,6 +1247,17 @@ public class attackPhase {
 						client.play(hand.Select(3).getID(), p1.getText());
 					}else if (server != null) {
 						server.play(hand.Select(3).getID(), p1.getText());
+					}
+					if(hand.Select(3).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
 					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
@@ -1262,6 +1310,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(4).getID(), p1.getText());
 					}
+					if(hand.Select(4).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
+					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1312,6 +1371,17 @@ public class attackPhase {
 						client.play(hand.Select(5).getID(), p1.getText());
 					}else if (server != null) {
 						server.play(hand.Select(5).getID(), p1.getText());
+					}
+					if(hand.Select(5).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
 					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
@@ -1364,6 +1434,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(6).getID(), p1.getText());
 					}
+					if(hand.Select(6).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1414,6 +1495,17 @@ public class attackPhase {
 						client.play(hand.Select(7).getID(), p1.getText());
 					}else if (server != null) {
 						server.play(hand.Select(7).getID(), p1.getText());
+					}
+					if(hand.Select(7).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p1.getText();
 					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
@@ -1474,6 +1566,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(0).getID(), p2.getText());
 					}
+					if(hand.Select(0).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
+					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1525,6 +1628,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(1).getID(), p2.getText());
 					}
+					if(hand.Select(1).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
+					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1574,6 +1688,17 @@ public class attackPhase {
 						client.play(hand.Select(2).getID(), p2.getText());
 					}else if (server != null) {
 						server.play(hand.Select(2).getID(), p2.getText());
+					}
+					if(hand.Select(2).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
 					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
@@ -1625,6 +1750,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(3).getID(), p2.getText());
 					}
+					if(hand.Select(3).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
+					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1674,6 +1810,17 @@ public class attackPhase {
 						client.play(hand.Select(4).getID(), p2.getText());
 					}else if (server != null) {
 						server.play(hand.Select(4).getID(), p2.getText());
+					}
+					if(hand.Select(4).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
 					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
@@ -1725,6 +1872,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(5).getID(), p2.getText());
 					}
+					if(hand.Select(5).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
+					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1775,6 +1933,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(6).getID(), p2.getText());
 					}
+					if(hand.Select(6).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1824,6 +1993,17 @@ public class attackPhase {
 						client.play(hand.Select(7).getID(), p2.getText());
 					}else if (server != null) {
 						server.play(hand.Select(7).getID(), p2.getText());
+					}
+					if(hand.Select(7).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p2.getText();
 					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
@@ -1883,6 +2063,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(0).getID(), p3.getText());
 					}
+					if(hand.Select(0).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
+					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -1932,6 +2123,17 @@ public class attackPhase {
 						client.play(hand.Select(1).getID(), p3.getText());
 					}else if (server != null) {
 						server.play(hand.Select(1).getID(), p3.getText());
+					}
+					if(hand.Select(1).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
 					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
@@ -1984,6 +2186,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(2).getID(), p3.getText());
 					}
+					if(hand.Select(2).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
+					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2034,6 +2247,17 @@ public class attackPhase {
 						client.play(hand.Select(3).getID(), p3.getText());
 					}else if (server != null) {
 						server.play(hand.Select(3).getID(), p3.getText());
+					}
+					if(hand.Select(3).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
 					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
@@ -2086,6 +2310,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(4).getID(), p3.getText());
 					}
+					if(hand.Select(4).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
+					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2129,6 +2364,17 @@ public class attackPhase {
 						client.play(hand.Select(5).getID(), p3.getText());
 					}else if (server != null) {
 						server.play(hand.Select(5).getID(), p3.getText());
+					}
+					if(hand.Select(5).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
 					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
@@ -2180,6 +2426,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(6).getID(), p3.getText());
 					}
+					if(hand.Select(6).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2229,6 +2486,17 @@ public class attackPhase {
 						client.play(hand.Select(7).getID(), p3.getText());
 					}else if (server != null) {
 						server.play(hand.Select(7).getID(), p3.getText());
+					}
+					if(hand.Select(7).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p3.getText();
 					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
@@ -2288,6 +2556,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(0).getID(), p4.getText());
 					}
+					if(hand.Select(0).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(0));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(0).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
+					}
 					hand.Remove(hand.Select(0));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2337,6 +2616,17 @@ public class attackPhase {
 						client.play(hand.Select(1).getID(), p4.getText());
 					}else if (server != null) {
 						server.play(hand.Select(1).getID(), p4.getText());
+					}
+					if(hand.Select(1).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(1));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(1).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
 					}
 					hand.Remove(hand.Select(1));
 					timer.stop();
@@ -2388,6 +2678,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(2).getID(), p4.getText());
 					}
+					if(hand.Select(2).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(2));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(2).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
+					}
 					hand.Remove(hand.Select(2));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2437,6 +2738,17 @@ public class attackPhase {
 						client.play(hand.Select(3).getID(), p4.getText());
 					}else if (server != null) {
 						server.play(hand.Select(3).getID(), p4.getText());
+					}
+					if(hand.Select(3).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(3));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(3).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
 					}
 					hand.Remove(hand.Select(3));
 					timer.stop();
@@ -2488,6 +2800,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(4).getID(), p4.getText());
 					}
+					if(hand.Select(4).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(4));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(4).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
+					}
 					hand.Remove(hand.Select(4));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2537,6 +2860,18 @@ public class attackPhase {
 						client.play(hand.Select(5).getID(), p4.getText());
 					}else if (server != null) {
 						server.play(hand.Select(5).getID(), p4.getText());
+					}
+					if(hand.Select(5).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(5));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(5).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
+						viewTrade();
 					}
 					hand.Remove(hand.Select(5));
 					timer.stop();
@@ -2588,6 +2923,17 @@ public class attackPhase {
 					}else if (server != null) {
 						server.play(hand.Select(6).getID(), p4.getText());
 					}
+					if(hand.Select(6).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(6));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(6).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
+					}
 					hand.Remove(hand.Select(6));
 					timer.stop();
 					if (currentTurn.equals(playerName)) {
@@ -2637,6 +2983,22 @@ public class attackPhase {
 						client.play(hand.Select(7).getID(), p4.getText());
 					}else if (server != null) {
 						server.play(hand.Select(7).getID(), p4.getText());
+					}
+					if(hand.Select(7).getCard_name() == SpecialCard.Scout)
+					{
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewScout();
+						return;
+					}
+					else if(hand.Select(7).getCard_name() == SpecialCard.Trade)
+					{
+						otherPlayer = p4.getText();
+						hand.Remove(hand.Select(7));
+						timer.stop();
+						viewTrade();
+						return;
+						
 					}
 					hand.Remove(hand.Select(7));
 					timer.stop();
@@ -2713,13 +3075,24 @@ public class attackPhase {
 		}
 	}
 
+	public String getPlayerName()
+	{
+		return playerName;
+	}
+	
 	public JPanel getPanel() {
 		return (JPanel) frame.getContentPane();
 	}
 
 	public void viewScout()
 	{
-		mainFrame.getContentPane().add(new scoutCardGUI(mainFrame, server, client, playerData.keySet().toArray(new String[0])).GetPanel());
+		mainFrame.getContentPane().add(new scoutCardsDisplay(mainFrame, server, client).GetPanel());
+		getPanel().setVisible(false);
+	}
+	
+	public void viewTrade()
+	{
+		mainFrame.getContentPane().add(new tradeCard(mainFrame, server, client, otherPlayer).GetPanel());
 		getPanel().setVisible(false);
 	}
 

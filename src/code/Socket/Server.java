@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.swing.JFrame;
@@ -463,11 +464,6 @@ public class Server implements Runnable{
 					case Archer_Tower:
 						model.getPlayers().get(0).useArcherTower();
 						break;
-//					case Trade:
-//						player.useTrade(card, wantedCard, oppoPlayer);
-//						message = Command.UseAttack.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
-//						this.send(message);
-//						break;
 					case Scout:
 						oppHand = model.getPlayers().get(0).useScout(worker.getPlayer());
 						break;
@@ -480,7 +476,21 @@ public class Server implements Runnable{
 	
 	}
 }
-
+	
+	public void trade(int i, String oppName)
+	{
+		Worker randWork = findWorker(oppName);
+		Random rand = new Random();
+		Card selectedCard = model.getPlayers().get(0).getHand().Select(i);
+		model.getPlayers().get(0).useTrade(
+				selectedCard, randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size())), 
+				randWork.getPlayer());
+		String msg = Command.Trade.toString() + " " + selectedCard.getCard_name() + " " + 
+				selectedCard.getDamage() + " " + selectedCard.getType() + " " +
+				selectedCard.getID() + "\n";
+		randWork.send(msg);
+	}
+	
 	private Worker findWorker(String token) {
 		for (int i = 0; i < this.getWorkerList().size(); i++) {
 			if (this.getWorkerList().get(i).getUsername().equals(token)){

@@ -49,7 +49,7 @@ public class scoutCardsDisplay {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					scoutCardsDisplay window = new scoutCardsDisplay(frmFortressDefense, null, null, hand);
+					scoutCardsDisplay window = new scoutCardsDisplay(frmFortressDefense, null, null);
 					window.frmFortressDefense.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,11 +61,26 @@ public class scoutCardsDisplay {
 	/**
 	 * Create the application.
 	 */
-	public scoutCardsDisplay(JFrame mainFrame, Server gameServer, Client client, Hand hand) {
+	public scoutCardsDisplay(JFrame mainFrame, Server gameServer, Client client) {
+		if(gameServer != null)
+		{
+			this.hand = gameServer.getOppHand();
+		}
+		else
+		{
+			try {
+				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			mainFrame.setCursor(Cursor.getDefaultCursor());
+			this.hand = client.getOppHand();
+		}
 		this.mainFrame = mainFrame;
 		this.client = client;
 		this.gameServer = gameServer;
-		this.hand = hand;
 		initialize();
 	}
 
@@ -123,7 +138,7 @@ public class scoutCardsDisplay {
 		
 		JButton btnCard1 = new JButton("");
 		btnCard1.setVisible(false);
-		btnCard1.setBounds(10, 75, 124, 190);
+		btnCard1.setBounds(10, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard1);
 		//for demo:
 		btnCard1.setIcon(new ImageIcon(axeImg));
@@ -131,7 +146,7 @@ public class scoutCardsDisplay {
 		
 		JButton btnCard2 = new JButton("");
 		btnCard2.setVisible(false);
-		btnCard2.setBounds(144, 75, 124, 190);
+		btnCard2.setBounds(144, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard2);
 		//for demo:
 		btnCard2.setIcon(new ImageIcon(tradeImg));
@@ -139,7 +154,7 @@ public class scoutCardsDisplay {
 		
 		JButton btnCard3 = new JButton("");
 		btnCard3.setVisible(false);
-		btnCard3.setBounds(278, 75, 124, 190);
+		btnCard3.setBounds(278, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard3);
 		//for demo:
 		btnCard3.setIcon(new ImageIcon(crossbowImg));
@@ -147,7 +162,7 @@ public class scoutCardsDisplay {
 		
 		JButton btnCard4 = new JButton("");
 		btnCard4.setVisible(false);
-		btnCard4.setBounds(412, 75, 124, 190);
+		btnCard4.setBounds(412, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard4);
 		//for demo:
 		btnCard4.setIcon(new ImageIcon(steelChainsImg));
@@ -155,28 +170,38 @@ public class scoutCardsDisplay {
 		
 		JButton btnCard5 = new JButton("");
 		btnCard5.setVisible(false);
-		btnCard5.setBounds(546, 75, 124, 190);
+		btnCard5.setBounds(546, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard5);
 		
 		JButton btnCard6 = new JButton("");
 		btnCard6.setVisible(false);
-		btnCard6.setBounds(680, 75, 124, 190);
+		btnCard6.setBounds(680, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard6);
 		
 		JButton btnCard7 = new JButton("");
 		btnCard7.setVisible(false);
-		btnCard7.setBounds(814, 75, 124, 190);
+		btnCard7.setBounds(814, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard7);
 		
 		JButton btnCard8 = new JButton("");
 		btnCard8.setVisible(false);
-		btnCard8.setBounds(950, 75, 124, 190);
+		btnCard8.setBounds(950, 110, 124, 190);
 		frmFortressDefense.getContentPane().add(btnCard8);
 		
+		JLabel lblDrawPhase = new JLabel("SCOUT CARD");
+		lblDrawPhase.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDrawPhase.setFont(new Font("Stencil", Font.PLAIN, 40));
+		lblDrawPhase.setBounds(369, 1, 276, 60);
+		frmFortressDefense.getContentPane().add(lblDrawPhase);
+		
+		JLabel lblScout = new JLabel("ACTIVATED");
+		lblScout.setHorizontalAlignment(SwingConstants.CENTER);
+		lblScout.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblScout.setBounds(369, 54, 276, 45);
+		frmFortressDefense.getContentPane().add(lblScout);
+		
 		//initialize players hand:
-		/*
 		JButton curBtn = btnCard1;
-		//int curBound = 10;
 		for(int i = 0; i < hand.Size(); i++)
 		{
 			if(hand.Select(i).getCard_name() == AttackCard.Axe)
@@ -255,10 +280,8 @@ public class scoutCardsDisplay {
 			{
 				curBtn.setIcon(new ImageIcon(woodenWallImg));
 			}
-			//curBtn.setBounds(curBound, 22, 119, 176);
 			curBtn.setVisible(true);
 			
-			//curBound = curBound + 130;
 			if(curBtn == btnCard1)
 			{
 				curBtn = btnCard2;
@@ -287,7 +310,7 @@ public class scoutCardsDisplay {
 			{
 				curBtn = btnCard8;
 			}
-		}*/
+		}
 		
 		tm = new Timer(1000, new ActionListener() {
 			@Override
@@ -297,7 +320,11 @@ public class scoutCardsDisplay {
 				{
 					tm.stop();
 					viewAttack();
-					//System.exit(0);
+					if (client != null) {
+						client.switchTurn();
+					}else if (gameServer != null) {
+						gameServer.nextTurn();
+					}
 					
 				}
 				lblTimer.setText(Integer.toString(i));
@@ -309,8 +336,7 @@ public class scoutCardsDisplay {
 	
 	public void viewAttack()
 	{
-//		mainFrame.getContentPane().add(new attackPhase(mainFrame, gameServer, client).getPanel());
-		GetPanel().setVisible(false);
+		mainFrame.remove(GetPanel());
 	}
 
 	public JPanel GetPanel() {

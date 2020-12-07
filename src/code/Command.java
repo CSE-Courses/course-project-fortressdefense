@@ -19,4 +19,5 @@ public enum Command {
 	GameOver,
 	UseAttack,
 	Scout,
+	Trade,
 }

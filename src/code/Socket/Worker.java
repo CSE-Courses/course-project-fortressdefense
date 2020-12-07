@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import code.*;
@@ -93,6 +94,9 @@ public class Worker extends Thread{
                     case UseAttack:
                     	handleAttack(tokens);
                     	break;
+                    case Trade:
+                    	handleTrade(tokens);
+                    	break;
                 	default:
                 		break;
                 }
@@ -112,6 +116,20 @@ public class Worker extends Thread{
         thisTurn = server.getTurn();
         String toClientCmd = Command.GetTurn + " " + thisTurn + "\n";
         send(toClientCmd);
+    }
+    
+    private void handleTrade(String[] tokens)
+    {
+    	Worker randWork = findWorker(tokens);
+		Random rand = new Random();
+		Card selectedCard = player.getHand().Select(Integer.parseInt(tokens[1]));
+		player.useTrade(
+				selectedCard, randWork.getPlayer().getHand().Select(rand.nextInt(randWork.getPlayer().getHand().Size())), 
+				randWork.getPlayer());
+		String msg = Command.Trade.toString() + " " + selectedCard.getCard_name() + " " + 
+				selectedCard.getDamage() + " " + selectedCard.getType() + " " +
+				selectedCard.getID() + "\n";
+		randWork.send(msg);
     }
     
     private void handleDraw(String[] tokens) {
@@ -185,11 +203,6 @@ public class Worker extends Thread{
     						case Archer_Tower:
     							player.useArcherTower();
     							break;
-//    						case Trade:
-//    							player.useTrade(card, wantedCard, oppoPlayer);
-//    							message = Command.UseAttack.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
-//    							this.send(message);
-//    							break;
     						case Scout:
     							Hand oppHand = player.useScout(server.getModel().getPlayers().get(0));
     							String message = Command.Scout.toString();
@@ -225,11 +238,6 @@ public class Worker extends Thread{
     						case Archer_Tower:
     							player.useArcherTower();
     							break;
-//    						case Trade:
-//    							player.useTrade(card, wantedCard, oppoPlayer);
-//    							message = Command.UseAttack.toString() + " " + card.getCard_name().toString() + " " + card.getType() + " " + card.getDamage() + "\n";
-//    							this.send(message);
-//    							break;
     						case Scout:
     							Hand oppHand = player.useScout(worker.getPlayer());
     							message = Command.Scout.toString();

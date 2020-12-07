@@ -188,6 +188,15 @@ public class Client {
 		}
 	}
 	
+	public void trade(int index, String oppPlayer){
+    	try {
+			String cmd = Command.Trade.toString() + " " + index + " " + oppPlayer + "\n";
+			serverOut.write(cmd.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 //	public void playOpponent(UUID id) {
 //		
 //	}
@@ -345,6 +354,23 @@ public class Client {
 		                		hand.Add(card);
 		                	}
 		                	break;
+		                case Trade:
+		                	if (tokens.length > 4) {
+		                		ICardEnum type;
+		                		try {
+		                			type = AttackCard.valueOf(tokens[1]);
+		                		} catch (IllegalArgumentException e) {
+		                       		try {
+			                			type = DefenseCard.valueOf(tokens[1]);
+			                		} catch (IllegalArgumentException e1) {
+			                			type = SpecialCard.valueOf(tokens[1]);
+			                		}
+		                		}
+		                		Card newCard = new Card(type, CardType.valueOf(tokens[3]), Integer.parseInt(tokens[2]));
+		                		newCard.setID(UUID.fromString(tokens[4]));
+		                		hand.Add(newCard);
+		                	}
+		                	break;
 		                case StartAttackPhase:
 		                	playerData = new HashMap<String, String>();
 		                	for (int i = 3; i < tokens.length; i+=2) {
@@ -383,6 +409,7 @@ public class Client {
 		                	health = Integer.parseInt(tokens[1]);
 		                	break;
 		                case Scout:
+		                	oppHand = new Hand();
 		                	for (int i = 1; i < tokens.length; i+=3) {
 		                		ICardEnum type;
 		                		try {
