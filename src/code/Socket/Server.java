@@ -172,7 +172,7 @@ public class Server implements Runnable{
                     		
                      		// remove players who lost
                     		for (int i = 0; i < this.model.getPlayers().size(); i++) {
-                    			if (player.points <= 0) {
+                    			if (this.getModel().getPlayers().get(i).points <= 0) {
                     				this.model.getPlayers().remove(i);
                     			}
                     		}
@@ -200,6 +200,7 @@ public class Server implements Runnable{
                         		turn = this.model.getPlayers().get(0).PlayerName;
                         		this.getModel().getPlayers().get(0).getHand().EndDrawPhase();
                                 for(Worker worker : this.getWorkerList()){
+                                	worker.getPlayer().getHand().EndDrawPhase();
                                     String toClientCmd = Command.StartDrawPhase + " " + worker.getHealth() + " " + turn + " " + round + "\n";
                                     worker.send(toClientCmd);
                                 }

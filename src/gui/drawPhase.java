@@ -705,7 +705,7 @@ public class drawPhase {
 						client.draw(CardType.Attack);
 						try {
 							mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-							Thread.sleep(1000);
+							Thread.sleep(1500);
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -813,11 +813,13 @@ public class drawPhase {
 					else if (client != null) {
 						client.draw(CardType.Defense);
 						try {
-							Thread.sleep(1000);
+							mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+							Thread.sleep(1500);
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						mainFrame.setCursor(Cursor.getDefaultCursor());
 						hand = client.getHand();
 					}
 
