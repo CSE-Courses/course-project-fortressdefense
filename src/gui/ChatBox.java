@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import code.FX_Handler;
 import code.Socket.Client;
 import code.Socket.Server;
 import gui.CreateGame.SendButtonHandler;
@@ -21,6 +24,7 @@ import java.awt.GridBagLayout;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class ChatBox extends JFrame {
 
@@ -80,6 +84,14 @@ public class ChatBox extends JFrame {
 		btnNewButton.addActionListener(new ActionListener(){       
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				//add FX
+				FX_Handler button = new FX_Handler();
+				try {
+					button.selected_card_fx("Scout");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
+
 				// TODO Auto-generated method stub
 				String input = textField.getText();
 		        if (!input.equals("")) 

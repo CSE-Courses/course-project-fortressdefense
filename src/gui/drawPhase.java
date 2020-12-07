@@ -4,9 +4,12 @@ import code.Deck.*;
 import code.Socket.*;
 import code.card_class.*;
 
+import java.io.IOException;
 import java.util.*;
 import java.awt.*;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -107,13 +110,18 @@ public class drawPhase {
 			@Override
 			//exit button
 			public void actionPerformed(ActionEvent e) {
-
+				//add FX
+				FX_Handler close = new FX_Handler();
+				try {
+					close.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				if (client != null) {
 					client.getJoinGame().getBackButton().doClick();
 				}else if (gameServer != null) {
 					gameServer.close(false);
 				}
-
 				System.exit(0);
 			}
 		});
@@ -206,8 +214,19 @@ public class drawPhase {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{//end turn and exit window when timer reaches 0
+				//add FX
+				FX_Handler turn = new FX_Handler();
+				if (i <= 10 && i >= 0) {
+					try {
+						turn.misc_fx("turn");
+					} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+						ex.printStackTrace();
+					}
+				}
+
 				if(i == -1)
 				{
+					i = -2;
 					tm.stop();
 					if (client != null) {
 						client.switchTurn();
@@ -301,11 +320,17 @@ public class drawPhase {
 			lblBar.setText("HEALTHPOINTS: " + client.getHealth());
 		}
 
+		FX_Handler select = new FX_Handler();
 		JButton btnCard1 = new JButton("");
 		btnCard1.setVisible(false);
 		btnCard1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(0).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(true);
 				lblCard2.setVisible(false);
@@ -325,6 +350,12 @@ public class drawPhase {
 		btnCard2.setVisible(false);
 		btnCard2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(1).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(true);
@@ -342,6 +373,12 @@ public class drawPhase {
 		btnCard3.setVisible(false);
 		btnCard3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(2).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
@@ -359,6 +396,12 @@ public class drawPhase {
 		btnCard4.setVisible(false);
 		btnCard4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(3).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
@@ -376,6 +419,12 @@ public class drawPhase {
 		btnCard5.setVisible(false);
 		btnCard5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(4).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
@@ -393,6 +442,12 @@ public class drawPhase {
 		btnCard6.setVisible(false);
 		btnCard6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(5).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
@@ -410,6 +465,12 @@ public class drawPhase {
 		btnCard7.setVisible(false);
 		btnCard7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(6).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
@@ -427,6 +488,12 @@ public class drawPhase {
 		btnCard8.setVisible(false);
 		btnCard8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("<html> " + hand.Select(7).getCard_name() + " card selected </html>");
 				lblCard1.setVisible(false);
 				lblCard2.setVisible(false);
@@ -601,6 +668,12 @@ public class drawPhase {
 		JButton btnPass = new JButton("PASS");
 		btnPass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				lblMsgBox.setText("Click GO! to PASS");
 				lblSelected.setText("PASS selected");
 				lblCard1.setVisible(false);
@@ -617,6 +690,12 @@ public class drawPhase {
 		JButton btnDiscard = new JButton("DISCARD");
 		btnDiscard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//add FX
+				try {
+					select.misc_fx("button");
+				} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+					ex.printStackTrace();
+				}
 				if(lblCard1.isVisible())
 				{
 					selected = hand.Select(0);
@@ -684,6 +763,12 @@ public class drawPhase {
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(lblSelected.getText() == "PASS selected") {
+					//add FX
+					try {
+						select.misc_fx("turn");
+					} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+						ex.printStackTrace();
+					}
 					tm.stop();
 					if (client != null) {
 						client.switchTurn();
@@ -789,7 +874,12 @@ public class drawPhase {
 					{
 						curBtn = btnCard8;
 					}
-
+					//add FX
+					try {
+						select.misc_fx("draw_card");
+					} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+						ex.printStackTrace();
+					}
 					JOptionPane.showMessageDialog(mainFrame, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
 
 					tm.stop();
@@ -915,7 +1005,12 @@ public class drawPhase {
 					{
 						curBtn = btnCard8;
 					}
-
+					//add FX
+					try {
+						select.misc_fx("draw_card");
+					} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+						ex.printStackTrace();
+					}
 					JOptionPane.showMessageDialog(mainFrame, "<html> " + hand.Select(hand.Size()-1).getCard_name() + " card acquired! </html>");
 
 					tm.stop();
@@ -972,9 +1067,13 @@ public class drawPhase {
 					{
 						lblCard7.setVisible(false);
 						btnCard7.setVisible(false);
-
 					}
-					
+					//add FX
+					try {
+						select.misc_fx("discard_card");
+					} catch (LineUnavailableException | UnsupportedAudioFileException | IOException ex) {
+						ex.printStackTrace();
+					}
 					tm.stop();
 					if (client != null) {
 						client.switchTurn();
